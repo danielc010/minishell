@@ -1,5 +1,38 @@
-External Functions
+ARCHITECTURE OVERVIEW
+---------------------
+Input (readline) -> Lexer -> Parser -> Expander -> Executor
+                   [-------- PERSON A ---------]   [-- B --]
 
+PERSON A owns: Lexer, Parser, Expander, echo/pwd/env built-ins
+PERSON B owns: Executor, Pipes, Redirections, cd/export/unset/exit built-ins, Signals
+
+SHARED / BOTH: Phase 1 foundation, data structures, testing, Makefile, README
+
+
+
+---------------------
+
+LEXER
+Lexical analysis is performed to convert raw source code characters into meaningful units called tokens, simplifying compilation by filtering out whitespace and comments.
+It acts as the first phase of a compiler, improving efficiency by breaking input down for easier syntactic analysis and identifying illegal tokens early.
+
+Key reasons for performing lexical analysis include:
+Tokenization and Classification: The process, also known as scanning, reads the source code string character-by-character and groups them into meaningful tokens like keywords,
+identifiers, constants, and operators.
+Simplification of Input: Lexical analyzers, or "lexers," remove unnecessary components from source code, such as whitespace, tabs, and comments, which simplifies the parsing
+(syntactic analysis) stage.
+Improved Efficiency and Portability: Separating lexical analysis from syntax analysis reduces the complexity of the compiler, allowing for highly optimized, platform-dependent
+scanning routines (e.g., handling specific line-ending characters) while keeping the parser portable.
+Error Detection: It allows for the identification of illegal characters or invalid token formats early in the compilation process.
+
+By performing these tasks, lexical analysis acts as a necessary bridge between raw source text and structural understanding by a computer system
+
+
+PARSER
+
+
+External Functions
+---------------------
 readline, rl_clear_history, rl_on_new_line,
 rl_replace_line, rl_redisplay, add_history,
 printf, malloc, free, write, access, open, read,
@@ -10,3 +43,5 @@ dup, dup2, pipe, opendir, readdir, closedir,
 strerror, perror, isatty, ttyname, ttyslot, ioctl,
 getenv, tcsetattr, tcgetattr, tgetent, tgetflag,
 tgetnum, tgetstr, tgoto, tputs
+
+
