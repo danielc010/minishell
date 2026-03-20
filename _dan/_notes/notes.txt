@@ -1,6 +1,8 @@
+cc readline.c -lreadline -L /opt/homebrew/opt/readline/lib -I /opt/homebrew/opt/readline/include -o readline
+
 ARCHITECTURE OVERVIEW
 ---------------------
-Input (readline) -> Lexer -> Parser -> Expander -> Executor
+Input (rbrwe eadline) -> Lexer -> Parser -> Expander -> Executor
                    [-------- PERSON A ---------]   [-- B --]
 
 PERSON A owns: Lexer, Parser, Expander, echo/pwd/env built-ins

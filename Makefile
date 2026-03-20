@@ -6,13 +6,12 @@
 #    By: dachin <dachin@student.codam.nl>             +#+                      #
 #                                                    +#+                       #
 #    Created: 2026/03/18 08:09:02 by dachin        #+#    #+#                  #
-#    Updated: 2026/03/18 08:09:09 by dachin        ########   odam.nl          #
+#    Updated: 2026/03/20 11:56:46 by dachin        ########   odam.nl          #
 #                                                                              #
 # **************************************************************************** #
 
 # List of source files
-SRCS = src/main.c src/parsing.c src/utils.c src/utils2.c src/utils3.c \
-		src/heredoc.c
+SRCS = src/main.c
 
 # Creates object files by replacing .c with .o. $ references variables or automatic variables
 OBJS = $(SRCS:.c=.o)
@@ -31,7 +30,7 @@ LIBFT_DIR = Libft
 LIBFT_LIB = $(LIBFT_DIR)/libft.a
 
 # Main executable name
-NAME = pipex
+NAME = minishell
 
 # Default target. Always put this in first place
 all: $(NAME)
@@ -79,3 +78,5 @@ test: $(NAME)
 # fsanitise for macOS
 sanitize: CFLAGS += -fsanitize=address -g
 sanitize: re
+
+
