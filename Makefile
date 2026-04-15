@@ -6,28 +6,32 @@
 #    By: dachin <dachin@student.codam.nl>             +#+                      #
 #                                                    +#+                       #
 #    Created: 2026/03/18 08:09:02 by dachin        #+#    #+#                  #
-#    Updated: 2026/03/20 11:56:46 by dachin        ########   odam.nl          #
+#    Updated: 2026/04/15 17:33:05 by dachin        ########   odam.nl          #
 #                                                                              #
 # **************************************************************************** #
 
 # List of source files
-SRCS = src/main.c
+SRCS = src/main.c src/signals.c
 
 # Creates object files by replacing .c with .o. $ references variables or automatic variables
 OBJS = $(SRCS:.c=.o)
 
-# Compiler and compiler flags
+# Compiler and compiler flags.
 CC = cc
 CFLAGS = -Wall -Wextra -Werror
 
-# Detect OS
-UNAME_S := $(shell uname -s)
-
+# Library paths
+LDLIBS = -lreadline
 # Subproject directories
 LIBFT_DIR = Libft
 
 # Subproject libraries
 LIBFT_LIB = $(LIBFT_DIR)/libft.a
+
+# Detect OS
+UNAME_S := $(shell uname -s)
+
+
 
 # Main executable name
 NAME = minishell
@@ -37,7 +41,7 @@ all: $(NAME)
 
 # Build main executable
 $(NAME): $(LIBFT_LIB) $(OBJS)
-	$(CC) $(CFLAGS) $(OBJS) $(LIBFT_LIB) -o $(NAME)
+	$(CC) $(CFLAGS) $(OBJS) $(LIBFT_LIB) $(LDLIBS) -o $(NAME)
 
 # Build subproject libraries
 $(LIBFT_LIB):
