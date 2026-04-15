@@ -10,6 +10,7 @@ void sigint_handler(int sig)
     printf("\n");  // New line after ^C
     rl_replace_line("", 0);  // Clear the line
     rl_on_new_line();  // Tell readline we're on a new line
+    rl_redisplay();
 }
 
 int main(void)
@@ -21,7 +22,7 @@ int main(void)
     while (1)
     {
         line = readline("shell> ");
-        if (line == NULL)
+        if (line == NULL) // Handle EOF (Ctrl+D)
             break;
 
         if (strlen(line) > 0)

@@ -1,4 +1,5 @@
 #include <stdio.h>
+#include <stdio.h>
 
 // Function-like Macro definition
 #define min(a, b) (((a) < (b)) ? (a) : (b))

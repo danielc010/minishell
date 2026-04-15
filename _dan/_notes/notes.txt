@@ -35,15 +35,99 @@ PARSER
 
 External Functions
 ---------------------
-readline, rl_clear_history, rl_on_new_line,
-rl_replace_line, rl_redisplay, add_history,
+
+READLINE
+readline: char *readline (const char *prompt);
+reads a line from term and return, using prompt as a prompt. needs to free when finished since it uses malloc
+
+rl_clear_history: void rl_clear_history (void);
+Clear the history list by deleting all of the entries, in the same manner as the History library’s clear_history() function. This differs from clear_history because it frees private data Readline saves in the history list.
+
+rl_on_new_line: int rl_on_new_line (void);
+Tell the update functions that we have moved onto a new (empty) line, usually after outputting a newline.
+
+rl_replace_line: void rl_replace_line (const char *text, int clear_undo);
+Replace the contents of rl_line_buffer with text. This preserves the point and mark, if possible. If clear_undo is non-zero, this clears the undo list associated with the current line.
+
+rl_redisplay: void rl_redisplay (void);
+Change what’s displayed on the screen to reflect the current contents of rl_line_buffer.
+
+add_history: int add_history(const char *);
+used to save lines away in a history list
+
+
+
 printf, malloc, free, write, access, open, read,
-close, fork, wait, waitpid, wait3, wait4, signal,
-sigaction, sigemptyset, sigaddset, kill, exit,
-getcwd, chdir, stat, lstat, fstat, unlink, execve,
+close, fork,
+
+
+WAIT
+wait: pid_t wait(int *status);
+Waits for any child process to finish. You have no control over which child it reaps. Returns the PID of the child that finished.
+The problem — in a pipeline you have multiple children and you need to know which one finished and what its exit status was. wait() is too blunt for that.
+
+waitpid: pid_t waitpid(pid_t pid, int *status, int options);
+Waits for a specific child. This is the one you'll use most in minishell.
+The options flag is important:
+0 — block until the specified child finishes
+WNOHANG — don't block, return immediately even if child hasn't finished yet
+The pid argument has special values worth knowing:
+specific PID — wait for that exact child
+-1 — wait for any child (same as wait())
+0 — wait for any child in the same process group
+
+wait3, wait4
+pid_t wait3(int *status, int options, struct rusage *rusage);
+pid_t wait4(pid_t pid, int *status, int options, struct rusage *rusage);
+These are extensions that also give you resource usage information about the child — things like CPU time used and memory consumed. wait3 is like wait, wait4 is like waitpid, both with the added rusage struct.
+For minishell you don't need these at all. They're listed in the allowed functions but you won't use them.
+
+
+SIGNALS
+signal: void (*signal(int sig, void (*func)(int));)(int);
+SIGINT (ctrl-C)
+Interactive mode: clear the line, show new prompt
+During child execution: let the child die, parent catches the exit status
+
+SIGQUIT (ctrl-\)
+Interactive mode: ignore it completely
+During child execution: let the child handle it normally
+
+SIGEOF (ctrl-D)
+Not actually a signal — readline returns NULL
+You handle it by checking if readline returns NULL and exiting cleanly
+
+func allows user to choose the action upon receipt of signal. default - SIG_DFL. To ignore signal - SIG_IGN.
+
+
+sigaction
+
+MANIPULATE signal sets
+sigemptyset: int sigemptyset(sigset_t *set);
+The sigemptyset() function initializes a signal set to be empty.
+sigaddset: int sigaddset(sigset_t *set, int signo);
+The sigaddset() function adds the specified signal signo to the signal set.
+
+kill, exit,
+getcwd, chdir, stat, lstat, fstat, unlink,
+
+execve,
 dup, dup2, pipe, opendir, readdir, closedir,
 strerror, perror, isatty, ttyname, ttyslot, ioctl,
 getenv, tcsetattr, tcgetattr, tgetent, tgetflag,
 tgetnum, tgetstr, tgoto, tputs
 
 
+async-signal-safe: function is safe to call from inside a signal handler, even if the signal interrupts your program at any random instruction.
+
+It is about interruption safety and internal state corruption.
+
+Why this matters:
+
+A signal can arrive while your program is already inside libc code.
+If your handler calls another unsafe libc function, both can touch shared internal data.
+That can cause undefined behavior: freezes, broken output, crashes, weird prompt state.
+Examples:
+
+Usually safe in handlers: write, kill, _exit, setting a sig_atomic_t flag.
+Usually unsafe in handlers: printf, malloc/free, most readline functions.
