@@ -6,7 +6,7 @@
 /*   By: luimarti <luimarti@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/18 13:41:38 by luimarti          #+#    #+#             */
-/*   Updated: 2026/04/21 15:50:25 by luimarti         ###   ########.fr       */
+/*   Updated: 2026/04/24 19:38:18 by luimarti         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -100,6 +100,9 @@ typedef struct s_lexer
 
 char	**copy_env(char **envp);
 void	free_array(char **str);
+void	free_cmd(t_cmd *commands);
+
+//LEXER
 
 int		add_operator_token(t_lexer *lx, t_token_type type, char *value);
 int		is_separator(char c);
@@ -116,5 +119,12 @@ int		handle_operator(t_lexer *lx);
 void	init_lexer(char *line, t_lexer *lx);
 int		handle_normal(t_lexer *lx);
 t_token	*lexer(char *line);
+
+//PARSER
+
+t_cmd	*init_cmd(void);
+int		word_counter(t_token *tokens);
+char	**build_args(t_token *tokens, int words);
+t_cmd	*parsing_core(t_token *tokens);
 
 #endif
