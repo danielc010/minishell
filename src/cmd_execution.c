@@ -59,7 +59,7 @@ void fork_and_exec(t_cmd *cmd, t_shell *shell)
 	int	j;
 
 	if (!cmd || !shell)
-		return NULL;
+		return ;
 	i = 0;
 	while (cmd->args[i])
 		++i;
@@ -74,7 +74,12 @@ void fork_and_exec(t_cmd *cmd, t_shell *shell)
 			return ;
 		}
 		if (pids[j] == 0)
-			execve()
+		{
+			if (execve(resolve_path(cmd->args[i], shell), cmd->args[i], shell->env[i]) ==- 1)
+			{
+				// blahblah
+			}
+		}
 		++j;
 	}
 }
