@@ -6,7 +6,7 @@
 /*   By: luimarti <luimarti@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/18 13:45:01 by luimarti          #+#    #+#             */
-/*   Updated: 2026/04/24 19:38:51 by luimarti         ###   ########.fr       */
+/*   Updated: 2026/05/01 17:44:46 by luimarti         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,7 @@ int	main(int argc, char **argv, char **envp)
 	t_token		*tokens;
 	t_cmd		*head;
 	t_cmd		*current;
+	t_redir		*redir;
 	int i;
 
 	(void)argc;
@@ -39,11 +40,17 @@ int	main(int argc, char **argv, char **envp)
 			while (current)
 			{
 				i = 0;
-				printf("--- cmd ---\n");
+				printf("--- Args ---\n");
 				while (current->args && current->args[i])
 				{
 					printf("args[%d]: %s\n", i, current->args[i]);
 					i++;
+				}
+				redir = current->redirs;
+				while (redir)
+				{
+    				printf("redir type: %d, file: %s\n", redir->type, redir->file);
+    				redir = redir->next;
 				}
 				current = current->next;
 			}

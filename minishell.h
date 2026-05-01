@@ -6,7 +6,7 @@
 /*   By: luimarti <luimarti@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/18 13:41:38 by luimarti          #+#    #+#             */
-/*   Updated: 2026/04/24 19:38:18 by luimarti         ###   ########.fr       */
+/*   Updated: 2026/05/01 17:46:27 by luimarti         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -123,8 +123,15 @@ t_token	*lexer(char *line);
 //PARSER
 
 t_cmd	*init_cmd(void);
+t_redir	*init_redir(void);
 int		word_counter(t_token *tokens);
 char	**build_args(t_token *tokens, int words);
 t_cmd	*parsing_core(t_token *tokens);
+
+t_redir	*build_redir(t_token *tokens);
+int	fill_redir(t_token *tokens, t_redir **head, t_redir **current);
+t_redir_type	redir_type(t_token *tokens);
+int	add_redir(t_redir *new, t_token *tokens, t_redir **head, t_redir **current);
+void	free_redir(t_redir *redirs);
 
 #endif

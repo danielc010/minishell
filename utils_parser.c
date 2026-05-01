@@ -6,7 +6,7 @@
 /*   By: luimarti <luimarti@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/24 20:04:11 by luimarti          #+#    #+#             */
-/*   Updated: 2026/04/24 20:04:29 by luimarti         ###   ########.fr       */
+/*   Updated: 2026/05/01 14:52:40 by luimarti         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,4 +23,18 @@ t_cmd	*init_cmd(void)
 	body->redirs = NULL;
 	body->next = NULL;
 	return (body);
+}
+
+t_redir	*init_redir(void)
+{
+	t_redir	*current;
+
+	current = malloc(sizeof(t_redir));
+	if (!current)
+		return (NULL);
+	current->type = 0;
+	current->file = NULL;
+	current->fd = 0;
+	current->next = NULL;
+	return (current);
 }

@@ -6,7 +6,7 @@
 /*   By: luimarti <luimarti@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/18 14:47:16 by luimarti          #+#    #+#             */
-/*   Updated: 2026/04/24 19:39:31 by luimarti         ###   ########.fr       */
+/*   Updated: 2026/05/01 18:13:46 by luimarti         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,6 +41,7 @@ char	**copy_env(char **envp)
 void	free_array(char **str)
 {
 	int	i;
+
 	if (!str)
 		return ;
 	i = 0;
@@ -55,10 +56,12 @@ void	free_array(char **str)
 
 void	free_cmd(t_cmd *commands)
 {
-	t_cmd *tmp;
+	t_cmd	*tmp;
 
 	while (commands)
 	{
+		if (commands->redirs)
+			free_redir(commands->redirs);
 		free_array(commands->args);
 		tmp = commands->next;
 		free (commands);

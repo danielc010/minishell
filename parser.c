@@ -6,7 +6,7 @@
 /*   By: luimarti <luimarti@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/24 13:56:39 by luimarti          #+#    #+#             */
-/*   Updated: 2026/04/24 20:04:08 by luimarti         ###   ########.fr       */
+/*   Updated: 2026/05/01 17:27:44 by luimarti         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -104,6 +104,7 @@ int	if_pipe(t_token *tokens, t_cmd **command, t_cmd *head, int words)
 			return (0);
 		}
 		second->args = build_args(tokens->next, words);
+		second->redirs = build_redir(tokens->next);
 		(*command)->next = second;
 		*command = second;
 	}
@@ -126,6 +127,7 @@ t_cmd	*parsing_core(t_token *tokens)
 		return (NULL);
 	}
 	command->args = build_args(tokens, words);
+	command->redirs = build_redir(tokens);
 	head = command;
 	while (tokens)
 	{
