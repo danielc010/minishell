@@ -6,7 +6,7 @@
 /*   By: luimarti <luimarti@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/18 13:41:38 by luimarti          #+#    #+#             */
-/*   Updated: 2026/05/01 17:46:27 by luimarti         ###   ########.fr       */
+/*   Updated: 2026/05/01 19:33:19 by luimarti         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -98,40 +98,44 @@ typedef struct s_lexer
 	char	*value;
 }	t_lexer;
 
-char	**copy_env(char **envp);
-void	free_array(char **str);
-void	free_cmd(t_cmd *commands);
+char			**copy_env(char **envp);
+void			free_array(char **str);
+void			free_cmd(t_cmd *commands);
 
 //LEXER
 
-int		add_operator_token(t_lexer *lx, t_token_type type, char *value);
-int		is_separator(char c);
-t_token	*new_token(t_token_type type, char *value);
-void	add_token_back(t_token **head, t_token *new);
-void	free_tokens(t_token *head);
+int				add_operator_token(t_lexer *lx, t_token_type type, char *value);
+int				is_separator(char c);
+t_token			*new_token(t_token_type type, char *value);
+void			add_token_back(t_token **head, t_token *new);
+void			free_tokens(t_token *head);
 
-int		handle_end_line(t_lexer *lx);
-int		handle_word(t_lexer *lx);
-void	handle_quotes(t_lexer *lx);
-int		handle_double_operator(t_lexer *lx);
-int		handle_operator(t_lexer *lx);
+int				handle_end_line(t_lexer *lx);
+int				handle_word(t_lexer *lx);
+void			handle_quotes(t_lexer *lx);
+int				handle_double_operator(t_lexer *lx);
+int				handle_operator(t_lexer *lx);
 
-void	init_lexer(char *line, t_lexer *lx);
-int		handle_normal(t_lexer *lx);
-t_token	*lexer(char *line);
+void			init_lexer(char *line, t_lexer *lx);
+int				handle_normal(t_lexer *lx);
+t_token			*lexer(char *line);
 
 //PARSER
 
-t_cmd	*init_cmd(void);
-t_redir	*init_redir(void);
-int		word_counter(t_token *tokens);
-char	**build_args(t_token *tokens, int words);
-t_cmd	*parsing_core(t_token *tokens);
+t_cmd			*init_cmd(void);
+t_redir			*init_redir(void);
+int				word_counter(t_token *tokens);
+char			**build_args(t_token *tokens, int words);
+t_cmd			*parsing_core(t_token *tokens);
 
-t_redir	*build_redir(t_token *tokens);
-int	fill_redir(t_token *tokens, t_redir **head, t_redir **current);
+t_redir			*build_redir(t_token *tokens);
+int				fill_redir(t_token *tokens, t_redir **head, t_redir **current);
 t_redir_type	redir_type(t_token *tokens);
-int	add_redir(t_redir *new, t_token *tokens, t_redir **head, t_redir **current);
-void	free_redir(t_redir *redirs);
+int				add_redir(t_redir *new, t_token *tokens, t_redir **head, t_redir **current);
+void			free_redir(t_redir *redirs);
+
+int				syntax_controller(t_token *tokens);
+int				check_redirs(t_token *tokens);
+int				check_pipes(t_token *tokens);
 
 #endif

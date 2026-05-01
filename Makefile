@@ -6,7 +6,7 @@
 #    By: luimarti <luimarti@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2026/01/18 11:17:27 by luimarti          #+#    #+#              #
-#    Updated: 2026/05/01 17:47:27 by luimarti         ###   ########.fr        #
+#    Updated: 2026/05/01 18:53:35 by luimarti         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -26,7 +26,8 @@ MANDATORY_SRC = main.c \
 				utils_lexer.c \
 				handlers_lexer.c \
 				utils_parser.c \
-				utils_parser_redir.c
+				utils_parser_redir.c \
+				syntax_controller.c
 				
 OBJ_DIR = o_files
 MANDATORY_OBJ = $(addprefix $(OBJ_DIR)/, $(MANDATORY_SRC:.c=.o))

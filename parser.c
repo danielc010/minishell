@@ -6,7 +6,7 @@
 /*   By: luimarti <luimarti@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/24 13:56:39 by luimarti          #+#    #+#             */
-/*   Updated: 2026/05/01 17:27:44 by luimarti         ###   ########.fr       */
+/*   Updated: 2026/05/01 19:36:29 by luimarti         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -118,6 +118,8 @@ t_cmd	*parsing_core(t_token *tokens)
 	int		words;
 
 	if (!tokens)
+		return (NULL);
+	if (!syntax_controller(tokens))
 		return (NULL);
 	command = init_cmd();
 	words = word_counter(tokens);
