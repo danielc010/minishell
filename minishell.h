@@ -6,7 +6,7 @@
 /*   By: luimarti <luimarti@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/18 13:41:38 by luimarti          #+#    #+#             */
-/*   Updated: 2026/05/01 19:33:19 by luimarti         ###   ########.fr       */
+/*   Updated: 2026/05/05 22:05:55 by luimarti         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -137,5 +137,10 @@ void			free_redir(t_redir *redirs);
 int				syntax_controller(t_token *tokens);
 int				check_redirs(t_token *tokens);
 int				check_pipes(t_token *tokens);
+
+//EXPANDER
+
+char    *find_value(char *name, char **env);
+
 
 #endif

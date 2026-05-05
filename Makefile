@@ -22,7 +22,6 @@ MANDATORY_SRC = main.c \
 				lexer.c \
 				parser.c \
 				pwd.c \
-				utils_env.c \
 				utils_lexer.c \
 				handlers_lexer.c \
 				utils_parser.c \
