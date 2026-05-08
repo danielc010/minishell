@@ -54,6 +54,7 @@ void	exec_pipeline(t_shell *shell)
 		}
 
 	}
+	close_all_pipes(pipes, n - 1);
 	i = 0;
 	while (i < n)
 	{
@@ -108,4 +109,19 @@ void	close_all_pipes(int **pipes, int n)
 		close(pipes[i][1]);
 		++i;
 	}
+}
+
+void	free_pipes(int **pipes, int n)
+{
+	int	i;
+
+	if (!pipes)
+		return ;
+	i = 0;
+	while(i < n)
+	{
+		free(pipes[i]);
+		++i;
+	}
+	free(pipes);
 }
