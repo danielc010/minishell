@@ -27,7 +27,9 @@ int	main(int argc, char **argv, char **envp) // so we can access envp
 		}
 		if (ft_strlen(line) > 0) //add_history as long as something was typed
 			add_history(line);
+		// fork_and_exec(cmd, &shell); // placeholder to insrt cmd from parser output
 		free(line); // manual free as readline is designed as such
 	}
+
 	return (0);
 }

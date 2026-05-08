@@ -51,35 +51,29 @@ char *resolve_path(char *cmd, t_shell *shell)
 	return (free(with_slash), free_array(paths_array), full_path);
 }
 
-void fork_and_exec(t_cmd *cmd, t_shell *shell)
+void fork_and_exec(t_cmd *cmd, t_shell *shell, t_pipe_ctx *ctx)
 {
-	pid_t	*pids;
-	int	num_args;
-	int	i;
-	int	j;
+	pid_t	pid;
+	int	status;
 
 	if (!cmd || !shell)
 		return ;
-	i = 0;
-	while (cmd->args[i])
-		++i;
-	pids = malloc(sizeof(pid_t) * i);
-	j = 0;
-	while (j < i)
+	pid = fork();
+	if (pid == -1)
+		return ;
+	if (pid == 0)
 	{
-		pids[j] = fork();
-		if (pids[j] == -1)
+		if (execve(resolve_path(cmd->args[0], shell), cmd->args, shell->env) == -1)
 		{
-			free_array(pids);
-			return ;
+			exit(EXIT_FAILURE);
 		}
-		if (pids[j] == 0)
+	}
+	else
+	{
+		waitpid(pid, &status, 0);
+		if (WIFEXITED(status))
 		{
-			if (execve(resolve_path(cmd->args[i], shell), cmd->args[i], shell->env[i]) ==- 1)
-			{
-				// blahblah
-			}
+			shell->exit_status = WEXITSTATUS(status);
 		}
-		++j;
 	}
 }
