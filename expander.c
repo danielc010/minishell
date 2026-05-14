@@ -3,50 +3,118 @@
 /*                                                        :::      ::::::::   */
 /*   expander.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: luimarti <luimarti@student.42.fr>          +#+  +:+       +#+        */
+/*   By: lucho <lucho@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/03 10:56:58 by luimarti          #+#    #+#             */
-/*   Updated: 2026/05/05 22:43:45 by luimarti         ###   ########.fr       */
+/*   Updated: 2026/05/14 13:20:10 by lucho            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-char	*find_value(char *name, char **env)
+char	*double_quote_handler(char *str, char *result, t_shell *shell, int *i)
 {
-	int		i;
-	char	*value;
-
-	if (!name)
-		return (NULL);
-	i = 0;
-	while (env[i])
+	(*i)++;
+	while (str[*i] != '"' && str[*i] != '\0')
 	{
-		if (!ft_strncmp(env[i], name, ft_strlen(name))
-			&& env[i][ft_strlen(name)] == '=')
+		if (str[*i] == '$')
 		{
-			value = ft_substr(env[i], ft_strlen(name) + 1,
-					ft_strlen(env[i]) - (ft_strlen(name) + 1));
-			return (value);
+			(*i)++;
+			if (str[*i] == '?')
+				result = special_handler(result, shell, i);
+			else
+				result = expand_var(str, shell, result, i);
 		}
-		i++;
+		else
+		{
+			result = append_char(str, result, i);
+			(*i)++;
+		}
 	}
-	return (NULL);
+	return (result);
 }
 
-char	*get_var_name(char *str)
+char	*special_handler(char *result, t_shell *shell, int *i)
 {
-	int		i;
-	char	*name;
+	char	*tmp;
+	char	*var_value;
 
-	i = 0;
+	var_value = ft_itoa(shell->exit_status);
+	tmp = ft_strjoin(result, var_value);
+	free(result);
+	result = tmp;
+	free(var_value);
+	(*i)++;
+	return (result);
+}
+
+char	*dispatcher(char *str, t_shell *shell, char *result, int *i)
+{
+	if (str[*i] == '\'')
+	{
+		(*i)++;
+		while (str[*i] != '\'' && str[*i] != '\0')
+		{
+			result = append_char(str, result, i);
+			(*i)++;
+		}
+		(*i)++;
+	}
+	else if (str[*i] == '"')
+	{
+		result = double_quote_handler(str, result, shell, i);
+		(*i)++;
+	}
+	else if (str[*i] == '$')
+		result = dollar_handler(str, result, shell, i);
+	else
+	{
+		result = append_char(str, result, i);
+		(*i)++;
+	}
+	return (result);
+}
+
+char	*get_str(char *str, t_shell *shell)
+{
+	char	*result;
+	int		i;
+
 	if (!str)
 		return (NULL);
-	while (ft_isalpha(str[i])
-		|| ft_isdigit(str[i]) || str[i] == '_')
-		i++;
-	name = ft_substr(str, 0, i);
-	if (!name)
+	result = ft_strdup("");
+	if (!result)
 		return (NULL);
-	return (name);
+	i = 0;
+	while (str[i] != '\0')
+		result = dispatcher(str, shell, result, &i);
+	return (result);
+}
+
+void	expander(t_cmd *cmds, t_shell *shell)
+{
+	t_redir	*redir;
+	char	*tmp;
+	int		i;
+
+	while (cmds)
+	{
+		i = 0;
+		while (cmds->args[i])
+		{
+			tmp = cmds->args[i];
+			cmds->args[i] = get_str(tmp, shell);
+			free(tmp);
+			i++;
+		}
+		redir = cmds->redirs;
+		while (redir)
+		{
+			tmp = redir->file;
+			redir->file = get_str(tmp, shell);
+			free(tmp);
+			redir = redir->next;
+		}
+		cmds = cmds->next;
+	}
 }

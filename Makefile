@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: luimarti <luimarti@student.42.fr>          +#+  +:+       +#+         #
+#    By: lucho <lucho@student.42.fr>                +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2026/01/18 11:17:27 by luimarti          #+#    #+#              #
-#    Updated: 2026/05/01 18:53:35 by luimarti         ###   ########.fr        #
+#    Updated: 2026/05/14 12:04:13 by lucho            ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -26,6 +26,7 @@ MANDATORY_SRC = main.c \
 				handlers_lexer.c \
 				utils_parser.c \
 				utils_parser_redir.c \
+				utils_expander.c \
 				syntax_controller.c
 				
 OBJ_DIR = o_files

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: luimarti <luimarti@student.42.fr>          +#+  +:+       +#+        */
+/*   By: lucho <lucho@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/18 13:45:01 by luimarti          #+#    #+#             */
-/*   Updated: 2026/05/01 17:44:46 by luimarti         ###   ########.fr       */
+/*   Updated: 2026/05/14 13:06:08 by lucho            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,6 +36,7 @@ int	main(int argc, char **argv, char **envp)
 			tokens = lexer(line);
 			add_history(line);
 			head = parsing_core(tokens);
+			expander(head, &shell);
 			current = head;
 			while (current)
 			{

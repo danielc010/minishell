@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: luimarti <luimarti@student.42.fr>          +#+  +:+       +#+        */
+/*   By: lucho <lucho@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/18 13:41:38 by luimarti          #+#    #+#             */
-/*   Updated: 2026/05/05 22:05:55 by luimarti         ###   ########.fr       */
+/*   Updated: 2026/05/14 12:28:05 by lucho            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -140,7 +140,16 @@ int				check_pipes(t_token *tokens);
 
 //EXPANDER
 
-char    *find_value(char *name, char **env);
-
+void	expander(t_cmd *cmds, t_shell *shell);
+char    *find_value(char *name, t_shell *shell);
+char	*get_var_name(char *str);
+char	*append_char(char *str, char *result, int *i);
+char	*expand_var(char *str, t_shell *shell, char *result, int *i);
+char	*single_quote_handler(char *str, char *result, int *i);
+char	*double_quote_handler(char *str, char *result, t_shell *shell, int *i);
+char	*special_handler(char *result, t_shell *shell, int *i);
+char	*dispatcher(char *str, t_shell *shell, char *result, int *i);
+char	*get_str(char *str, t_shell *shell);
+char	*dollar_handler(char *str, char *result, t_shell *shell, int *i);
 
 #endif
