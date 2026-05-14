@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   parser.c                                           :+:      :+:    :+:   */
+/*   parser_args.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: luimarti <luimarti@student.42.fr>          +#+  +:+       +#+        */
+/*   By: lucho <lucho@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/24 13:56:39 by luimarti          #+#    #+#             */
-/*   Updated: 2026/04/24 20:04:08 by luimarti         ###   ########.fr       */
+/*   Updated: 2026/05/14 14:46:29 by lucho            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,7 @@ int	word_counter(t_token *tokens)
 			else
 			{
 				ft_putstr_fd("Syntax error\n", 2);
-				return (-1); // Devolvemos -1 e lugar de 0 para distinguir entre error y el hehco de que no haya palabras.
+				return (-1);
 			}
 		}
 		else if (current->type == WORD)

@@ -6,7 +6,7 @@
 /*   By: lucho <lucho@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/18 13:41:38 by luimarti          #+#    #+#             */
-/*   Updated: 2026/05/14 12:28:05 by lucho            ###   ########.fr       */
+/*   Updated: 2026/05/14 14:49:39 by lucho            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -131,7 +131,8 @@ t_cmd			*parsing_core(t_token *tokens);
 t_redir			*build_redir(t_token *tokens);
 int				fill_redir(t_token *tokens, t_redir **head, t_redir **current);
 t_redir_type	redir_type(t_token *tokens);
-int				add_redir(t_redir *new, t_token *tokens, t_redir **head, t_redir **current);
+int				add_redir(t_redir *new, t_token *tokens, t_redir **head,
+					t_redir **current);
 void			free_redir(t_redir *redirs);
 
 int				syntax_controller(t_token *tokens);
@@ -140,16 +141,18 @@ int				check_pipes(t_token *tokens);
 
 //EXPANDER
 
-void	expander(t_cmd *cmds, t_shell *shell);
-char    *find_value(char *name, t_shell *shell);
-char	*get_var_name(char *str);
-char	*append_char(char *str, char *result, int *i);
-char	*expand_var(char *str, t_shell *shell, char *result, int *i);
-char	*single_quote_handler(char *str, char *result, int *i);
-char	*double_quote_handler(char *str, char *result, t_shell *shell, int *i);
-char	*special_handler(char *result, t_shell *shell, int *i);
-char	*dispatcher(char *str, t_shell *shell, char *result, int *i);
-char	*get_str(char *str, t_shell *shell);
-char	*dollar_handler(char *str, char *result, t_shell *shell, int *i);
+void			expander(t_cmd *cmds, t_shell *shell);
+char			*find_value(char *name, t_shell *shell);
+char			*get_var_name(char *str);
+char			*append_char(char *str, char *result, int *i);
+char			*expand_var(char *str, t_shell *shell, char *result, int *i);
+char			*single_quote_handler(char *str, char *result, int *i);
+char			*double_quote_handler(char *str, char *result, t_shell *shell,
+					int *i);
+char			*special_handler(char *result, t_shell *shell, int *i);
+char			*dispatcher(char *str, t_shell *shell, char *result, int *i);
+char			*get_str(char *str, t_shell *shell);
+char			*dollar_handler(char *str, char *result, t_shell *shell,
+					int *i);
 
 #endif
