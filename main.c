@@ -6,7 +6,7 @@
 /*   By: lucho <lucho@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/18 13:45:01 by luimarti          #+#    #+#             */
-/*   Updated: 2026/05/14 13:06:08 by lucho            ###   ########.fr       */
+/*   Updated: 2026/05/15 23:14:24 by lucho            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,6 +37,8 @@ int	main(int argc, char **argv, char **envp)
 			add_history(line);
 			head = parsing_core(tokens);
 			expander(head, &shell);
+			if (ft_strncmp(head->args[0], "echo", 4) == 0)
+    			ft_echo(head->args);
 			current = head;
 			while (current)
 			{

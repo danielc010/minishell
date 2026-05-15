@@ -6,7 +6,7 @@
 /*   By: lucho <lucho@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/18 13:41:38 by luimarti          #+#    #+#             */
-/*   Updated: 2026/05/14 14:49:39 by lucho            ###   ########.fr       */
+/*   Updated: 2026/05/15 23:15:50 by lucho            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -154,5 +154,10 @@ char			*dispatcher(char *str, t_shell *shell, char *result, int *i);
 char			*get_str(char *str, t_shell *shell);
 char			*dollar_handler(char *str, char *result, t_shell *shell,
 					int *i);
+
+//echo
+
+int				is_n_flag(char **args);
+int				ft_echo(char **args);		
 
 #endif
