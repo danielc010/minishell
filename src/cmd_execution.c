@@ -1,6 +1,7 @@
 #include "../include/minishell.h"
 
-char **extract_path_to_array(t_shell *shell)
+// Finds all the PATH= in env, splitting on : and returns the array
+char	**extract_path_to_array(t_shell *shell)
 {
 	int	i;
 	char	**paths_array;
@@ -21,17 +22,21 @@ char **extract_path_to_array(t_shell *shell)
 	return (paths_array);
 }
 
-char *resolve_path(char *cmd, t_shell *shell)
+char	*resolve_path(char *cmd, t_shell *shell)
 {
-	int	i;
-	char *with_slash;
-	char *full_path;
-	char **paths_array;
+	int		i;
+	char	*with_slash;
+	char	*full_path;
+	char	**paths_array;
 
 	if (!cmd || !shell)
 		return NULL;
-	if (cmd[0] == '/')
-		return cmd;
+	if (cmd[0] == '/' || (cmd[0] == '.' && cmd[1] == '/'))
+	{
+		if (access(cmd, X_OK) == 0)
+			return (ft_strdup(cmd));
+		return (NULL);
+	}
 	paths_array = extract_path_to_array(shell);
 	if (!paths_array)
 		return NULL;
@@ -42,22 +47,22 @@ char *resolve_path(char *cmd, t_shell *shell)
 		full_path = ft_strjoin(paths_array[i], with_slash);
 		if ((access(full_path, X_OK)) == 0)
 		{
-			break ;
+			break ; // we found the executable, skip to last return statement
 		}
 		else
 			free(full_path);
 		++i;
 	}
-	if (paths_array[i] == NULL)
+	if (paths_array[i] == NULL) // command is not found
 		return (free(with_slash), free_array(paths_array), NULL);
 	return (free(with_slash), free_array(paths_array), full_path);
 }
 
-void fork_and_exec(t_cmd *cmd, t_shell *shell)
+void	fork_and_exec(t_cmd *cmd, t_shell *shell)
 {
 	pid_t	pid;
-	int	status;
-	char *temp;
+	int		status;
+	char	*path;
 
 	if (!cmd || !shell)
 		return ;
@@ -66,14 +71,17 @@ void fork_and_exec(t_cmd *cmd, t_shell *shell)
 		return ;
 	if (pid == 0)
 	{
-		temp = resolve_path(cmd->args[0], shell);
-		apply_redirs(cmd->redirs); // positioned here because everything after successful execve will not run
-		if (execve(temp, cmd->args, shell->env) == -1)
+		path = resolve_path(cmd->args[0], shell);
+		if (!path)
 		{
-			free(temp); // TODO: To fix this free later. The absolute path case in resolve_path returns cmd directly (not malloc'd), so free(temp) would be wrong here.
-			exit(EXIT_FAILURE);
+			ft_putstr_fd("minishell: command not found: ", 2);
+			ft_putendl_fd(cmd->args[0], 2);
+			exit(127);
 		}
-
+		apply_redirs(cmd->redirs);
+		execve(path, cmd->args, shell->env);
+		free(path);
+		exit(EXIT_FAILURE);
 	}
 	else
 	{

@@ -5,6 +5,10 @@
 static void	handle_signal(int sig)
 {
 	g_signal = sig;
+	write(1, "^C\n", 3);
+	rl_on_new_line();
+	rl_replace_line("", 0);
+	rl_redisplay();
 }
 
 // Configure the struct before registering it.

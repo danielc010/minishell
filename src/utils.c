@@ -21,7 +21,7 @@ void	dup_envp(t_shell *shell, char **envp)
 	while (envp[j])
 	{
 		envp_cpy[j] = ft_strdup(envp[j]);
-		if (!envp_cpy[j])
+		if (!envp_cpy[j]) // TODO: can we call free_array here?
 		{
 			while (j < i)
 			{
@@ -50,21 +50,6 @@ void	free_array(char **arr)
 		++i;
 	}
 	free(arr);
-}
-
-void	free_pipes(int **pipes, int n)
-{
-	int	i;
-
-	if (!pipes)
-		return ;
-	i = 0;
-	while(i < n)
-	{
-		free(pipes[i]);
-		++i;
-	}
-	free(pipes);
 }
 
 int	count_cmds(t_cmd *cmd)

@@ -110,3 +110,18 @@ void	close_all_pipes(int **pipes, int n)
 		++i;
 	}
 }
+
+void	free_pipes(int **pipes, int n)
+{
+	int	i;
+
+	if (!pipes)
+		return ;
+	i = 0;
+	while(i < n)
+	{
+		free(pipes[i]);
+		++i;
+	}
+	free(pipes);
+}

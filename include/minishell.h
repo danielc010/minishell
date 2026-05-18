@@ -23,7 +23,10 @@
 
 
 // extern declaration so all files can see it
-extern int	g_signal;
+// volatile ells the compiler "don't optimize reads of this away — it can change
+// outside the normal flow of the program." Without it, the compiler might cache
+// g_signal in a register and never re-read it from memory after the signal fires.
+extern volatile sig_atomic_t	g_signal;
 
 typedef enum e_token_type
 {
@@ -52,11 +55,11 @@ typedef struct s_token
 
 typedef struct s_redir
 {
-	t_redir_type    type;
-	char            *file;
-	int             fd;
-	struct s_redir  *next;
-}   t_redir;
+	t_redir_type	type;
+	char			*file;
+	int				fd;
+	struct s_redir	*next;
+}	t_redir;
 
 // Struct containing information on the user input
 typedef struct s_cmd
@@ -75,16 +78,9 @@ typedef struct s_shell
 {
 	t_cmd	*cmds;
 	char	**env;
-	int	exit_status;
-	int	running;
-}   t_shell;
-
-typedef struct s_pipe_ctx
-{
-	int	**pipes;
-	int	i;
-	int	n;
-}	t_pipe_ctx;
+	int		exit_status;
+	int		running;
+}	t_shell;
 
 // signals.c
 void	signals_interactive(void);
@@ -92,19 +88,19 @@ void	signals_interactive(void);
 // utils.c
 void	dup_envp(t_shell *shell, char **envp);
 void	free_array(char **arr);
-void	free_pipes(int **pipes, int n);
-int	    count_cmds(t_cmd *cmd);
+int		count_cmds(t_cmd *cmd);
 
 // cmd_execution.c
-char **extract_path_to_array(t_shell *shell);
-char *resolve_path(char *cmd, t_shell *shell);
-void fork_and_exec(t_cmd *cmd, t_shell *shell);
-void apply_redirs(t_redir *redir);
+char	**extract_path_to_array(t_shell *shell);
+char	*resolve_path(char *cmd, t_shell *shell);
+void	fork_and_exec(t_cmd *cmd, t_shell *shell);
+void	apply_redirs(t_redir *redir);
 
 // pipes.c
 void	exec_pipeline(t_shell *shell);
-int	init_pipes(int **pipes, int n);
+int		init_pipes(int **pipes, int n);
 void	setup_child_fds(int **pipes, int i, int n);
 void	close_all_pipes(int **pipes, int n);
+void	free_pipes(int **pipes, int n);
 
 #endif

@@ -30,6 +30,10 @@ LIBFT_LIB = $(LIBFT_DIR)/libft.a
 
 # Detect OS
 UNAME_S := $(shell uname -s)
+ifeq ($(UNAME_S), Darwin)
+	CFLAGS += -I/opt/homebrew/opt/readline/include
+	LDLIBS += -L/opt/homebrew/opt/readline/lib
+endif
 
 
 
