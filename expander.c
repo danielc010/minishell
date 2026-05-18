@@ -6,7 +6,7 @@
 /*   By: lucho <lucho@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/03 10:56:58 by luimarti          #+#    #+#             */
-/*   Updated: 2026/05/14 13:20:10 by lucho            ###   ########.fr       */
+/*   Updated: 2026/05/18 18:04:44 by lucho            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,8 +22,15 @@ char	*double_quote_handler(char *str, char *result, t_shell *shell, int *i)
 			(*i)++;
 			if (str[*i] == '?')
 				result = special_handler(result, shell, i);
-			else
+			else if ((ft_isalpha(str[*i]) || ft_isdigit(str[*i])
+					|| str[*i] == '_'))
 				result = expand_var(str, shell, result, i);
+			else
+			{
+				(*i)--;
+				result = append_char(str, result, i);
+				(*i)++;
+			}
 		}
 		else
 		{
