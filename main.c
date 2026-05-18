@@ -6,7 +6,7 @@
 /*   By: lucho <lucho@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/18 13:45:01 by luimarti          #+#    #+#             */
-/*   Updated: 2026/05/15 23:14:24 by lucho            ###   ########.fr       */
+/*   Updated: 2026/05/18 17:36:06 by lucho            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,6 +39,10 @@ int	main(int argc, char **argv, char **envp)
 			expander(head, &shell);
 			if (ft_strncmp(head->args[0], "echo", 4) == 0)
     			ft_echo(head->args);
+			if (ft_strncmp(head->args[0], "pwd", 3) == 0)
+    			ft_pwd();
+			if (ft_strncmp(head->args[0], "env", 3) == 0)
+				ft_env(&shell);
 			current = head;
 			while (current)
 			{

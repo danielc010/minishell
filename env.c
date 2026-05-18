@@ -6,7 +6,7 @@
 /*   By: lucho <lucho@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/03 10:58:25 by luimarti          #+#    #+#             */
-/*   Updated: 2026/05/14 14:46:41 by lucho            ###   ########.fr       */
+/*   Updated: 2026/05/18 17:33:41 by lucho            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,34 +38,19 @@ char	**copy_env(char **envp)
 	return (env);
 }
 
-void	free_array(char **str)
+int	ft_env(t_shell *shell)
 {
-	int	i;
+	char	**var;
+	int		i;
 
-	if (!str)
-		return ;
+	if (!shell)
+		return (1);
+	var = shell->env;
 	i = 0;
-	while (str[i] != NULL)
+	while (var[i])
 	{
-		free(str[i]);
+		printf("%s\n", var[i]);
 		i++;
 	}
-	free(str);
-	return ;
-}
-
-void	free_cmd(t_cmd *commands)
-{
-	t_cmd	*tmp;
-
-	while (commands)
-	{
-		if (commands->redirs)
-			free_redir(commands->redirs);
-		free_array(commands->args);
-		tmp = commands->next;
-		free (commands);
-		commands = tmp;
-	}
-	return ;
+	return (0);
 }

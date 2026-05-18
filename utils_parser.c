@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   utils_parser.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: luimarti <luimarti@student.42.fr>          +#+  +:+       +#+        */
+/*   By: lucho <lucho@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/24 20:04:11 by luimarti          #+#    #+#             */
-/*   Updated: 2026/05/01 14:52:40 by luimarti         ###   ########.fr       */
+/*   Updated: 2026/05/18 17:25:48 by lucho            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,4 +37,36 @@ t_redir	*init_redir(void)
 	current->fd = 0;
 	current->next = NULL;
 	return (current);
+}
+
+void	free_array(char **str)
+{
+	int	i;
+
+	if (!str)
+		return ;
+	i = 0;
+	while (str[i] != NULL)
+	{
+		free(str[i]);
+		i++;
+	}
+	free(str);
+	return ;
+}
+
+void	free_cmd(t_cmd *commands)
+{
+	t_cmd	*tmp;
+
+	while (commands)
+	{
+		if (commands->redirs)
+			free_redir(commands->redirs);
+		free_array(commands->args);
+		tmp = commands->next;
+		free (commands);
+		commands = tmp;
+	}
+	return ;
 }
