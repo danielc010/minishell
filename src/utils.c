@@ -1,6 +1,7 @@
 #include "../include/minishell.h"
 
-// We copy because envp is owned by the OS/runtime — you can't modify it. But your shell needs to modify the environment when the user runs export or unset. Those built-ins add, change, or remove variables.
+// We copy because envp is owned by the OS/runtime — you can't modify it. But your shell needs to
+// modify the environment when the user runs export or unset. Those built-ins add, change, or remove variables.
 // If you used envp directly, those changes would be impossible. With your own copy in shell.env, you can freely modify it.
 void	dup_envp(t_shell *shell, char **envp)
 {
@@ -72,8 +73,8 @@ int	count_cmds(t_cmd *cmd)
 
 	if (!cmd)
 		return (0);
-	i = 1;
-	while (cmd->next)
+	i = 0;
+	while (cmd)
 	{
 		cmd = cmd->next;
 		++i;

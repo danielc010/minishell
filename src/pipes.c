@@ -10,6 +10,7 @@ void	exec_pipeline(t_shell *shell)
 	int status;
 	pid_t	*pids;
 
+
 	cmd = shell->cmds;
 	n = count_cmds(cmd);
 	if (n == 1)
@@ -42,9 +43,9 @@ void	exec_pipeline(t_shell *shell)
 		{
 				setup_child_fds(pipes, i , n);
 				close_all_pipes(pipes, n - 1);
+				apply_redirs(cmd->redirs); // positioned here because everything after successful execve will not run
 				if (execve(resolve_path(cmd->args[0], shell), cmd->args, shell->env) == -1)
 					exit(EXIT_FAILURE);
-
 		}
 		else
 		{
@@ -52,8 +53,8 @@ void	exec_pipeline(t_shell *shell)
 			cmd = cmd->next;
 			++i;
 		}
-
 	}
+	close_all_pipes(pipes, n - 1); // close pipes for the parent to avoid hanging
 	i = 0;
 	while (i < n)
 	{

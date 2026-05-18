@@ -19,6 +19,8 @@
 #include <sys/wait.h>
 // waitpid
 
+#include <fcntl.h>
+
 
 // extern declaration so all files can see it
 extern int	g_signal;
@@ -56,7 +58,6 @@ typedef struct s_redir
 	struct s_redir  *next;
 }   t_redir;
 
-
 // Struct containing information on the user input
 typedef struct s_cmd
 {
@@ -91,12 +92,14 @@ void	signals_interactive(void);
 // utils.c
 void	dup_envp(t_shell *shell, char **envp);
 void	free_array(char **arr);
+void	free_pipes(int **pipes, int n);
 int	    count_cmds(t_cmd *cmd);
 
 // cmd_execution.c
 char **extract_path_to_array(t_shell *shell);
 char *resolve_path(char *cmd, t_shell *shell);
 void fork_and_exec(t_cmd *cmd, t_shell *shell);
+void apply_redirs(t_redir *redir);
 
 // pipes.c
 void	exec_pipeline(t_shell *shell);

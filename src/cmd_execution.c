@@ -30,6 +30,8 @@ char *resolve_path(char *cmd, t_shell *shell)
 
 	if (!cmd || !shell)
 		return NULL;
+	if (cmd[0] == '/')
+		return cmd;
 	paths_array = extract_path_to_array(shell);
 	if (!paths_array)
 		return NULL;
@@ -51,10 +53,11 @@ char *resolve_path(char *cmd, t_shell *shell)
 	return (free(with_slash), free_array(paths_array), full_path);
 }
 
-void fork_and_exec(t_cmd *cmd, t_shell *shell, t_pipe_ctx *ctx)
+void fork_and_exec(t_cmd *cmd, t_shell *shell)
 {
 	pid_t	pid;
 	int	status;
+	char *temp;
 
 	if (!cmd || !shell)
 		return ;
@@ -63,10 +66,14 @@ void fork_and_exec(t_cmd *cmd, t_shell *shell, t_pipe_ctx *ctx)
 		return ;
 	if (pid == 0)
 	{
-		if (execve(resolve_path(cmd->args[0], shell), cmd->args, shell->env) == -1)
+		temp = resolve_path(cmd->args[0], shell);
+		apply_redirs(cmd->redirs); // positioned here because everything after successful execve will not run
+		if (execve(temp, cmd->args, shell->env) == -1)
 		{
+			free(temp); // TODO: To fix this free later. The absolute path case in resolve_path returns cmd directly (not malloc'd), so free(temp) would be wrong here.
 			exit(EXIT_FAILURE);
 		}
+
 	}
 	else
 	{
@@ -75,5 +82,33 @@ void fork_and_exec(t_cmd *cmd, t_shell *shell, t_pipe_ctx *ctx)
 		{
 			shell->exit_status = WEXITSTATUS(status);
 		}
+	}
+}
+
+void apply_redirs(t_redir *redir)
+{
+	int	fd;
+
+	while (redir)
+	{
+		if (redir->type == R_IN)
+		{
+			fd = open(redir->file, O_RDONLY);
+			dup2(fd, STDIN_FILENO);
+			close(fd);
+		}
+		else if (redir->type == R_OUT)
+		{
+			fd = open(redir->file, O_WRONLY | O_CREAT | O_TRUNC, 0644);
+			dup2(fd, STDOUT_FILENO);
+			close(fd);
+		}
+		else if (redir->type == R_APPEND)
+		{
+			fd = open(redir->file, O_WRONLY | O_CREAT | O_APPEND, 0644);
+			dup2(fd, STDOUT_FILENO);
+			close(fd);
+		}
+		redir = redir->next;
 	}
 }
