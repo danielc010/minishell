@@ -9,8 +9,23 @@ void	exec_pipeline(t_shell *shell)
 	int pid;
 	int status;
 	pid_t	*pids;
+	t_redir *redir;
 
-
+	cmd = shell->cmds;
+	// handle heredoc
+	while (cmd)
+	{
+		redir = cmd->redirs;
+		while (redir)
+		{
+			if (redir->type == R_HEREDOC)
+			{
+				redir->fd = setup_heredoc(redir->file);
+			}
+			redir = redir->next;
+		}
+		cmd = cmd->next;
+	}
 	cmd = shell->cmds;
 	n = count_cmds(cmd);
 	if (n == 1)
@@ -41,11 +56,11 @@ void	exec_pipeline(t_shell *shell)
 			return ;
 		if (pid == 0)
 		{
-				setup_child_fds(pipes, i , n);
-				close_all_pipes(pipes, n - 1);
-				apply_redirs(cmd->redirs); // positioned here because everything after successful execve will not run
-				if (execve(resolve_path(cmd->args[0], shell), cmd->args, shell->env) == -1)
-					exit(EXIT_FAILURE);
+			setup_child_fds(pipes, i , n);
+			close_all_pipes(pipes, n - 1);
+			apply_redirs(cmd->redirs); // positioned here because everything after successful execve will not run
+			if (execve(resolve_path(cmd->args[0], shell), cmd->args, shell->env) == -1)
+				exit(EXIT_FAILURE);
 		}
 		else
 		{

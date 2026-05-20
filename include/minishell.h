@@ -89,6 +89,7 @@ void	signals_interactive(void);
 void	dup_envp(t_shell *shell, char **envp);
 void	free_array(char **arr);
 int		count_cmds(t_cmd *cmd);
+int setup_heredoc(char *delim);
 
 // cmd_execution.c
 char	**extract_path_to_array(t_shell *shell);

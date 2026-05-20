@@ -117,6 +117,11 @@ void apply_redirs(t_redir *redir)
 			dup2(fd, STDOUT_FILENO);
 			close(fd);
 		}
+		else if (redir->type == R_HEREDOC)
+		{
+			dup2(redir->fd, STDIN_FILENO);
+			close(redir->fd);
+		}
 		redir = redir->next;
 	}
 }

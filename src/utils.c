@@ -66,3 +66,34 @@ int	count_cmds(t_cmd *cmd)
 	}
 	return i;
 }
+
+int setup_heredoc(char *delim)
+{
+    int pipe_fd[2];
+	char *line;
+
+    pipe(pipe_fd);
+    while (1)
+	{
+		line = readline("> ");
+		if (line == NULL)
+		{
+			if (g_signal == SIGINT)
+			{
+				g_signal = 0;
+				continue ;
+			}
+			break ;
+		}
+		if (!ft_strncmp(line, delim, ft_strlen(delim)))
+		{
+			free(line);
+			break;
+		}
+		write(pipe_fd[1], line, ft_strlen(line));
+		write(pipe_fd[1], "\n", 1);
+		free(line);
+	}
+	close(pipe_fd[1]);
+	return pipe_fd[0];
+}
