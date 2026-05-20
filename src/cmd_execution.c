@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        ::::::::            */
+/*   cmd_execution.c                                    :+:    :+:            */
+/*                                                     +:+                    */
+/*   By: dachin <dachin@student.codam.nl>             +#+                     */
+/*                                                   +#+                      */
+/*   Created: 2026/05/20 23:39:14 by dachin        #+#    #+#                 */
+/*   Updated: 2026/05/20 23:39:15 by dachin        ########   odam.nl         */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../include/minishell.h"
 
 // Finds all the PATH= in env, splitting on : and returns the array
@@ -124,4 +136,35 @@ void apply_redirs(t_redir *redir)
 		}
 		redir = redir->next;
 	}
+}
+
+int setup_heredoc(char *delim)
+{
+    int pipe_fd[2];
+	char *line;
+
+    pipe(pipe_fd);
+    while (1)
+	{
+		line = readline("> ");
+		if (line == NULL)
+		{
+			if (g_signal == SIGINT)
+			{
+				g_signal = 0;
+				continue ;
+			}
+			break ;
+		}
+		if (!ft_strncmp(line, delim, ft_strlen(delim)))
+		{
+			free(line);
+			break;
+		}
+		write(pipe_fd[1], line, ft_strlen(line));
+		write(pipe_fd[1], "\n", 1);
+		free(line);
+	}
+	close(pipe_fd[1]);
+	return pipe_fd[0];
 }

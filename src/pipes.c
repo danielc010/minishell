@@ -1,15 +1,27 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        ::::::::            */
+/*   pipes.c                                            :+:    :+:            */
+/*                                                     +:+                    */
+/*   By: dachin <dachin@student.codam.nl>             +#+                     */
+/*                                                   +#+                      */
+/*   Created: 2026/05/20 23:39:28 by dachin        #+#    #+#                 */
+/*   Updated: 2026/05/21 00:19:15 by dachin        ########   odam.nl         */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../include/minishell.h"
 
 void	exec_pipeline(t_shell *shell)
 {
 	t_cmd	*cmd;
-	int	n;
-	int	i;
-	int	**pipes;
-	int pid;
-	int status;
+	int		n;
+	int		i;
+	int		**pipes;
+	int		pid;
+	int		status;
 	pid_t	*pids;
-	t_redir *redir;
+	t_redir	*redir;
 
 	cmd = shell->cmds;
 	// handle heredoc
@@ -30,6 +42,16 @@ void	exec_pipeline(t_shell *shell)
 	n = count_cmds(cmd);
 	if (n == 1)
 	{
+		if (!ft_strncmp(cmd->args[0], "cd", 3))
+		{
+			builtin_cd(shell, cmd);
+			return ;
+		}
+		if (!ft_strncmp(cmd->args[0], "exit", 6))
+		{
+			builtin_exit(shell, cmd);
+			return ;
+		}
 		fork_and_exec(shell->cmds, shell);
 		return ;
 	}

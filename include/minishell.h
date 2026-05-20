@@ -89,13 +89,14 @@ void	signals_interactive(void);
 void	dup_envp(t_shell *shell, char **envp);
 void	free_array(char **arr);
 int		count_cmds(t_cmd *cmd);
-int setup_heredoc(char *delim);
+
 
 // cmd_execution.c
 char	**extract_path_to_array(t_shell *shell);
 char	*resolve_path(char *cmd, t_shell *shell);
 void	fork_and_exec(t_cmd *cmd, t_shell *shell);
 void	apply_redirs(t_redir *redir);
+int		setup_heredoc(char *delim);
 
 // pipes.c
 void	exec_pipeline(t_shell *shell);
@@ -103,5 +104,15 @@ int		init_pipes(int **pipes, int n);
 void	setup_child_fds(int **pipes, int i, int n);
 void	close_all_pipes(int **pipes, int n);
 void	free_pipes(int **pipes, int n);
+
+// builtin.c
+void	replace_env_entry(char **entry, char *newval);
+void	update_env(t_shell *shell, char *key, char *value);
+char	*get_env(t_shell *shell, char *key);
+char	*get_cd_path(t_shell *shell, t_cmd *cmd);
+void	builtin_cd(t_shell *shell, t_cmd *cmd);
+
+// builtin2.c
+void	builtin_exit(t_shell *shell, t_cmd *cmd);
 
 #endif

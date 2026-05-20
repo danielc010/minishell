@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        ::::::::            */
+/*   main.c                                             :+:    :+:            */
+/*                                                     +:+                    */
+/*   By: dachin <dachin@student.codam.nl>             +#+                     */
+/*                                                   +#+                      */
+/*   Created: 2026/05/20 23:39:19 by dachin        #+#    #+#                 */
+/*   Updated: 2026/05/21 00:34:05 by dachin        ########   odam.nl         */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../include/minishell.h"
 
 volatile sig_atomic_t	g_signal = 0;
@@ -12,6 +24,7 @@ int	main(int argc, char **argv, char **envp)
 	(void)argv;
 	dup_envp(&shell, envp);
 	signals_interactive();
+
 	// By default, readline installs its own signal handlers for SIGINT
 	// (and others). When readline catches SIGINT, it does its own cleanup
 	//  — but that interferes with your custom signal handling in
