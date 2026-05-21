@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lucho <lucho@student.42.fr>                +#+  +:+       +#+        */
+/*   By: luimarti <luimarti@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/18 13:45:01 by luimarti          #+#    #+#             */
-/*   Updated: 2026/05/18 18:18:40 by lucho            ###   ########.fr       */
+/*   Updated: 2026/05/21 14:25:31 by luimarti         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,54 +16,19 @@ int	main(int argc, char **argv, char **envp)
 {
 	t_shell		shell;
 	char		*line;
-	t_token		*tokens;
-	t_cmd		*head;
-	t_cmd		*current;
-	t_redir		*redir;
-	int i;
 
 	(void)argc;
 	(void)argv;
-	shell.cmds = NULL;
-	shell.env = copy_env(envp);
-	shell.exit_status = 0;
-	shell.running = 1;
+	init_shell(&shell, envp);
 	line = readline("minishell>");
 	while (shell.running == 1 && line != NULL)
 	{
 		if (line[0])
-		{
-			tokens = lexer(line);
 			add_history(line);
-			head = parsing_core(tokens);
-			expander(head, &shell);
-			if (ft_strncmp(head->args[0], "echo", 4) == 0)
-    			ft_echo(head->args);
-			if (ft_strncmp(head->args[0], "pwd", 3) == 0)
-    			ft_pwd();
-			if (ft_strncmp(head->args[0], "env", 3) == 0)
-				ft_env(&shell);
-			current = head;
-			while (current)
-			{
-				i = 0;
-				printf("--- Args ---\n");
-				while (current->args && current->args[i])
-				{
-					printf("args[%d]: %s\n", i, current->args[i]);
-					i++;
-				}
-				redir = current->redirs;
-				while (redir)
-				{
-    				printf("redir type: %d, file: %s\n", redir->type, redir->file);
-    				redir = redir->next;
-				}
-				current = current->next;
-			}
-			free_cmd(head);
-			free_tokens(tokens);
-		}
+		shell.cmds = parse(line, &shell);
+		// if (shell.cmds)
+    	// 	exec_pipeline(&shell);
+		free_cmd(shell.cmds);
 		free(line);
 		line = readline("minishell>");
 	}

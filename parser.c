@@ -3,41 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   parser.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lucho <lucho@student.42.fr>                +#+  +:+       +#+        */
+/*   By: luimarti <luimarti@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/24 13:56:39 by luimarti          #+#    #+#             */
-/*   Updated: 2026/05/14 14:46:56 by lucho            ###   ########.fr       */
+/*   Updated: 2026/05/21 13:58:49 by luimarti         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
-
-int	word_counter(t_token *tokens)
-{
-	int		i;
-	t_token	*current;
-
-	i = 0;
-	current = tokens;
-	while (current && current->type != PIPE)
-	{
-		if (current->type == REDIR_IN || current->type == REDIR_OUT
-			|| current->type == REDIR_APPEND || current->type == HEREDOC)
-		{
-			if (current->next)
-				current = current->next;
-			else
-			{
-				ft_putstr_fd("Syntax error\n", 2);
-				return (-1);
-			}
-		}
-		else if (current->type == WORD)
-			i++;
-		current = current->next;
-	}
-	return (i);
-}
 
 static int	fill_args(t_token *current, char **args, int *i)
 {

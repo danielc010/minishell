@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lucho <lucho@student.42.fr>                +#+  +:+       +#+        */
+/*   By: luimarti <luimarti@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/18 13:41:38 by luimarti          #+#    #+#             */
-/*   Updated: 2026/05/18 17:35:30 by lucho            ###   ########.fr       */
+/*   Updated: 2026/05/21 14:02:23 by luimarti         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -161,5 +161,10 @@ int				is_n_flag(char **args);
 int				ft_echo(char **args);
 int				ft_pwd(void);
 int				ft_env(t_shell *shell);
+
+//CORE
+
+t_cmd			*parse(char *line, t_shell *shell);
+void			init_shell(t_shell *shell, char **envp);
 
 #endif
