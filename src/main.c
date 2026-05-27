@@ -6,7 +6,7 @@
 /*   By: dachin <dachin@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2026/05/20 23:39:19 by dachin        #+#    #+#                 */
-/*   Updated: 2026/05/21 00:34:05 by dachin        ########   odam.nl         */
+/*   Updated: 2026/05/27 21:12:16 by dachin        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,12 @@ int	main(int argc, char **argv, char **envp)
 	char	*line;
 	t_shell	shell;
 
+	t_cmd cmd1;
+	cmd1.args= (char *[]){"echo", "test", NULL};
+	cmd1.redirs = NULL;
+	cmd1.next = NULL;
+
+	shell.cmds = &cmd1;
 
 	(void)argc;
 	(void)argv;
@@ -42,6 +48,9 @@ int	main(int argc, char **argv, char **envp)
 			if (g_signal == SIGINT)
 			{
 				g_signal = 0;
+			rl_on_new_line();
+			rl_replace_line("", 0);
+			rl_redisplay();
 				continue ;
 			}
 			break ;

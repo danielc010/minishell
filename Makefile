@@ -6,13 +6,14 @@
 #    By: dachin <dachin@student.codam.nl>             +#+                      #
 #                                                    +#+                       #
 #    Created: 2026/03/18 08:09:02 by dachin        #+#    #+#                  #
-#    Updated: 2026/05/21 00:21:05 by dachin        ########   odam.nl          #
+#    Updated: 2026/05/27 16:48:55 by dachin        ########   odam.nl          #
 #                                                                              #
 # **************************************************************************** #
 
 # List of source files
 SRCS = src/main.c src/signals.c src/utils.c src/cmd_execution.c src/pipes.c \
-		src/builtin.c src/builtin2.c
+		src/builtin.c src/builtin2.c src/cmd_execution2.c src/pipes2.c \
+		src/builtin3.c
 
 # Creates object files by replacing .c with .o. $ references variables or automatic variables
 OBJS = $(SRCS:.c=.o)

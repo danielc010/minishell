@@ -6,7 +6,7 @@
 /*   By: dachin <dachin@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2026/05/20 23:39:14 by dachin        #+#    #+#                 */
-/*   Updated: 2026/05/20 23:39:15 by dachin        ########   odam.nl         */
+/*   Updated: 2026/05/27 21:09:05 by dachin        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 // Finds all the PATH= in env, splitting on : and returns the array
 char	**extract_path_to_array(t_shell *shell)
 {
-	int	i;
+	int		i;
 	char	**paths_array;
 
 	if (!shell)
@@ -34,15 +34,39 @@ char	**extract_path_to_array(t_shell *shell)
 	return (paths_array);
 }
 
+// if ((access(full_path, X_OK)) == 0): we found the executable, skip to
+// last return statement
+// if (paths_array[i] == NULL): command is not found
+char	*find_in_paths(char **paths, char *with_slash)
+{
+	char	*full_path;
+	int		i;
+
+	full_path = NULL;
+	i = 0;
+	while (paths[i])
+	{
+		full_path = ft_strjoin(paths[i], with_slash);
+		if ((access(full_path, X_OK)) == 0)
+			break ;
+		else
+		{
+			free(full_path);
+			full_path = NULL;
+		}
+		++i;
+	}
+	return (full_path);
+}
+
 char	*resolve_path(char *cmd, t_shell *shell)
 {
-	int		i;
 	char	*with_slash;
 	char	*full_path;
 	char	**paths_array;
 
 	if (!cmd || !shell)
-		return NULL;
+		return (NULL);
 	if (cmd[0] == '/' || (cmd[0] == '.' && cmd[1] == '/'))
 	{
 		if (access(cmd, X_OK) == 0)
@@ -51,30 +75,35 @@ char	*resolve_path(char *cmd, t_shell *shell)
 	}
 	paths_array = extract_path_to_array(shell);
 	if (!paths_array)
-		return NULL;
-	i = 0;
+		return (NULL);
 	with_slash = ft_strjoin("/", cmd);
-	while (paths_array[i])
-	{
-		full_path = ft_strjoin(paths_array[i], with_slash);
-		if ((access(full_path, X_OK)) == 0)
-		{
-			break ; // we found the executable, skip to last return statement
-		}
-		else
-			free(full_path);
-		++i;
-	}
-	if (paths_array[i] == NULL) // command is not found
+	full_path = find_in_paths(paths_array, with_slash);
+	if (full_path == NULL)
 		return (free(with_slash), free_array(paths_array), NULL);
 	return (free(with_slash), free_array(paths_array), full_path);
+}
+
+void	exec_child(t_cmd *cmd, t_shell *shell)
+{
+	char	*path;
+
+	path = resolve_path(cmd->args[0], shell);
+	if (!path)
+	{
+		ft_putstr_fd("minishell: command not found: ", 2);
+		ft_putendl_fd(cmd->args[0], 2);
+		exit(127);
+	}
+	signals_child();
+	apply_redirs(cmd->redirs);
+	execve(path, cmd->args, shell->env);
+	free(path);
 }
 
 void	fork_and_exec(t_cmd *cmd, t_shell *shell)
 {
 	pid_t	pid;
 	int		status;
-	char	*path;
 
 	if (!cmd || !shell)
 		return ;
@@ -83,88 +112,16 @@ void	fork_and_exec(t_cmd *cmd, t_shell *shell)
 		return ;
 	if (pid == 0)
 	{
-		path = resolve_path(cmd->args[0], shell);
-		if (!path)
-		{
-			ft_putstr_fd("minishell: command not found: ", 2);
-			ft_putendl_fd(cmd->args[0], 2);
-			exit(127);
-		}
-		apply_redirs(cmd->redirs);
-		execve(path, cmd->args, shell->env);
-		free(path);
+		exec_child(cmd, shell);
 		exit(EXIT_FAILURE);
 	}
 	else
 	{
 		waitpid(pid, &status, 0);
 		if (WIFEXITED(status))
-		{
 			shell->exit_status = WEXITSTATUS(status);
-		}
+		if (WIFSIGNALED(status) && WTERMSIG(status) == SIGQUIT)
+    		ft_putendl_fd("Quit: 3", 2);
+		signals_interactive();
 	}
-}
-
-void apply_redirs(t_redir *redir)
-{
-	int	fd;
-
-	while (redir)
-	{
-		if (redir->type == R_IN)
-		{
-			fd = open(redir->file, O_RDONLY);
-			dup2(fd, STDIN_FILENO);
-			close(fd);
-		}
-		else if (redir->type == R_OUT)
-		{
-			fd = open(redir->file, O_WRONLY | O_CREAT | O_TRUNC, 0644);
-			dup2(fd, STDOUT_FILENO);
-			close(fd);
-		}
-		else if (redir->type == R_APPEND)
-		{
-			fd = open(redir->file, O_WRONLY | O_CREAT | O_APPEND, 0644);
-			dup2(fd, STDOUT_FILENO);
-			close(fd);
-		}
-		else if (redir->type == R_HEREDOC)
-		{
-			dup2(redir->fd, STDIN_FILENO);
-			close(redir->fd);
-		}
-		redir = redir->next;
-	}
-}
-
-int setup_heredoc(char *delim)
-{
-    int pipe_fd[2];
-	char *line;
-
-    pipe(pipe_fd);
-    while (1)
-	{
-		line = readline("> ");
-		if (line == NULL)
-		{
-			if (g_signal == SIGINT)
-			{
-				g_signal = 0;
-				continue ;
-			}
-			break ;
-		}
-		if (!ft_strncmp(line, delim, ft_strlen(delim)))
-		{
-			free(line);
-			break;
-		}
-		write(pipe_fd[1], line, ft_strlen(line));
-		write(pipe_fd[1], "\n", 1);
-		free(line);
-	}
-	close(pipe_fd[1]);
-	return pipe_fd[0];
 }

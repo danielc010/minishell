@@ -1,39 +1,61 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        ::::::::            */
+/*   utils.c                                            :+:    :+:            */
+/*                                                     +:+                    */
+/*   By: dachin <dachin@student.codam.nl>             +#+                     */
+/*                                                   +#+                      */
+/*   Created: 2026/05/21 00:38:41 by dachin        #+#    #+#                 */
+/*   Updated: 2026/05/21 00:49:29 by dachin        ########   odam.nl         */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../include/minishell.h"
 
-// We copy because envp is owned by the OS/runtime — you can't modify it. But your shell needs to
-// modify the environment when the user runs export or unset. Those built-ins add, change, or remove variables.
-// If you used envp directly, those changes would be impossible. With your own copy in shell.env, you can freely modify it.
-void	dup_envp(t_shell *shell, char **envp)
+void	free_partial_env(char **env, int count)
 {
 	int	i;
-	char **envp_cpy;
-	int j;
+
+	i = 0;
+	while (i < count)
+	{
+		free(env[i]);
+		++i;
+	}
+	free(env);
+}
+
+// We copy because envp is owned by the OS/runtime — you
+// can't modify it. But your shell needs to modify the
+// environment when the user runs export or unset.
+// Those built-ins add, change, or remove variables.
+// If you used envp directly, those changes would be impossible.
+// With your own copy in shell.env, you can freely modify it.
+void	dup_envp(t_shell *shell, char **envp)
+{
+	int		i;
+	char	**envp_cpy;
 
 	if (!shell || !envp)
 		return ;
 	i = 0;
-	j = 0;
 	while (envp[i])
 		++i;
 	envp_cpy = malloc(sizeof(char *) * (i + 1));
 	if (!envp_cpy)
 		return ;
-	while (envp[j])
+	i = 0;
+	while (envp[i])
 	{
-		envp_cpy[j] = ft_strdup(envp[j]);
-		if (!envp_cpy[j]) // TODO: can we call free_array here?
+		envp_cpy[i] = ft_strdup(envp[i]);
+		if (!envp_cpy[i])
 		{
-			while (j < i)
-			{
-				free(envp_cpy[j]);
-				++j;
-			}
-			free(envp_cpy);
+			free_partial_env(envp_cpy, i);
 			return ;
 		}
-		++j;
+		++i;
 	}
-	envp_cpy[j] = NULL;
+	envp_cpy[i] = NULL;
 	shell->env = envp_cpy;
 }
 
@@ -54,7 +76,7 @@ void	free_array(char **arr)
 
 int	count_cmds(t_cmd *cmd)
 {
-	int i;
+	int	i;
 
 	if (!cmd)
 		return (0);
@@ -64,6 +86,5 @@ int	count_cmds(t_cmd *cmd)
 		cmd = cmd->next;
 		++i;
 	}
-	return i;
+	return (i);
 }
-

@@ -6,7 +6,7 @@
 /*   By: dachin <dachin@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2026/05/20 23:39:07 by dachin        #+#    #+#                 */
-/*   Updated: 2026/05/21 00:32:52 by dachin        ########   odam.nl         */
+/*   Updated: 2026/05/27 17:33:00 by dachin        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,25 @@ void	replace_env_entry(char **entry, char *newval)
 	tmp = *entry;
 	*entry = newval;
 	free(tmp);
+}
+
+void	add_env(t_shell *shell, int i, char *new_env)
+{
+	char	**env_new;
+
+	env_new = malloc((i + 2) * sizeof(char *));
+	if (!env_new)
+		return ;
+	env_new[i + 1] = NULL;
+	env_new[i] = new_env;
+	--i;
+	while (i >= 0)
+	{
+		env_new[i] = shell->env[i];
+		--i;
+	}
+	free(shell->env);
+	shell->env = env_new;
 }
 
 void	update_env(t_shell *shell, char *key, char *value)
@@ -46,7 +65,7 @@ void	update_env(t_shell *shell, char *key, char *value)
 	}
 	free(keyequal);
 	if (!found)
-		free(keyequalvalue);
+		add_env(shell, i, keyequalvalue);
 }
 
 char	*get_env(t_shell *shell, char *key)
@@ -75,6 +94,8 @@ char	*get_cd_path(t_shell *shell, t_cmd *cmd)
 {
 	char	*path;
 
+	if (!shell || !cmd)
+		return (NULL);
 	if (!cmd->args[1])
 		path = get_env(shell, "HOME");
 	else if (!ft_strncmp(cmd->args[1], "-", 2))
@@ -82,31 +103,4 @@ char	*get_cd_path(t_shell *shell, t_cmd *cmd)
 	else
 		path = cmd->args[1];
 	return (path);
-}
-
-void	builtin_cd(t_shell *shell, t_cmd *cmd)
-{
-	char	*oldpwd;
-	char	*pwd;
-	char	*path;
-
-	oldpwd = getcwd(NULL, 0);
-	if (!oldpwd)
-		return ;
-	path = get_cd_path(shell, cmd);
-	if (!path)
-	{
-		free(oldpwd);
-		return ;
-	}
-	if (chdir(path) != 0)
-	{
-		free(oldpwd);
-		return ;
-	}
-	pwd = getcwd(NULL, 0);
-	update_env(shell, "OLDPWD", oldpwd);
-	update_env(shell, "PWD", pwd);
-	free(oldpwd);
-	free(pwd);
 }
