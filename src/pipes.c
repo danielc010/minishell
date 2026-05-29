@@ -6,7 +6,7 @@
 /*   By: dachin <dachin@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2026/05/20 23:39:28 by dachin        #+#    #+#                 */
-/*   Updated: 2026/05/27 21:06:26 by dachin        ########   odam.nl         */
+/*   Updated: 2026/05/29 18:09:51 by dachin        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,9 +22,7 @@ void	prepare_heredocs(t_cmd *cmd)
 		while (redir)
 		{
 			if (redir->type == R_HEREDOC)
-			{
 				redir->fd = setup_heredoc(redir->file);
-			}
 			redir = redir->next;
 		}
 		cmd = cmd->next;
@@ -45,7 +43,7 @@ void	wait_all(t_shell *shell, pid_t *pids, int n)
 		if (WIFEXITED(status))
 			shell->exit_status = WEXITSTATUS(status);
 		if (WIFSIGNALED(status) && WTERMSIG(status) == SIGQUIT)
-		ft_putendl_fd("Quit: 3", 2);
+			ft_putendl_fd("Quit: 3", 2);
 		++i;
 	}
 	signals_interactive();

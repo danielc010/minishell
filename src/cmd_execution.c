@@ -6,7 +6,7 @@
 /*   By: dachin <dachin@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2026/05/20 23:39:14 by dachin        #+#    #+#                 */
-/*   Updated: 2026/05/27 21:09:05 by dachin        ########   odam.nl         */
+/*   Updated: 2026/05/29 18:08:57 by dachin        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -121,7 +121,7 @@ void	fork_and_exec(t_cmd *cmd, t_shell *shell)
 		if (WIFEXITED(status))
 			shell->exit_status = WEXITSTATUS(status);
 		if (WIFSIGNALED(status) && WTERMSIG(status) == SIGQUIT)
-    		ft_putendl_fd("Quit: 3", 2);
+			ft_putendl_fd("Quit: 3", 2);
 		signals_interactive();
 	}
 }

@@ -6,7 +6,7 @@
 /*   By: dachin <dachin@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2026/05/22 14:57:15 by dachin        #+#    #+#                 */
-/*   Updated: 2026/05/22 15:00:55 by dachin        ########   odam.nl         */
+/*   Updated: 2026/05/29 18:10:29 by dachin        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,7 @@ int	init_pipes(int **pipes, int n)
 			return (-1);
 		++i;
 	}
-	return 0;
+	return (0);
 }
 
 void	setup_child_fds(int **pipes, int i, int n)
@@ -62,11 +62,10 @@ void	free_pipes(int **pipes, int n)
 	if (!pipes)
 		return ;
 	i = 0;
-	while(i < n)
+	while (i < n)
 	{
 		free(pipes[i]);
 		++i;
 	}
 	free(pipes);
 }
-

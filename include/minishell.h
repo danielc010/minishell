@@ -1,31 +1,54 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        ::::::::            */
+/*   minishell.h                                        :+:    :+:            */
+/*                                                     +:+                    */
+/*   By: dachin <dachin@student.codam.nl>             +#+                     */
+/*                                                   +#+                      */
+/*   Created: 2026/05/29 10:32:25 by dachin        #+#    #+#                 */
+/*   Updated: 2026/05/29 18:08:30 by dachin        ########   odam.nl         */
+/*                                                                            */
+/* ************************************************************************** */
+
 #ifndef MINISHELL_H
 # define MINISHELL_H
 
-#include "../Libft/libft.h"
-#include <stdio.h>
-#include <readline/readline.h>
-#include <readline/history.h>
-//readline
+# include "../Libft/libft.h"
+// perror? currently not used
+# include <stdio.h>
 
-#include <stdlib.h>
-// malloc, calloc, free
+// readline(), rl_catch_signals, rl_on_new_line, rl_replace_line, rl_redisplay.
+# include <readline/readline.h>
+// provides add_history()
+# include <readline/history.h>
 
-#include <signal.h>
-// various signals
+// malloc, calloc, free, exit
+# include <stdlib.h>
 
-#include <unistd.h>
-// write, fork, execve
+// Various Signals
+// sigaction, SIGINT, SIGQUIT, SIG_DFL, SIG_IGN, and the sig_atomic_t type.
+# include <signal.h>
 
-#include <sys/wait.h>
-// waitpid
+// write, fork, execve, pipe
+# include <unistd.h>
 
-#include <fcntl.h>
+// waitpid related MACROS (WIFEXITED, WEXITSTATUS, WIFSIGNALED, WTERMSIG)
+# include <sys/wait.h>
 
+// open() and its flags: O_RDONLY, O_WRONLY, O_CREAT, O_TRUNC, O_APPEND.
+# include <fcntl.h>
 
-// extern declaration so all files can see it
-// volatile ells the compiler "don't optimize reads of this away — it can change
-// outside the normal flow of the program." Without it, the compiler might cache
-// g_signal in a register and never re-read it from memory after the signal fires.
+// A signal can interrupt your program at any point — mid-assignment,
+// mid-function, anywhere. If your signal handler writes to a variable while the
+// main program is also reading it, you get a data race.
+// extern declaration: so all files can see it
+// volatile: tells the compiler "don't optimize reads of this away — it can
+// change outside the normal flow of the program." Without it, the compiler
+//  might cache g_signal in a register and never re-read it from memory
+// after the signal fires.
+// sig_atomic_t: integer type that the CPU guarantees can be read and written
+// atomically — in a single uninterruptible operation. No partial reads, no torn
+// writes. It's the only type C guarantees is safe to use in a signal handler.
 extern volatile sig_atomic_t	g_signal;
 
 typedef enum e_token_type
@@ -49,7 +72,7 @@ typedef enum e_redir_type
 typedef struct s_token
 {
 	t_token_type	type;
-	char	*value;
+	char			*value;
 	struct s_token	*next;
 }	t_token;
 
@@ -64,15 +87,16 @@ typedef struct s_redir
 // Struct containing information on the user input
 typedef struct s_cmd
 {
-	char	**args;
-	t_redir	*redirs;
+	char			**args;
+	t_redir			*redirs;
 	struct s_cmd	*next;
 }	t_cmd;
 
 // General information on the shell
 // cmds: struct containing information on the user input
 // env: cmds: struct containing information on the user input
-// exit_status: stores the last command's exit code. if a command finished successfully (return 0) or not (return anything else)
+// exit_status: stores the last command's exit code. if a command finished
+// successfully (return 0) or not (return anything else)
 // running: ? reserved as flag for main loop
 typedef struct s_shell
 {
@@ -118,7 +142,6 @@ void	wait_all(t_shell *shell, pid_t *pids, int n);
 void	fork_children(t_shell *shell, t_cmd *cmd, t_pipe_ctx *ctx);
 void	run_pipeline(t_shell *shell, t_cmd *cmd, int n);
 void	exec_pipeline(t_shell *shell);
-
 
 // pipes2.c
 int		init_pipes(int **pipes, int n);

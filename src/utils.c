@@ -6,12 +6,14 @@
 /*   By: dachin <dachin@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2026/05/21 00:38:41 by dachin        #+#    #+#                 */
-/*   Updated: 2026/05/21 00:49:29 by dachin        ########   odam.nl         */
+/*   Updated: 2026/05/29 10:27:26 by dachin        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/minishell.h"
 
+// As env is unitialised memory, normal NULL terminated approach does not work.
+// Precision is key to know exactly where to stop.
 void	free_partial_env(char **env, int count)
 {
 	int	i;
