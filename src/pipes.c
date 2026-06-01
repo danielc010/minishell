@@ -6,7 +6,7 @@
 /*   By: dachin <dachin@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2026/05/20 23:39:28 by dachin        #+#    #+#                 */
-/*   Updated: 2026/05/29 18:09:51 by dachin        ########   odam.nl         */
+/*   Updated: 2026/06/01 12:15:22 by dachin        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -110,6 +110,8 @@ void	exec_pipeline(t_shell *shell)
 	n = count_cmds(cmd);
 	if (n == 1)
 	{
+		if (!cmd->args || !cmd->args[0])
+			return ;
 		if (!ft_strncmp(cmd->args[0], "cd", 3))
 		{
 			builtin_cd(shell, cmd);

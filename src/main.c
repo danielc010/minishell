@@ -6,7 +6,7 @@
 /*   By: dachin <dachin@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2026/05/20 23:39:19 by dachin        #+#    #+#                 */
-/*   Updated: 2026/05/27 21:12:16 by dachin        ########   odam.nl         */
+/*   Updated: 2026/06/01 12:22:11 by dachin        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,15 +16,8 @@ volatile sig_atomic_t	g_signal = 0;
 
 int	main(int argc, char **argv, char **envp)
 {
-	char	*line;
 	t_shell	shell;
-
-	t_cmd cmd1;
-	cmd1.args= (char *[]){"echo", "test", NULL};
-	cmd1.redirs = NULL;
-	cmd1.next = NULL;
-
-	shell.cmds = &cmd1;
+	char	*line;
 
 	(void)argc;
 	(void)argv;
