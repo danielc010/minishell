@@ -6,7 +6,7 @@
 #    By: dachin <dachin@student.codam.nl>             +#+                      #
 #                                                    +#+                       #
 #    Created: 2026/03/18 08:09:02 by dachin        #+#    #+#                  #
-#    Updated: 2026/05/27 16:48:55 by dachin        ########   odam.nl          #
+#    Updated: 2026/06/01 11:56:16 by dachin        ########   odam.nl          #
 #                                                                              #
 # **************************************************************************** #
 
@@ -25,7 +25,7 @@ CFLAGS = -Wall -Wextra -Werror
 # Library paths
 LDLIBS = -lreadline
 # Subproject directories
-LIBFT_DIR = Libft
+LIBFT_DIR = libft
 
 # Subproject libraries
 LIBFT_LIB = $(LIBFT_DIR)/libft.a

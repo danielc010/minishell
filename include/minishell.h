@@ -6,14 +6,14 @@
 /*   By: dachin <dachin@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2026/05/29 10:32:25 by dachin        #+#    #+#                 */
-/*   Updated: 2026/05/29 18:08:30 by dachin        ########   odam.nl         */
+/*   Updated: 2026/06/01 12:01:31 by dachin        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef MINISHELL_H
 # define MINISHELL_H
 
-# include "../Libft/libft.h"
+# include "../libft/libft.h"
 // perror? currently not used
 # include <stdio.h>
 
