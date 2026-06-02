@@ -10,7 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell.h"
+#include "../include/minishell.h"
 
 char	*double_quote_handler(char *str, char *result, t_shell *shell, int *i)
 {

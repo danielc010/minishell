@@ -10,7 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell.h"
+#include "../include/minishell.h"
 
 int	add_operator_token(t_lexer *lx, t_token_type type, char *value)
 {
