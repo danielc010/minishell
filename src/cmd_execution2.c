@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
-/*                                                        ::::::::            */
-/*   cmd_execution2.c                                   :+:    :+:            */
-/*                                                     +:+                    */
-/*   By: dachin <dachin@student.codam.nl>             +#+                     */
-/*                                                   +#+                      */
-/*   Created: 2026/05/22 12:19:00 by dachin        #+#    #+#                 */
-/*   Updated: 2026/05/22 14:26:48 by dachin        ########   odam.nl         */
+/*                                                        :::      ::::::::   */
+/*   cmd_execution2.c                                   :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: luimarti <luimarti@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2026/05/22 12:19:00 by dachin            #+#    #+#             */
+/*   Updated: 2026/06/02 17:00:20 by luimarti         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,6 +36,11 @@ void	apply_redirs(t_redir *redir)
 	while (redir)
 	{
 		fd = open_redir_fd(redir);
+		if (fd == -1)
+		{
+			perror("minishell");
+			exit(1);
+		}
 		if (redir->type == R_IN || redir->type == R_HEREDOC)
 			dup2(fd, STDIN_FILENO);
 		else if (redir->type == R_OUT || redir->type == R_APPEND)
@@ -44,6 +49,12 @@ void	apply_redirs(t_redir *redir)
 		redir = redir->next;
 	}
 }
+/* FIX (lines 39-43): Added fd == -1 check after open_redir_fd().
+** When open() fails (e.g. permission denied, file not found),
+** it returns -1. Without this check, -1 was passed to dup2() and
+** close(), causing the program to continue silently instead of
+** reporting the error. Now we print the system error with perror()
+** and exit with code 1, matching bash behaviour. */
 
 int	handle_heredoc_signal(void)
 {

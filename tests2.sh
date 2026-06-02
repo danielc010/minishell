@@ -1,7 +1,5 @@
 #!/bin/bash
 
-#!/bin/bash
-
 PASS=0
 FAIL=0
 
@@ -76,6 +74,10 @@ run_test 'unset'
 run_test 'not_cmd bonjour'
 run_test 'echo bonjour > /tmp/test1'
 run_test 'cat < /tmp/test1'
+run_test 'cat <Makefile>./outfiles/outfile'
+run_test 'cat <Makefile|ls'
+run_test 'echo hi > /tmp/outfile bye'
+run_test 'echo <123 <456 hi | echo 42'
 
 echo ""
 echo "PASS: $PASS / FAIL: $FAIL"

@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
-/*                                                        ::::::::            */
-/*   cmd_execution.c                                    :+:    :+:            */
-/*                                                     +:+                    */
-/*   By: dachin <dachin@student.codam.nl>             +#+                     */
-/*                                                   +#+                      */
-/*   Created: 2026/05/20 23:39:14 by dachin        #+#    #+#                 */
-/*   Updated: 2026/05/29 18:08:57 by dachin        ########   odam.nl         */
+/*                                                        :::      ::::::::   */
+/*   cmd_execution.c                                    :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: luimarti <luimarti@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2026/05/20 23:39:14 by dachin            #+#    #+#             */
+/*   Updated: 2026/06/02 17:22:39 by luimarti         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,6 +71,11 @@ char	*resolve_path(char *cmd, t_shell *shell)
 	{
 		if (access(cmd, X_OK) == 0)
 			return (ft_strdup(cmd));
+		 if (access(cmd, F_OK) == 0)
+		{	
+			perror("minishell");
+			exit(126);
+		}
 		return (NULL);
 	}
 	paths_array = extract_path_to_array(shell);
@@ -82,6 +87,12 @@ char	*resolve_path(char *cmd, t_shell *shell)
 		return (free(with_slash), free_array(paths_array), NULL);
 	return (free(with_slash), free_array(paths_array), full_path);
 }
+/* FIX (lines 74 - 78): Added access(cmd, F_OK) check after access(cmd, X_OK) fails.
+** Previously, when a file existed but had no execute permissions,
+** resolve_path returned NULL and exec_child printed "command not found"
+** with exit code 127. Now we distinguish between a missing file (NULL,
+** exit 127) and an existing file without execute permissions (exit 126),
+** matching bash behaviour. */
 
 void	exec_child(t_cmd *cmd, t_shell *shell)
 {
