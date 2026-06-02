@@ -6,7 +6,7 @@
 /*   By: luimarti <luimarti@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/29 10:32:25 by dachin            #+#    #+#             */
-/*   Updated: 2026/06/02 13:40:11 by luimarti         ###   ########.fr       */
+/*   Updated: 2026/06/02 14:38:30 by luimarti         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -245,7 +245,7 @@ char			*dollar_handler(char *str, char *result, t_shell *shell,
 
 //built-ins
 
-int				is_n_flag(char **args);
+int				is_n_flag(char *str);
 int				ft_echo(char **args);
 int				ft_pwd(void);
 int				ft_env(t_shell *shell);

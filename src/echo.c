@@ -3,30 +3,30 @@
 /*                                                        :::      ::::::::   */
 /*   echo.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lucho <lucho@student.42.fr>                +#+  +:+       +#+        */
+/*   By: luimarti <luimarti@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/15 22:45:55 by lucho             #+#    #+#             */
-/*   Updated: 2026/05/15 23:12:40 by lucho            ###   ########.fr       */
+/*   Updated: 2026/06/02 14:38:06 by luimarti         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/minishell.h"
 
-int	is_n_flag(char **args)
+int	is_n_flag(char *str)
 {
 	int	i;
 
 	i = 0;
-	if (!args[1])
+	if (!str)
 		return (0);
-	if (args[1][i] == '-')
+	if (str[0] == '-')
 	{
-		if (!args[1][i + 1])
+		if (!str[1])
 			return (0);
 		i = 1;
-		while (args[1][i])
+		while (str[i])
 		{
-			if (args[1][i] != 'n')
+			if (str[i] != 'n')
 				return (0);
 			i++;
 		}
@@ -43,10 +43,10 @@ int	ft_echo(char **args)
 
 	i = 1;
 	flag = 0;
-	if (is_n_flag(args))
+	while (args[i] && is_n_flag(args[i]))
 	{
 		flag = 1;
-		i = 2;
+		i++;
 	}
 	while (args[i])
 	{
