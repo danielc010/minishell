@@ -1,16 +1,16 @@
 /* ************************************************************************** */
 /*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   utils_lexer.c                                      :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: luimarti <luimarti@student.42.fr>          +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2026/04/18 18:43:43 by luimarti          #+#    #+#             */
-/*   Updated: 2026/04/24 15:27:30 by luimarti         ###   ########.fr       */
+/*                                                        ::::::::            */
+/*   utils_lexer.c                                      :+:    :+:            */
+/*                                                     +:+                    */
+/*   By: luimarti <luimarti@student.42.fr>            +#+                     */
+/*                                                   +#+                      */
+/*   Created: 2026/04/18 18:43:43 by luimarti      #+#    #+#                 */
+/*   Updated: 2026/06/03 15:27:07 by dachin        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell.h"
+#include "../include/minishell.h"
 
 int	add_operator_token(t_lexer *lx, t_token_type type, char *value)
 {

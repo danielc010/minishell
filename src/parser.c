@@ -1,43 +1,16 @@
 /* ************************************************************************** */
 /*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   parser_args.c                                      :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: lucho <lucho@student.42.fr>                +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2026/04/24 13:56:39 by luimarti          #+#    #+#             */
-/*   Updated: 2026/05/14 14:46:29 by lucho            ###   ########.fr       */
+/*                                                        ::::::::            */
+/*   parser.c                                           :+:    :+:            */
+/*                                                     +:+                    */
+/*   By: luimarti <luimarti@student.42.fr>            +#+                     */
+/*                                                   +#+                      */
+/*   Created: 2026/04/24 13:56:39 by luimarti      #+#    #+#                 */
+/*   Updated: 2026/06/03 15:26:54 by dachin        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell.h"
-
-int	word_counter(t_token *tokens)
-{
-	int		i;
-	t_token	*current;
-
-	i = 0;
-	current = tokens;
-	while (current && current->type != PIPE)
-	{
-		if (current->type == REDIR_IN || current->type == REDIR_OUT
-			|| current->type == REDIR_APPEND || current->type == HEREDOC)
-		{
-			if (current->next)
-				current = current->next;
-			else
-			{
-				ft_putstr_fd("Syntax error\n", 2);
-				return (-1);
-			}
-		}
-		else if (current->type == WORD)
-			i++;
-		current = current->next;
-	}
-	return (i);
-}
+#include "../include/minishell.h"
 
 static int	fill_args(t_token *current, char **args, int *i)
 {
@@ -104,6 +77,7 @@ int	if_pipe(t_token *tokens, t_cmd **command, t_cmd *head, int words)
 			return (0);
 		}
 		second->args = build_args(tokens->next, words);
+		second->redirs = build_redir(tokens->next);
 		(*command)->next = second;
 		*command = second;
 	}
@@ -118,6 +92,8 @@ t_cmd	*parsing_core(t_token *tokens)
 
 	if (!tokens)
 		return (NULL);
+	if (!syntax_controller(tokens))
+		return (NULL);
 	command = init_cmd();
 	words = word_counter(tokens);
 	if (words == -1)
@@ -126,6 +102,7 @@ t_cmd	*parsing_core(t_token *tokens)
 		return (NULL);
 	}
 	command->args = build_args(tokens, words);
+	command->redirs = build_redir(tokens);
 	head = command;
 	while (tokens)
 	{

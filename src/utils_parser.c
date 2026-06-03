@@ -1,16 +1,16 @@
 /* ************************************************************************** */
 /*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   utils_parser.c                                     :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: luimarti <luimarti@student.42.fr>          +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2026/04/24 20:04:11 by luimarti          #+#    #+#             */
-/*   Updated: 2026/05/21 13:35:42 by luimarti         ###   ########.fr       */
+/*                                                        ::::::::            */
+/*   utils_parser.c                                     :+:    :+:            */
+/*                                                     +:+                    */
+/*   By: luimarti <luimarti@student.42.fr>            +#+                     */
+/*                                                   +#+                      */
+/*   Created: 2026/04/24 20:04:11 by luimarti      #+#    #+#                 */
+/*   Updated: 2026/06/03 15:27:13 by dachin        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell.h"
+#include "../include/minishell.h"
 
 int	word_counter(t_token *tokens)
 {

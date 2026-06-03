@@ -1,16 +1,16 @@
 /* ************************************************************************** */
 /*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   utils_expander.c                                   :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: lucho <lucho@student.42.fr>                +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2026/05/14 12:02:08 by lucho             #+#    #+#             */
-/*   Updated: 2026/05/14 14:29:37 by lucho            ###   ########.fr       */
+/*                                                        ::::::::            */
+/*   utils_expander.c                                   :+:    :+:            */
+/*                                                     +:+                    */
+/*   By: lucho <lucho@student.42.fr>                  +#+                     */
+/*                                                   +#+                      */
+/*   Created: 2026/05/14 12:02:08 by lucho         #+#    #+#                 */
+/*   Updated: 2026/06/03 15:27:04 by dachin        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell.h"
+#include "../include/minishell.h"
 
 char	*find_value(char *name, t_shell *shell)
 {

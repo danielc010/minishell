@@ -1,16 +1,16 @@
 /* ************************************************************************** */
 /*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   handlers_lexer.c                                   :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: luimarti <luimarti@student.42.fr>          +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2026/04/21 14:18:01 by luimarti          #+#    #+#             */
-/*   Updated: 2026/04/21 16:37:26 by luimarti         ###   ########.fr       */
+/*                                                        ::::::::            */
+/*   handlers_lexer.c                                   :+:    :+:            */
+/*                                                     +:+                    */
+/*   By: luimarti <luimarti@student.42.fr>            +#+                     */
+/*                                                   +#+                      */
+/*   Created: 2026/04/21 14:18:01 by luimarti      #+#    #+#                 */
+/*   Updated: 2026/06/03 15:26:35 by dachin        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell.h"
+#include "../include/minishell.h"
 
 int	handle_end_line(t_lexer *lx)
 {

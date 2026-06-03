@@ -1,16 +1,16 @@
 /* ************************************************************************** */
 /*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   utils_parser_redir.c                               :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: luimarti <luimarti@student.42.fr>          +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2026/05/01 14:48:45 by luimarti          #+#    #+#             */
-/*   Updated: 2026/05/01 17:52:04 by luimarti         ###   ########.fr       */
+/*                                                        ::::::::            */
+/*   utils_parser_redir.c                               :+:    :+:            */
+/*                                                     +:+                    */
+/*   By: luimarti <luimarti@student.42.fr>            +#+                     */
+/*                                                   +#+                      */
+/*   Created: 2026/05/01 14:48:45 by luimarti      #+#    #+#                 */
+/*   Updated: 2026/06/03 15:27:10 by dachin        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell.h"
+#include "../include/minishell.h"
 
 void	free_redir(t_redir *redirs)
 {

@@ -1,16 +1,16 @@
 /* ************************************************************************** */
 /*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   syntax_controller.c                                :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: luimarti <luimarti@student.42.fr>          +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2026/05/01 18:52:34 by luimarti          #+#    #+#             */
-/*   Updated: 2026/05/01 19:48:06 by luimarti         ###   ########.fr       */
+/*                                                        ::::::::            */
+/*   syntax_controller.c                                :+:    :+:            */
+/*                                                     +:+                    */
+/*   By: luimarti <luimarti@student.42.fr>            +#+                     */
+/*                                                   +#+                      */
+/*   Created: 2026/05/01 18:52:34 by luimarti      #+#    #+#                 */
+/*   Updated: 2026/06/03 15:27:01 by dachin        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell.h"
+#include "../include/minishell.h"
 
 int	check_pipes(t_token *tokens)
 {

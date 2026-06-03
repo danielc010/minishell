@@ -1,16 +1,16 @@
 /* ************************************************************************** */
 /*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   core.c                                             :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: luimarti <luimarti@student.42.fr>          +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2026/05/21 13:58:59 by luimarti          #+#    #+#             */
-/*   Updated: 2026/05/21 14:17:14 by luimarti         ###   ########.fr       */
+/*                                                        ::::::::            */
+/*   core.c                                             :+:    :+:            */
+/*                                                     +:+                    */
+/*   By: luimarti <luimarti@student.42.fr>            +#+                     */
+/*                                                   +#+                      */
+/*   Created: 2026/05/21 13:58:59 by luimarti      #+#    #+#                 */
+/*   Updated: 2026/06/03 15:26:23 by dachin        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell.h"
+#include "../include/minishell.h"
 
 t_cmd	*parse(char *line, t_shell *shell)
 {
