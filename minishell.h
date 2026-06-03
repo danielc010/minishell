@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   minishell.h                                        :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: luimarti <luimarti@student.42.fr>          +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2026/04/18 13:41:38 by luimarti          #+#    #+#             */
-/*   Updated: 2026/05/21 14:02:23 by luimarti         ###   ########.fr       */
+/*                                                        ::::::::            */
+/*   minishell.h                                        :+:    :+:            */
+/*                                                     +:+                    */
+/*   By: luimarti <luimarti@student.42.fr>            +#+                     */
+/*                                                   +#+                      */
+/*   Created: 2026/04/18 13:41:38 by luimarti      #+#    #+#                 */
+/*   Updated: 2026/06/03 15:30:31 by dachin        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -87,16 +87,7 @@ typedef struct s_shell
 	int				running;
 }	t_shell;
 
-typedef struct s_lexer
-{
-	char	*line;
-	t_token	*head;
-	t_token	*tok;
-	t_state	state;
-	int		i;
-	int		word_start;
-	char	*value;
-}	t_lexer;
+
 
 char			**copy_env(char **envp);
 void			free_array(char **str);

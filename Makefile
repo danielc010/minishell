@@ -6,7 +6,7 @@
 #    By: dachin <dachin@student.codam.nl>             +#+                      #
 #                                                    +#+                       #
 #    Created: 2026/03/18 08:09:02 by dachin        #+#    #+#                  #
-#    Updated: 2026/06/03 00:00:00 by dachin        ########   odam.nl          #
+#    Updated: 2026/06/03 15:33:25 by dachin        ########   odam.nl          #
 #                                                                              #
 # **************************************************************************** #
 
@@ -14,11 +14,10 @@
 SRCS = src/main.c src/signals.c src/utils.c src/cmd_execution.c src/pipes.c \
 		src/builtin.c src/builtin2.c src/cmd_execution2.c src/pipes2.c \
 		src/builtin3.c \
-		core.c lexer.c handlers_lexer.c utils_lexer.c \
-		parser.c utils_parser.c utils_parser_redir.c \
-		expander.c utils_expander.c \
-		syntax_controller.c \
-		echo.c pwd.c env.c
+		src/core.c src/lexer.c src/handlers_lexer.c src/utils_lexer.c \
+		src/parser.c src/utils_parser.c src/utils_parser_redir.c \
+		src/expander.c src/utils_expander.c src/syntax_controller.c \
+		src/echo.c src/pwd.c src/env.c
 
 # Creates object files by replacing .c with .o. $ references variables or automatic variables
 OBJS = $(SRCS:.c=.o)
