@@ -6,14 +6,19 @@
 #    By: dachin <dachin@student.codam.nl>             +#+                      #
 #                                                    +#+                       #
 #    Created: 2026/03/18 08:09:02 by dachin        #+#    #+#                  #
-#    Updated: 2026/06/01 11:56:16 by dachin        ########   odam.nl          #
+#    Updated: 2026/06/03 00:00:00 by dachin        ########   odam.nl          #
 #                                                                              #
 # **************************************************************************** #
 
 # List of source files
 SRCS = src/main.c src/signals.c src/utils.c src/cmd_execution.c src/pipes.c \
 		src/builtin.c src/builtin2.c src/cmd_execution2.c src/pipes2.c \
-		src/builtin3.c
+		src/builtin3.c \
+		core.c lexer.c handlers_lexer.c utils_lexer.c \
+		parser.c utils_parser.c utils_parser_redir.c \
+		expander.c utils_expander.c \
+		syntax_controller.c \
+		echo.c pwd.c env.c
 
 # Creates object files by replacing .c with .o. $ references variables or automatic variables
 OBJS = $(SRCS:.c=.o)
@@ -37,8 +42,6 @@ ifeq ($(UNAME_S), Darwin)
 	LDLIBS += -L/opt/homebrew/opt/readline/lib
 endif
 
-
-
 # Main executable name
 NAME = minishell
 
@@ -51,27 +54,24 @@ $(NAME): $(LIBFT_LIB) $(OBJS)
 
 # Build subproject libraries
 $(LIBFT_LIB):
-	make -C $(LIBFT_DIR)
+	$(MAKE) -C $(LIBFT_DIR)
 
 # Pattern rule. Compiles any .c file into .o using specified compiler and flags
-# % is a wildcard
-# $@ - name of the target
-# $< = name of the first prerequisite
-# $^ = name of all prerequisites
-# -I flag tells the compiler where to look for header files
+# -I. lets root-level .c files find minishell.h
+# -Iinclude lets src/ files find include/minishell.h
 %.o: %.c $(LIBFT_LIB)
-	$(CC) $(CFLAGS) -I$(LIBFT_DIR) -Iinclude -c $< -o $@
+	$(CC) $(CFLAGS) -I$(LIBFT_DIR) -Iinclude -I. -c $< -o $@
 
-# $(RM) is prefined in make and equals rm -f. -f force flag avoids errors if files do not exist
+# $(RM) is predefined in make and equals rm -f. -f force flag avoids errors if files do not exist
 clean:
 	$(RM) $(OBJS)
-	make -C $(LIBFT_DIR) clean
+	$(MAKE) -C $(LIBFT_DIR) clean
 
 # Removes all object files and the library file.
 fclean:	clean
 	$(RM) $(NAME)
 	$(RM) tests/test_runner
-	make -C $(LIBFT_DIR) fclean
+	$(MAKE) -C $(LIBFT_DIR) fclean
 
 # Rebuilds everything by clean and all
 re:	fclean all
@@ -85,8 +85,6 @@ test: $(NAME)
 	@echo "Running test suite..."
 	@cd tests && ./test.sh
 
-# fsanitise for macOS
+# fsanitize for macOS
 sanitize: CFLAGS += -fsanitize=address -g
 sanitize: re
-
-
