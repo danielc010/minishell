@@ -6,14 +6,14 @@
 #    By: dachin <dachin@student.codam.nl>             +#+                      #
 #                                                    +#+                       #
 #    Created: 2026/03/18 08:09:02 by dachin        #+#    #+#                  #
-#    Updated: 2026/06/03 15:33:25 by dachin        ########   odam.nl          #
+#    Updated: 2026/06/03 15:36:14 by dachin        ########   odam.nl          #
 #                                                                              #
 # **************************************************************************** #
 
 # List of source files
-SRCS = src/main.c src/signals.c src/utils.c src/cmd_execution.c src/pipes.c \
+SRCS = src/main.c src/signals.c src/cmd_execution.c src/pipes.c \
 		src/builtin.c src/builtin2.c src/cmd_execution2.c src/pipes2.c \
-		src/builtin3.c \
+		src/builtin3.c src/utils_executor.c \
 		src/core.c src/lexer.c src/handlers_lexer.c src/utils_lexer.c \
 		src/parser.c src/utils_parser.c src/utils_parser_redir.c \
 		src/expander.c src/utils_expander.c src/syntax_controller.c \

@@ -6,7 +6,7 @@
 /*   By: dachin <dachin@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2026/05/29 10:32:25 by dachin        #+#    #+#                 */
-/*   Updated: 2026/06/03 15:31:02 by dachin        ########   odam.nl         */
+/*   Updated: 2026/06/03 15:36:45 by dachin        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -212,7 +212,7 @@ void			init_shell(t_shell *shell, char **envp);
 void	signals_interactive(void);
 void	signals_child(void);
 
-// utils.c
+// utils_executor.c
 void	free_partial_env(char **env, int count);
 int		count_cmds(t_cmd *cmd);
 
