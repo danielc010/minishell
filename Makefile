@@ -6,12 +6,14 @@
 #    By: dachin <dachin@student.codam.nl>             +#+                      #
 #                                                    +#+                       #
 #    Created: 2026/03/18 08:09:02 by dachin        #+#    #+#                  #
-#    Updated: 2026/04/15 17:33:05 by dachin        ########   odam.nl          #
+#    Updated: 2026/06/01 11:56:16 by dachin        ########   odam.nl          #
 #                                                                              #
 # **************************************************************************** #
 
 # List of source files
-SRCS = src/main.c src/signals.c
+SRCS = src/main.c src/signals.c src/utils.c src/cmd_execution.c src/pipes.c \
+		src/builtin.c src/builtin2.c src/cmd_execution2.c src/pipes2.c \
+		src/builtin3.c
 
 # Creates object files by replacing .c with .o. $ references variables or automatic variables
 OBJS = $(SRCS:.c=.o)
@@ -23,13 +25,17 @@ CFLAGS = -Wall -Wextra -Werror
 # Library paths
 LDLIBS = -lreadline
 # Subproject directories
-LIBFT_DIR = Libft
+LIBFT_DIR = libft
 
 # Subproject libraries
 LIBFT_LIB = $(LIBFT_DIR)/libft.a
 
 # Detect OS
 UNAME_S := $(shell uname -s)
+ifeq ($(UNAME_S), Darwin)
+	CFLAGS += -I/opt/homebrew/opt/readline/include
+	LDLIBS += -L/opt/homebrew/opt/readline/lib
+endif
 
 
 
