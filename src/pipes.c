@@ -6,7 +6,7 @@
 /*   By: dachin <dachin@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2026/05/20 23:39:28 by dachin        #+#    #+#                 */
-/*   Updated: 2026/06/01 12:15:22 by dachin        ########   odam.nl         */
+/*   Updated: 2026/06/01 22:21:04 by dachin        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,6 +29,9 @@ void	prepare_heredocs(t_cmd *cmd)
 	}
 }
 
+// Loop through all pids and calles waitpid on each. Overwrites
+// shell->exit_status for every child per bash behaviour, using exit status of
+// the last command in a pipeline.
 void	wait_all(t_shell *shell, pid_t *pids, int n)
 {
 	int	i;
@@ -49,6 +52,10 @@ void	wait_all(t_shell *shell, pid_t *pids, int n)
 	signals_interactive();
 }
 
+// Forks all children in a loop. Pipe wiring for child branch done right
+// before execve, so child inherits the correct stdin/stdout connections.
+// Similarly to parent closing all pipes post forking, the child needs to close
+// extra unused pipes which can prevent EOF from delivred in complex piplines.
 void	fork_children(t_shell *shell, t_cmd *cmd, t_pipe_ctx *ctx)
 {
 	int	i;
@@ -62,6 +69,8 @@ void	fork_children(t_shell *shell, t_cmd *cmd, t_pipe_ctx *ctx)
 			return ;
 		if (pid == 0)
 		{
+			setup_child_fds(ctx->pipes, i, ctx->n);
+			close_all_pipes(ctx->pipes, ctx->n - 1);
 			exec_child(cmd, shell);
 			exit(EXIT_FAILURE);
 		}
@@ -74,6 +83,8 @@ void	fork_children(t_shell *shell, t_cmd *cmd, t_pipe_ctx *ctx)
 	}
 }
 
+// Close all pipes in the parent after forking, so child reading from the
+// pipe write ends get EOF delivered correctly when the writing child exits.
 void	run_pipeline(t_shell *shell, t_cmd *cmd, int n)
 {
 	t_pipe_ctx	ctx;
@@ -100,6 +111,9 @@ void	run_pipeline(t_shell *shell, t_cmd *cmd, int n)
 	free_pipes(ctx.pipes, n - 1);
 }
 
+// These built-in commands modify the shell state, hence are run in the
+// parent process, unlike echo, pwd, env which are read-only operations.
+// n commands need n - 1 pipes as each pipe connects adjacent commands.
 void	exec_pipeline(t_shell *shell)
 {
 	t_cmd	*cmd;

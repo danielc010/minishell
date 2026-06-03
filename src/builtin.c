@@ -6,7 +6,7 @@
 /*   By: dachin <dachin@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2026/05/20 23:39:07 by dachin        #+#    #+#                 */
-/*   Updated: 2026/05/27 17:33:00 by dachin        ########   odam.nl         */
+/*   Updated: 2026/06/03 11:44:15 by dachin        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,6 +21,8 @@ void	replace_env_entry(char **entry, char *newval)
 	free(tmp);
 }
 
+// Copies shell->env entries into env_new. The old array shell->env is freed
+// but this does not affect the individual strings as they were copied out.
 void	add_env(t_shell *shell, int i, char *new_env)
 {
 	char	**env_new;
@@ -68,6 +70,8 @@ void	update_env(t_shell *shell, char *key, char *value)
 		add_env(shell, i, keyequalvalue);
 }
 
+// Skip past "KEY=" extract the pointer directly into the string at the value part.
+// "PATH=/usr/bin" returns "/user/bin"
 char	*get_env(t_shell *shell, char *key)
 {
 	int		i;
@@ -90,6 +94,10 @@ char	*get_env(t_shell *shell, char *key)
 	return (NULL);
 }
 
+// sets the path for 3 cases:-
+// cd alone: goes to HOME folder i.e. cd ~
+// cd -: goes to previous directory i.e. OLDPWD
+// cd xx: goes to directory ./xx
 char	*get_cd_path(t_shell *shell, t_cmd *cmd)
 {
 	char	*path;

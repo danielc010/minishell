@@ -6,12 +6,16 @@
 /*   By: dachin <dachin@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2026/05/22 12:19:00 by dachin        #+#    #+#                 */
-/*   Updated: 2026/05/22 14:26:48 by dachin        ########   odam.nl         */
+/*   Updated: 2026/06/01 21:28:37 by dachin        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/minishell.h"
 
+// Helper that takes a redirection and returns an open file descriptor
+// appropriate for its type — read-only for R_IN, write/create/truncate for
+// R_OUT, write/create/append for R_APPEND, or the already-prepared pipe fd for
+// R_HEREDOC. It just opens the right fd; it doesn't do the actual redirecting.
 int	open_redir_fd(t_redir *redir)
 {
 	int	fd;
@@ -28,6 +32,11 @@ int	open_redir_fd(t_redir *redir)
 	return (fd);
 }
 
+// Connects the fd to sdin or stdout.
+// dup2(fd, STDIN_FILENO makes STDIN_FILENO (fd 0) point to same file/pipe as fd
+// so any future read from stdin reads from your file/pipe instead.
+// dup2(fd, STDOUT_FILENO makes STDOUT_FILENO (fd 1) point to same file/pipe as
+// fd so any future write to stdout writes to your file/pipe instead.
 void	apply_redirs(t_redir *redir)
 {
 	int	fd;
@@ -45,6 +54,8 @@ void	apply_redirs(t_redir *redir)
 	}
 }
 
+// Reset signal flag so the next iteraction doesn't think another
+// Ctrl + c happened
 int	handle_heredoc_signal(void)
 {
 	if (g_signal == SIGINT)
@@ -55,6 +66,9 @@ int	handle_heredoc_signal(void)
 	return (0);
 }
 
+// Len of line & len of delim  to match to avoid "EOFEXTRA" triggering "EOF"
+// We add a newline after writing line as readline strips newline from input
+// Close write end of pipe so reader does not wait forever for EOF from pipe
 int	setup_heredoc(char *delim)
 {
 	int		pipe_fd[2];
@@ -70,7 +84,8 @@ int	setup_heredoc(char *delim)
 				continue ;
 			break ;
 		}
-		if (!ft_strncmp(line, delim, ft_strlen(delim)))
+		if (!ft_strncmp(line, delim, ft_strlen(delim))
+			&& ft_strlen(line) == ft_strlen(delim))
 		{
 			free(line);
 			break ;

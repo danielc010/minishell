@@ -6,7 +6,7 @@
 /*   By: dachin <dachin@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2026/05/20 23:39:19 by dachin        #+#    #+#                 */
-/*   Updated: 2026/06/01 12:22:11 by dachin        ########   odam.nl         */
+/*   Updated: 2026/06/01 17:14:52 by dachin        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,9 @@
 
 volatile sig_atomic_t	g_signal = 0;
 
+
+// Reset g_signal = 0 so the next iteraction doesn't think another
+// Ctrl + c happened
 int	main(int argc, char **argv, char **envp)
 {
 	t_shell	shell;

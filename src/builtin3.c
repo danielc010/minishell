@@ -6,12 +6,13 @@
 /*   By: dachin <dachin@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2026/05/27 16:48:07 by dachin        #+#    #+#                 */
-/*   Updated: 2026/05/27 17:33:42 by dachin        ########   odam.nl         */
+/*   Updated: 2026/06/01 22:00:11 by dachin        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/minishell.h"
 
+// In the format as displayed when we type export with no arguments
 void	print_export(char *key, char *value)
 {
 	ft_putstr_fd("declare -x ", 1);
@@ -21,6 +22,8 @@ void	print_export(char *key, char *value)
 	ft_putendl_fd("\"", 1);
 }
 
+// If no NAMEs are given,a list of all names that are exported in this shell is
+// printed.
 void	no_arg_export(t_shell *shell)
 {
 	char	*eq;
@@ -45,6 +48,8 @@ void	no_arg_export(t_shell *shell)
 	}
 }
 
+// Exporting shell variables and functions to child processes
+// Create and export a variable to env: export VAR=value
 void	builtin_export(t_shell *shell, t_cmd *cmd)
 {
 	char	*eq;
@@ -52,9 +57,7 @@ void	builtin_export(t_shell *shell, t_cmd *cmd)
 	char	*value;
 
 	if (!cmd->args[1])
-	{
 		no_arg_export(shell);
-	}
 	else
 	{
 		eq = ft_strchr(cmd->args[1], '=');

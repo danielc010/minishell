@@ -6,13 +6,15 @@
 /*   By: dachin <dachin@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2026/05/20 23:39:14 by dachin        #+#    #+#                 */
-/*   Updated: 2026/05/29 18:08:57 by dachin        ########   odam.nl         */
+/*   Updated: 2026/06/01 16:19:28 by dachin        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/minishell.h"
 
 // Finds all the PATH= in env, splitting on : and returns the array
+// PATH is environment variable telling OS where to search for exec programs
+// and commands. The folders are delimited by :
 char	**extract_path_to_array(t_shell *shell)
 {
 	int		i;
@@ -34,8 +36,8 @@ char	**extract_path_to_array(t_shell *shell)
 	return (paths_array);
 }
 
-// if ((access(full_path, X_OK)) == 0): we found the executable, skip to
-// last return statement
+// if ((access(full_path, X_OK)) == 0): path exists and is executable so
+// skip to the last return statement
 // if (paths_array[i] == NULL): command is not found
 char	*find_in_paths(char **paths, char *with_slash)
 {
@@ -83,6 +85,9 @@ char	*resolve_path(char *cmd, t_shell *shell)
 	return (free(with_slash), free_array(paths_array), full_path);
 }
 
+// Exit code 127 is standard POSIX convention for "cmd not found"
+// exit(127) occurs instead of returning from exec_child as
+// it is a generic exit(EXIT_FAILURE) in fork_and_exec.
 void	exec_child(t_cmd *cmd, t_shell *shell)
 {
 	char	*path;
@@ -100,6 +105,10 @@ void	exec_child(t_cmd *cmd, t_shell *shell)
 	free(path);
 }
 
+// When a child process finishes, it doesnt disapppear. It stays in the
+// process as a zombie proesss. waiting for its parent to collect
+// its exit status with waitpid for clean up, otherwise there will be
+// process table leak where no new processes can be created.
 void	fork_and_exec(t_cmd *cmd, t_shell *shell)
 {
 	pid_t	pid;

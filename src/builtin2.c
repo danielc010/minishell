@@ -6,12 +6,13 @@
 /*   By: dachin <dachin@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2026/05/20 23:58:04 by dachin        #+#    #+#                 */
-/*   Updated: 2026/05/27 17:32:17 by dachin        ########   odam.nl         */
+/*   Updated: 2026/06/03 13:40:55 by dachin        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/minishell.h"
 
+// Relating to directory change
 void	builtin_cd(t_shell *shell, t_cmd *cmd)
 {
 	char	*oldpwd;
@@ -52,6 +53,7 @@ void	builtin_exit(t_shell *shell, t_cmd *cmd)
 		exit(shell->exit_status);
 }
 
+// The additional == '=' check ensures key "FOX" doesn't trigger "FOXERA=..."
 int	key_index(t_shell *shell, char *key)
 {
 	int	i;
@@ -68,6 +70,8 @@ int	key_index(t_shell *shell, char *key)
 	return (-1);
 }
 
+// For each NAME, remove the corresponding variable or function. Shift everything
+// left by one position then sets last entry to NULL. No reallocation of array.
 void	builtin_unset(t_shell *shell, t_cmd *cmd)
 {
 	char	*key;

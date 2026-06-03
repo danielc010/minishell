@@ -6,12 +6,13 @@
 /*   By: dachin <dachin@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2026/05/22 14:57:15 by dachin        #+#    #+#                 */
-/*   Updated: 2026/05/29 18:10:29 by dachin        ########   odam.nl         */
+/*   Updated: 2026/06/01 22:28:44 by dachin        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/minishell.h"
 
+// Set up array for correct number of pipes. Malloc failure is handled elsewhere
 int	init_pipes(int **pipes, int n)
 {
 	int	i;
@@ -21,9 +22,7 @@ int	init_pipes(int **pipes, int n)
 	{
 		pipes[i] = malloc(sizeof(int) * 2);
 		if (!pipes[i])
-		{
 			return (-1);
-		}
 		if (pipe(pipes[i]) == -1)
 			return (-1);
 		++i;
@@ -31,6 +30,7 @@ int	init_pipes(int **pipes, int n)
 	return (0);
 }
 
+// Set up child fds for each child process. The first child's stdin is untouched
 void	setup_child_fds(int **pipes, int i, int n)
 {
 	if (i > 0)
