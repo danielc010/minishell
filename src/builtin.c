@@ -76,17 +76,19 @@ char	*get_env(t_shell *shell, char *key)
 {
 	int		i;
 	char	*keyequal;
+	int		len;
 
 	if (!shell || !key)
 		return (NULL);
 	keyequal = ft_strjoin(key, "=");
+	len = ft_strlen(keyequal);
 	i = 0;
 	while (shell->env[i])
 	{
-		if (!ft_strncmp(shell->env[i], keyequal, ft_strlen(keyequal)))
+		if (!ft_strncmp(shell->env[i], keyequal, len))
 		{
 			free(keyequal);
-			return (shell->env[i] + ft_strlen(keyequal));
+			return (shell->env[i] + len);
 		}
 		++i;
 	}
@@ -107,7 +109,11 @@ char	*get_cd_path(t_shell *shell, t_cmd *cmd)
 	if (!cmd->args[1])
 		path = get_env(shell, "HOME");
 	else if (!ft_strncmp(cmd->args[1], "-", 2))
+	{
 		path = get_env(shell, "OLDPWD");
+		if (path)
+			printf("%s\n", path);
+	}
 	else
 		path = cmd->args[1];
 	return (path);

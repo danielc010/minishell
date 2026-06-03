@@ -6,7 +6,7 @@
 /*   By: dachin <dachin@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2026/05/29 10:32:25 by dachin        #+#    #+#                 */
-/*   Updated: 2026/06/03 15:36:45 by dachin        ########   odam.nl         */
+/*   Updated: 2026/06/03 16:11:59 by dachin        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -210,6 +210,7 @@ void			init_shell(t_shell *shell, char **envp);
 
 // signals.c
 void	signals_interactive(void);
+void	signals_waiting(void);
 void	signals_child(void);
 
 // utils_executor.c

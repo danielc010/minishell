@@ -6,7 +6,7 @@
 /*   By: dachin <dachin@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2026/05/20 23:58:04 by dachin        #+#    #+#                 */
-/*   Updated: 2026/06/03 13:40:55 by dachin        ########   odam.nl         */
+/*   Updated: 2026/06/03 16:41:56 by dachin        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,7 +77,7 @@ void	builtin_unset(t_shell *shell, t_cmd *cmd)
 	char	*key;
 	int		index;
 
-	if (!shell || !cmd)
+	if (!shell || !cmd || !cmd->args[1])
 		return ;
 	key = cmd->args[1];
 	index = key_index(shell, key);

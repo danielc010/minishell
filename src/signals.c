@@ -6,7 +6,7 @@
 /*   By: dachin <dachin@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2026/05/22 14:32:00 by dachin        #+#    #+#                 */
-/*   Updated: 2026/06/01 17:17:38 by dachin        ########   odam.nl         */
+/*   Updated: 2026/06/03 16:11:19 by dachin        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,17 @@
 static void	handle_signal(int sig)
 {
 	g_signal = sig;
-	write(1, "^C\n", 3);
+	write(1, "\n", 1);
+}
+
+void	signals_waiting(void)
+{
+	struct sigaction	sa;
+
+	sa.sa_handler = handle_signal;
+	sigemptyset(&sa.sa_mask);
+	sa.sa_flags = 0;
+	sigaction(SIGINT, &sa, NULL);
 }
 
 // Configure the struct before registering it.

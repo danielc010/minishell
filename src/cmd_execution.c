@@ -6,7 +6,7 @@
 /*   By: dachin <dachin@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2026/05/20 23:39:14 by dachin        #+#    #+#                 */
-/*   Updated: 2026/06/01 16:19:28 by dachin        ########   odam.nl         */
+/*   Updated: 2026/06/03 16:10:51 by dachin        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -126,6 +126,7 @@ void	fork_and_exec(t_cmd *cmd, t_shell *shell)
 	}
 	else
 	{
+		signals_waiting();
 		waitpid(pid, &status, 0);
 		if (WIFEXITED(status))
 			shell->exit_status = WEXITSTATUS(status);
