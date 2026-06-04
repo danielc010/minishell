@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
-/*                                                        ::::::::            */
-/*   builtin.c                                          :+:    :+:            */
-/*                                                     +:+                    */
-/*   By: dachin <dachin@student.codam.nl>             +#+                     */
-/*                                                   +#+                      */
-/*   Created: 2026/05/20 23:39:07 by dachin        #+#    #+#                 */
-/*   Updated: 2026/05/27 17:33:00 by dachin        ########   odam.nl         */
+/*                                                        :::      ::::::::   */
+/*   builtin.c                                          :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: lucho <lucho@student.42.fr>                +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2026/05/20 23:39:07 by dachin            #+#    #+#             */
+/*   Updated: 2026/06/03 23:03:45 by lucho            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,17 +72,19 @@ char	*get_env(t_shell *shell, char *key)
 {
 	int		i;
 	char	*keyequal;
+	int		len;
 
 	if (!shell || !key)
 		return (NULL);
 	keyequal = ft_strjoin(key, "=");
+	len = ft_strlen(keyequal);
 	i = 0;
 	while (shell->env[i])
 	{
-		if (!ft_strncmp(shell->env[i], keyequal, ft_strlen(keyequal)))
+		if (!ft_strncmp(shell->env[i], keyequal, len))
 		{
 			free(keyequal);
-			return (shell->env[i] + ft_strlen(keyequal));
+			return (shell->env[i] + len);
 		}
 		++i;
 	}

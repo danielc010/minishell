@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   builtin2.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: luimarti <luimarti@student.42.fr>          +#+  +:+       +#+        */
+/*   By: lucho <lucho@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/20 23:58:04 by dachin            #+#    #+#             */
-/*   Updated: 2026/06/02 18:03:43 by luimarti         ###   ########.fr       */
+/*   Updated: 2026/06/05 00:15:56 by lucho            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,14 +66,47 @@ void	builtin_cd(t_shell *shell, t_cmd *cmd)
 
 void	builtin_exit(t_shell *shell, t_cmd *cmd)
 {
+	int	i;
+
 	if (!shell || !cmd)
 		return ;
 	ft_putendl_fd("exit", 2);
+	if (cmd->args[1] && cmd->args[2])
+	{
+		ft_putstr_fd("minishell: exit: too many arguments\n", 2);
+		shell->exit_status = 1;
+		return ;
+	}
 	if (cmd->args[1])
-		exit(ft_atoi(cmd->args[1]));
-	else
-		exit(shell->exit_status);
+	{
+		i = 0;
+		if (cmd->args[1][0] == '+' || cmd->args[1][0] == '-')
+			i++;
+		while (cmd->args[1][i])
+		{
+			if (!ft_isdigit(cmd->args[1][i]))
+			{
+				ft_putstr_fd("minishell: exit: ", 2);
+				ft_putstr_fd(cmd->args[1], 2);
+				ft_putstr_fd(": numeric argument required\n", 2);
+				exit(2);
+			}
+			i++;
+		}
+		exit(ft_atoi(cmd->args[1]) & 0xFF);
+	}
+	exit(shell->exit_status);
 }
+
+/* FIX: Added validation for exit arguments.
+** Previously, builtin_exit did not validate its argument — ft_atoi("hello")
+** returned 0 and the shell exited silently with code 0. Now we check:
+** 1. Too many arguments (args[1] and args[2] exist) — print error, return
+**    without exiting, set exit_status = 1.
+** 2. Non-numeric argument — print "numeric argument required", exit(2).
+** 3. Exit code is masked with 0xFF to keep it in the 0-255 range,
+**    matching bash behaviour (e.g. exit 298 returns 42).
+** ft_putendl_fd("exit") is always printed first, as bash does. */
 
 int	key_index(t_shell *shell, char *key)
 {
@@ -98,6 +131,8 @@ void	builtin_unset(t_shell *shell, t_cmd *cmd)
 
 	if (!shell || !cmd)
 		return ;
+	if (!cmd->args[1])
+    	return ;
 	key = cmd->args[1];
 	index = key_index(shell, key);
 	if (index != -1)

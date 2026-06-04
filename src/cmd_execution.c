@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cmd_execution.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: luimarti <luimarti@student.42.fr>          +#+  +:+       +#+        */
+/*   By: lucho <lucho@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/20 23:39:14 by dachin            #+#    #+#             */
-/*   Updated: 2026/06/02 17:22:39 by luimarti         ###   ########.fr       */
+/*   Updated: 2026/06/05 00:54:24 by lucho            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,15 +64,27 @@ char	*resolve_path(char *cmd, t_shell *shell)
 	char	*with_slash;
 	char	*full_path;
 	char	**paths_array;
+	DIR		*dir;
 
 	if (!cmd || !shell)
 		return (NULL);
 	if (cmd[0] == '/' || (cmd[0] == '.' && cmd[1] == '/'))
 	{
 		if (access(cmd, X_OK) == 0)
+		{
+			dir = opendir(cmd);
+			if (dir)
+			{
+				closedir(dir);
+				ft_putstr_fd("minishell: ", 2);
+				ft_putstr_fd(cmd, 2);
+				ft_putstr_fd(": Is a directory\n", 2);
+				exit(126);
+			}
 			return (ft_strdup(cmd));
-		 if (access(cmd, F_OK) == 0)
-		{	
+		}
+		if (access(cmd, F_OK) == 0)
+		{
 			perror("minishell");
 			exit(126);
 		}
@@ -92,6 +104,16 @@ char	*resolve_path(char *cmd, t_shell *shell)
 ** resolve_path returned NULL and exec_child printed "command not found"
 ** with exit code 127. Now we distinguish between a missing file (NULL,
 ** exit 127) and an existing file without execute permissions (exit 126),
+** matching bash behaviour. */
+
+/* FIX 2: Added directory detection in resolve_path() using opendir().
+** Previously, when a user tried to execute a directory (e.g. ./test_files
+** or $PWD which expands to a path), access(cmd, X_OK) returned 0 because
+** directories have execute permission by default. This caused resolve_path()
+** to return the path, exec_child() to call execve(), which failed silently
+** with exit code 1 instead of the correct 126.
+** Now we use opendir() to check if the path is a directory before returning
+** it. If it is, we print the correct error message and exit with code 126,
 ** matching bash behaviour. */
 
 void	exec_child(t_cmd *cmd, t_shell *shell)

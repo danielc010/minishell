@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   pipes.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: luimarti <luimarti@student.42.fr>          +#+  +:+       +#+        */
+/*   By: lucho <lucho@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/20 23:39:28 by dachin            #+#    #+#             */
-/*   Updated: 2026/06/02 13:48:54 by luimarti         ###   ########.fr       */
+/*   Updated: 2026/06/05 00:33:47 by lucho            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,6 +62,15 @@ void	fork_children(t_shell *shell, t_cmd *cmd, t_pipe_ctx *ctx)
 			return ;
 		if (pid == 0)
 		{
+			setup_child_fds(ctx->pipes, i, ctx->n);
+			close_all_pipes(ctx->pipes, ctx->n - 1);
+			apply_redirs(cmd->redirs);
+			if (!ft_strncmp(cmd->args[0], "echo", 5))
+				exit(ft_echo(cmd->args));
+			if (!ft_strncmp(cmd->args[0], "pwd", 4))
+				exit(ft_pwd());
+			if (!ft_strncmp(cmd->args[0], "env", 4))
+				exit(ft_env(shell));
 			exec_child(cmd, shell);
 			exit(EXIT_FAILURE);
 		}
@@ -73,6 +82,14 @@ void	fork_children(t_shell *shell, t_cmd *cmd, t_pipe_ctx *ctx)
 		}
 	}
 }
+/* FIX, lines 65 - 73: Added builtin execution inside fork_children() for pipeline support.
+** Previously, builtins (echo, pwd, env) were only executed in the parent
+** process in exec_pipeline(). When a builtin was part of a pipe, its stdout
+** was not connected to the pipe — it printed directly to the terminal instead
+** of passing output to the next command. Now builtins are also executed in
+** the child process with setup_child_fds() and close_all_pipes() called first
+** to correctly configure the pipe file descriptors. apply_redirs() was also
+** added to handle redirections within pipes. */
 
 void	run_pipeline(t_shell *shell, t_cmd *cmd, int n)
 {
@@ -100,6 +117,54 @@ void	run_pipeline(t_shell *shell, t_cmd *cmd, int n)
 	free_pipes(ctx.pipes, n - 1);
 }
 
+static int	run_builtin(t_shell *shell, t_cmd *cmd)
+{
+	if (!ft_strncmp(cmd->args[0], "echo", 5))
+		return (shell->exit_status = ft_echo(cmd->args), 1);
+	if (!ft_strncmp(cmd->args[0], "pwd", 4))
+		return (shell->exit_status = ft_pwd(), 1);
+	if (!ft_strncmp(cmd->args[0], "env", 4))
+		return (shell->exit_status = ft_env(shell), 1);
+	if (!ft_strncmp(cmd->args[0], "cd", 3))
+		return (builtin_cd(shell, cmd), 1);
+	if (!ft_strncmp(cmd->args[0], "exit", 6))
+		return (builtin_exit(shell, cmd), 1);
+	if (!ft_strncmp(cmd->args[0], "export", 7))
+		return (builtin_export(shell, cmd), 1);
+	if (!ft_strncmp(cmd->args[0], "unset", 6))
+		return (builtin_unset(shell, cmd), 1);
+	return (0);
+}
+
+static void	exec_builtin_with_redirs(t_cmd *cmd, t_shell *shell)
+{
+	pid_t	pid;
+	int		status;
+
+	pid = fork();
+	if (pid == -1)
+		return ;
+	if (pid == 0)
+	{
+		apply_redirs(cmd->redirs);
+		if (!ft_strncmp(cmd->args[0], "echo", 5))
+			exit(ft_echo(cmd->args));
+		if (!ft_strncmp(cmd->args[0], "pwd", 4))
+			exit(ft_pwd());
+		if (!ft_strncmp(cmd->args[0], "env", 4))
+			exit(ft_env(shell));
+		exec_child(cmd, shell);
+		exit(EXIT_FAILURE);
+	}
+	else
+	{
+		waitpid(pid, &status, 0);
+		if (WIFEXITED(status))
+			shell->exit_status = WEXITSTATUS(status);
+		signals_interactive();
+	}
+}
+
 void	exec_pipeline(t_shell *shell)
 {
 	t_cmd	*cmd;
@@ -110,45 +175,30 @@ void	exec_pipeline(t_shell *shell)
 	n = count_cmds(cmd);
 	if (n == 1)
 	{
-		if (!cmd->args || !cmd->args[0])
+		if (!cmd->args || !cmd->args[0] || cmd->args[0][0] == '\0')
 			return ;
-		if (!ft_strncmp(cmd->args[0], "echo", 5))
+		if (cmd->redirs)
 		{
-    		shell->exit_status = ft_echo(cmd->args);
-    		return ;
-		}
-		if (!ft_strncmp(cmd->args[0], "pwd", 4))
-		{
-    		shell->exit_status = ft_pwd();
-    		return ;
-		}
-		if (!ft_strncmp(cmd->args[0], "env", 4))
-		{
-    		shell->exit_status = ft_env(shell);
-    		return ;
-		}
-		if (!ft_strncmp(cmd->args[0], "cd", 3))
-		{
-			builtin_cd(shell, cmd);
+			exec_builtin_with_redirs(cmd, shell);
 			return ;
 		}
-		if (!ft_strncmp(cmd->args[0], "exit", 6))
-		{
-			builtin_exit(shell, cmd);
-			return ;
-		}
-		if (!ft_strncmp(cmd->args[0], "export", 7))
-		{
-			builtin_export(shell, cmd);
-			return ;
-		}
-		if (!ft_strncmp(cmd->args[0], "unset", 6))
-		{
-			builtin_unset(shell, cmd);
-			return ;
-		}
-		fork_and_exec(shell->cmds, shell);
+		if (!run_builtin(shell, cmd))
+			fork_and_exec(shell->cmds, shell);
 		return ;
 	}
 	run_pipeline(shell, cmd, n);
 }
+
+/* FIX: Added exec_builtin_with_redirs() and run_builtin() to handle
+** builtins with redirections in single command pipelines.
+** Previously, builtins (echo, pwd, env, cd, export, unset, exit) in
+** exec_pipeline() were executed directly in the parent process without
+** applying redirections. This caused two problems:
+** 1. Redirections were ignored — output went to stdout instead of the file.
+** 2. When a redirection failed (missing file, no permissions), apply_redirs()
+**    called exit(1) in the parent process, closing the entire shell.
+** Now, when a builtin has redirections, we fork a child process,
+** apply the redirections there, and execute the builtin in the child.
+** The parent waits and collects the exit code via waitpid().
+** run_builtin() was extracted to keep exec_pipeline() within norminette
+** limits and avoid code duplication. */

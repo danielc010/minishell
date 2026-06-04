@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
-/*                                                        ::::::::            */
-/*   builtin3.c                                         :+:    :+:            */
-/*                                                     +:+                    */
-/*   By: dachin <dachin@student.codam.nl>             +#+                     */
-/*                                                   +#+                      */
-/*   Created: 2026/05/27 16:48:07 by dachin        #+#    #+#                 */
-/*   Updated: 2026/05/27 17:33:42 by dachin        ########   odam.nl         */
+/*                                                        :::      ::::::::   */
+/*   builtin3.c                                         :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: lucho <lucho@student.42.fr>                +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2026/05/27 16:48:07 by dachin            #+#    #+#             */
+/*   Updated: 2026/06/04 19:31:20 by lucho            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,6 +45,22 @@ void	no_arg_export(t_shell *shell)
 	}
 }
 
+int is_valid_identifier(char *str)
+{
+	int i;
+
+	i = 0;
+	if (!ft_isalpha(str[0]) && str[0] != '_')
+			return (0);
+		while (str[i])
+		{
+			if (!ft_isalpha(str[i]) && str[i] != '_' && !ft_isdigit(str[i]))
+				return (0);
+			i++;
+		}
+	return (1);
+}
+
 void	builtin_export(t_shell *shell, t_cmd *cmd)
 {
 	char	*eq;
@@ -54,15 +70,39 @@ void	builtin_export(t_shell *shell, t_cmd *cmd)
 	if (!cmd->args[1])
 	{
 		no_arg_export(shell);
+		return ;
 	}
-	else
+	eq = ft_strchr(cmd->args[1], '=');
+	if (!eq)
 	{
-		eq = ft_strchr(cmd->args[1], '=');
-		if (!eq)
-			return ;
-		key = ft_substr(cmd->args[1], 0, eq - cmd->args[1]);
-		value = eq + 1;
-		update_env(shell, key, value);
-		free(key);
+		if (!is_valid_identifier(cmd->args[1]))
+		{
+			ft_putstr_fd("minishell: export: `", 2);
+			ft_putstr_fd(cmd->args[1], 2);
+			ft_putstr_fd("': not a valid identifier\n", 2);
+			shell->exit_status = 1;
+		}
+		return ;
 	}
+	key = ft_substr(cmd->args[1], 0, eq - cmd->args[1]);
+	if (!is_valid_identifier(key))
+	{
+		ft_putstr_fd("minishell: export: `", 2);
+		ft_putstr_fd(cmd->args[1], 2);
+		ft_putstr_fd("': not a valid identifier\n", 2);
+		shell->exit_status = 1;
+		free(key);
+		return ;
+	}
+	value = eq + 1;
+	update_env(shell, key, value);
+	free(key);
 }
+/* FIX: Added validation for export identifiers.
+** Previously, builtin_export accepted any string as a variable name,
+** including invalid identifiers like "A-", "123" or "=". Now we validate
+** the key with is_valid_identifier() before calling update_env(). A valid
+** identifier must start with a letter or '_' and contain only letters,
+** digits and '_'. If invalid, we print "not a valid identifier" and set
+** shell->exit_status = 1, matching bash behaviour. Added is_valid_identifier()
+** as a helper function to keep builtin_export within norminette limits. */

@@ -6,7 +6,7 @@
 /*   By: lucho <lucho@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/03 10:56:58 by luimarti          #+#    #+#             */
-/*   Updated: 2026/05/18 18:04:44 by lucho            ###   ########.fr       */
+/*   Updated: 2026/06/04 23:47:49 by lucho            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -103,6 +103,7 @@ void	expander(t_cmd *cmds, t_shell *shell)
 	t_redir	*redir;
 	char	*tmp;
 	int		i;
+	int		j;
 
 	while (cmds)
 	{
@@ -111,8 +112,22 @@ void	expander(t_cmd *cmds, t_shell *shell)
 		{
 			tmp = cmds->args[i];
 			cmds->args[i] = get_str(tmp, shell);
-			free(tmp);
-			i++;
+			if (cmds->args[i][0] == '\0')
+			{
+				free(cmds->args[i]);
+				j = i;
+				while (cmds->args[j])
+				{
+    				cmds->args[j] = cmds->args[j + 1];
+    				j++;
+				}
+				free(tmp);
+			}
+			else
+			{
+				free(tmp);
+				i++;
+			}
 		}
 		redir = cmds->redirs;
 		while (redir)

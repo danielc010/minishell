@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: luimarti <luimarti@student.42.fr>          +#+  +:+       +#+        */
+/*   By: lucho <lucho@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/29 10:32:25 by dachin            #+#    #+#             */
-/*   Updated: 2026/06/02 14:38:30 by luimarti         ###   ########.fr       */
+/*   Updated: 2026/06/05 00:46:23 by lucho            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,6 +37,9 @@
 
 // open() and its flags: O_RDONLY, O_WRONLY, O_CREAT, O_TRUNC, O_APPEND.
 # include <fcntl.h>
+
+// opendir, readdir, closedir — directory traversal functions
+# include <dirent.h>
 
 // A signal can interrupt your program at any point — mid-assignment,
 // mid-function, anywhere. If your signal handler writes to a variable while the
