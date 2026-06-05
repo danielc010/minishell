@@ -6,11 +6,42 @@
 /*   By: luimarti <luimarti@student.42.fr>            +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2026/05/22 12:19:00 by dachin        #+#    #+#                 */
-/*   Updated: 2026/06/05 08:12:55 by dachin        ########   odam.nl         */
+/*   Updated: 2026/06/05 10:03:10 by dachin        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/minishell.h"
+
+// When a child process finishes, it doesnt disapppear. It stays in the
+// process as a zombie proesss. waiting for its parent to collect
+// its exit status with waitpid for clean up, otherwise there will be
+// process table leak where no new processes can be created.
+void	fork_and_exec(t_cmd *cmd, t_shell *shell)
+{
+	pid_t	pid;
+	int		status;
+
+	if (!cmd || !shell)
+		return ;
+	pid = fork();
+	if (pid == -1)
+		return ;
+	if (pid == 0)
+	{
+		exec_child(cmd, shell);
+		exit(EXIT_FAILURE);
+	}
+	else
+	{
+		signals_waiting();
+		waitpid(pid, &status, 0);
+		if (WIFEXITED(status))
+			shell->exit_status = WEXITSTATUS(status);
+		if (WIFSIGNALED(status) && WTERMSIG(status) == SIGQUIT)
+			ft_putendl_fd("Quit: 3", 2);
+		signals_interactive();
+	}
+}
 
 // Helper that takes a redirection and returns an open file descriptor
 // appropriate for its type — read-only for R_IN, write/create/truncate for
@@ -32,7 +63,7 @@ int	open_redir_fd(t_redir *redir)
 	return (fd);
 }
 
-// Connects the fd to sdin or stdout.
+// Connects the fd to stdin or stdout. Recap dup2 points arg2 to arg1.
 // dup2(fd, STDIN_FILENO makes STDIN_FILENO (fd 0) point to same file/pipe as fd
 // so any future read from stdin reads from your file/pipe instead.
 // dup2(fd, STDOUT_FILENO makes STDOUT_FILENO (fd 1) point to same file/pipe as

@@ -1,12 +1,12 @@
 # **************************************************************************** #
 #                                                                              #
-#                                                         :::      ::::::::    #
-#    Makefile                                           :+:      :+:    :+:    #
-#                                                     +:+ +:+         +:+      #
-#    By: luimarti <luimarti@student.42.fr>          +#+  +:+       +#+         #
-#                                                 +#+#+#+#+#+   +#+            #
-#    Created: 2026/01/18 11:17:27 by luimarti          #+#    #+#              #
-#    Updated: 2026/06/02 13:32:58 by luimarti         ###   ########.fr        #
+#                                                         ::::::::             #
+#    Makefile                                           :+:    :+:             #
+#                                                      +:+                     #
+#    By: luimarti <luimarti@student.42.fr>            +#+                      #
+#                                                    +#+                       #
+#    Created: 2026/01/18 11:17:27 by luimarti      #+#    #+#                  #
+#    Updated: 2026/06/05 11:05:27 by dachin        ########   odam.nl          #
 #                                                                              #
 # **************************************************************************** #
 
@@ -25,6 +25,7 @@ SRCS = src/main.c \
 	   src/builtin.c \
 	   src/builtin2.c \
 	   src/builtin3.c \
+	   src/builtin4.c \
 	   src/echo.c \
 	   src/env.c \
 	   src/expander.c \

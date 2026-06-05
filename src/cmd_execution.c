@@ -6,7 +6,7 @@
 /*   By: lucho <lucho@student.42.fr>                  +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2026/05/20 23:39:14 by dachin        #+#    #+#                 */
-/*   Updated: 2026/06/05 08:10:47 by dachin        ########   odam.nl         */
+/*   Updated: 2026/06/05 09:51:28 by dachin        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,62 +61,56 @@ char	*find_in_paths(char **paths, char *with_slash)
 	return (full_path);
 }
 
-char	*resolve_path(char *cmd, t_shell *shell)
+// Handles cmds on explicit path (starting with / or ./).
+// Checks in order:
+// not executable but exists -> permission denied (126) or not found (127)
+// executable + is a directory -> Is a directory (126)"
+// executable + is a file -> return the path
+static char	*resolve_direct(char *cmd)
 {
-	char	*with_slash;
-	char	*full_path;
-	char	**paths_array;
-	DIR		*dir;
+	DIR	*dir;
 
-	if (!cmd || !shell)
-		return (NULL);
-	if (cmd[0] == '/' || (cmd[0] == '.' && cmd[1] == '/'))
+	if (access(cmd, X_OK) != 0)
 	{
-		if (access(cmd, X_OK) == 0)
-		{
-			dir = opendir(cmd);
-			if (dir)
-			{
-				closedir(dir);
-				ft_putstr_fd("minishell: ", 2);
-				ft_putstr_fd(cmd, 2);
-				ft_putstr_fd(": Is a directory\n", 2);
-				exit(126);
-			}
-			return (ft_strdup(cmd));
-		}
 		if (access(cmd, F_OK) == 0)
 		{
 			perror("minishell");
 			exit(126);
 		}
-		return (NULL);
+		ft_putstr_fd("minishell: ", 2);
+		ft_putstr_fd(cmd, 2);
+		ft_putendl_fd(": No such file or directory", 2);
+		exit(127);
 	}
+	dir = opendir(cmd);
+	if (dir)
+	{
+		closedir(dir);
+		ft_putstr_fd("minishell: ", 2);
+		ft_putstr_fd(cmd, 2);
+		ft_putstr_fd(": Is a directory\n", 2);
+		exit(126);
+	}
+	return (ft_strdup(cmd));
+}
+
+char	*resolve_path(char *cmd, t_shell *shell)
+{
+	char	*with_slash;
+	char	*full_path;
+	char	**paths_array;
+
+	if (!cmd || !shell)
+		return (NULL);
+	if (cmd[0] == '/' || (cmd[0] == '.' && cmd[1] == '/'))
+		return (resolve_direct(cmd));
 	paths_array = extract_path_to_array(shell);
 	if (!paths_array)
 		return (NULL);
 	with_slash = ft_strjoin("/", cmd);
 	full_path = find_in_paths(paths_array, with_slash);
-	if (full_path == NULL)
-		return (free(with_slash), free_array(paths_array), NULL);
 	return (free(with_slash), free_array(paths_array), full_path);
 }
-/* FIX (lines 74 - 78): Added access(cmd, F_OK) check after access(cmd, X_OK) fails.
-** Previously, when a file existed but had no execute permissions,
-** resolve_path returned NULL and exec_child printed "command not found"
-** with exit code 127. Now we distinguish between a missing file (NULL,
-** exit 127) and an existing file without execute permissions (exit 126),
-** matching bash behaviour. */
-
-/* FIX 2: Added directory detection in resolve_path() using opendir().
-** Previously, when a user tried to execute a directory (e.g. ./test_files
-** or $PWD which expands to a path), access(cmd, X_OK) returned 0 because
-** directories have execute permission by default. This caused resolve_path()
-** to return the path, exec_child() to call execve(), which failed silently
-** with exit code 1 instead of the correct 126.
-** Now we use opendir() to check if the path is a directory before returning
-** it. If it is, we print the correct error message and exit with code 126,
-** matching bash behaviour. */
 
 // Exit code 127 is standard POSIX convention for "cmd not found"
 // exit(127) occurs instead of returning from exec_child as
@@ -136,35 +130,4 @@ void	exec_child(t_cmd *cmd, t_shell *shell)
 	apply_redirs(cmd->redirs);
 	execve(path, cmd->args, shell->env);
 	free(path);
-}
-
-// When a child process finishes, it doesnt disapppear. It stays in the
-// process as a zombie proesss. waiting for its parent to collect
-// its exit status with waitpid for clean up, otherwise there will be
-// process table leak where no new processes can be created.
-void	fork_and_exec(t_cmd *cmd, t_shell *shell)
-{
-	pid_t	pid;
-	int		status;
-
-	if (!cmd || !shell)
-		return ;
-	pid = fork();
-	if (pid == -1)
-		return ;
-	if (pid == 0)
-	{
-		exec_child(cmd, shell);
-		exit(EXIT_FAILURE);
-	}
-	else
-	{
-		signals_waiting();
-		waitpid(pid, &status, 0);
-		if (WIFEXITED(status))
-			shell->exit_status = WEXITSTATUS(status);
-		if (WIFSIGNALED(status) && WTERMSIG(status) == SIGQUIT)
-			ft_putendl_fd("Quit: 3", 2);
-		signals_interactive();
-	}
 }

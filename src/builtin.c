@@ -6,7 +6,7 @@
 /*   By: lucho <lucho@student.42.fr>                  +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2026/05/20 23:39:07 by dachin        #+#    #+#                 */
-/*   Updated: 2026/06/05 08:07:47 by dachin        ########   odam.nl         */
+/*   Updated: 2026/06/05 10:50:10 by dachin        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,7 +70,8 @@ void	update_env(t_shell *shell, char *key, char *value)
 		add_env(shell, i, keyequalvalue);
 }
 
-// Skip past "KEY=" extract the pointer directly into the string at the value part.
+// Skip past "KEY=" extract the pointer directly into the string at
+// the value part.
 // "PATH=/usr/bin" returns "/user/bin"
 char	*get_env(t_shell *shell, char *key)
 {

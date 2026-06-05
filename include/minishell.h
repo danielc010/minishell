@@ -6,7 +6,7 @@
 /*   By: lucho <lucho@student.42.fr>                  +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2026/05/29 10:32:25 by dachin        #+#    #+#                 */
-/*   Updated: 2026/06/05 08:28:45 by dachin        ########   odam.nl         */
+/*   Updated: 2026/06/05 11:05:17 by dachin        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -152,9 +152,9 @@ char			**extract_path_to_array(t_shell *shell);
 char			*find_in_paths(char **paths, char *with_slash);
 char			*resolve_path(char *cmd, t_shell *shell);
 void			exec_child(t_cmd *cmd, t_shell *shell);
-void			fork_and_exec(t_cmd *cmd, t_shell *shell);
 
 // cmd_execution2.d
+void			fork_and_exec(t_cmd *cmd, t_shell *shell);
 int				open_redir_fd(t_redir *redir);
 void			apply_redirs(t_redir *redir);
 int				handle_heredoc_signal(void);
@@ -183,12 +183,16 @@ char			*get_cd_path(t_shell *shell, t_cmd *cmd);
 // builtin2.c
 void			builtin_cd(t_shell *shell, t_cmd *cmd);
 void			builtin_exit(t_shell *shell, t_cmd *cmd);
+
+
+//builtin3.c
 int				key_index(t_shell *shell, char *key);
 void			builtin_unset(t_shell *shell, t_cmd *cmd);
 
-//builtin3.c
+//builtin4.c
 void			print_export(char *key, char *value);
 void			no_arg_export(t_shell *shell);
+int				is_valid_identifier(char *str);
 void			builtin_export(t_shell *shell, t_cmd *cmd);
 
 char			**copy_env(char **envp);
