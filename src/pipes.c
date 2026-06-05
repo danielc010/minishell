@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
-/*                                                        ::::::::            */
-/*   pipes.c                                            :+:    :+:            */
-/*                                                     +:+                    */
-/*   By: lucho <lucho@student.42.fr>                  +#+                     */
-/*                                                   +#+                      */
-/*   Created: 2026/05/20 23:39:28 by dachin        #+#    #+#                 */
-/*   Updated: 2026/06/05 13:25:42 by dachin        ########   odam.nl         */
+/*                                                        :::      ::::::::   */
+/*   pipes.c                                            :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: luimarti <luimarti@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2026/05/20 23:39:28 by dachin            #+#    #+#             */
+/*   Updated: 2026/06/05 14:26:37 by luimarti         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,9 +29,6 @@ void	prepare_heredocs(t_cmd *cmd)
 	}
 }
 
-// Loop through all pids and calles waitpid on each. Overwrites
-// shell->exit_status for every child per bash behaviour, using exit status of
-// the last command in a pipeline.
 void	wait_all(t_shell *shell, pid_t *pids, int n)
 {
 	int	i;
@@ -52,15 +49,6 @@ void	wait_all(t_shell *shell, pid_t *pids, int n)
 	signals_interactive();
 }
 
-// Forks all children in a loop. Pipe wiring for child branch done right
-// before execve, so child inherits the correct stdin/stdout connections.
-// Similarly to parent closing all pipes post forking, the child needs to close
-// extra unused pipes which can prevent EOF from delivred in complex piplines.
-// Read-only built-ins are added here to cater for multiple command cases e.g.
-// echo hello | grep hello, where execution goes through fork_children instead.
-// Without these, echo would fall to exec_child which calls execve which looks
-// for external binary echo instead of our builtin. Setup_child_fds is already
-// called so stdout is wired to the pipe.
 void	fork_children(t_shell *shell, t_cmd *cmd, t_pipe_ctx *ctx)
 {
 	int	i;
@@ -83,6 +71,23 @@ void	fork_children(t_shell *shell, t_cmd *cmd, t_pipe_ctx *ctx)
 				exit(ft_pwd());
 			if (!ft_strncmp(cmd->args[0], "env", 4))
 				exit(ft_env(shell));
+			if (!ft_strncmp(cmd->args[0], "exit", 5))
+				exit(ft_atoi(cmd->args[1] ? cmd->args[1] : "0"));
+			if (!ft_strncmp(cmd->args[0], "cd", 3))
+			{
+				builtin_cd(shell, cmd);
+				exit(shell->exit_status);
+			}
+			if (!ft_strncmp(cmd->args[0], "export", 7))
+			{
+				builtin_export(shell, cmd);
+				exit(shell->exit_status);
+			}
+			if (!ft_strncmp(cmd->args[0], "unset", 6))
+			{
+				builtin_unset(shell, cmd);
+				exit(shell->exit_status);
+			}
 			exec_child(cmd, shell);
 			exit(EXIT_FAILURE);
 		}
@@ -95,8 +100,6 @@ void	fork_children(t_shell *shell, t_cmd *cmd, t_pipe_ctx *ctx)
 	}
 }
 
-// Close all pipes in the parent after forking, so child reading from the
-// pipe write ends get EOF delivered correctly when the writing child exits.
 void	run_pipeline(t_shell *shell, t_cmd *cmd, int n)
 {
 	t_pipe_ctx	ctx;
@@ -123,57 +126,6 @@ void	run_pipeline(t_shell *shell, t_cmd *cmd, int n)
 	free_pipes(ctx.pipes, n - 1);
 }
 
-static int	run_builtin(t_shell *shell, t_cmd *cmd)
-{
-	if (!ft_strncmp(cmd->args[0], "echo", 5))
-		return (shell->exit_status = ft_echo(cmd->args), 1);
-	if (!ft_strncmp(cmd->args[0], "pwd", 4))
-		return (shell->exit_status = ft_pwd(), 1);
-	if (!ft_strncmp(cmd->args[0], "env", 4))
-		return (shell->exit_status = ft_env(shell), 1);
-	if (!ft_strncmp(cmd->args[0], "cd", 3))
-		return (builtin_cd(shell, cmd), 1);
-	if (!ft_strncmp(cmd->args[0], "exit", 6))
-		return (builtin_exit(shell, cmd), 1);
-	if (!ft_strncmp(cmd->args[0], "export", 7))
-		return (builtin_export(shell, cmd), 1);
-	if (!ft_strncmp(cmd->args[0], "unset", 6))
-		return (builtin_unset(shell, cmd), 1);
-	return (0);
-}
-
-static void	exec_builtin_with_redirs(t_cmd *cmd, t_shell *shell)
-{
-	pid_t	pid;
-	int		status;
-
-	pid = fork();
-	if (pid == -1)
-		return ;
-	if (pid == 0)
-	{
-		apply_redirs(cmd->redirs);
-		if (!ft_strncmp(cmd->args[0], "echo", 5))
-			exit(ft_echo(cmd->args));
-		if (!ft_strncmp(cmd->args[0], "pwd", 4))
-			exit(ft_pwd());
-		if (!ft_strncmp(cmd->args[0], "env", 4))
-			exit(ft_env(shell));
-		exec_child(cmd, shell);
-		exit(EXIT_FAILURE);
-	}
-	else
-	{
-		waitpid(pid, &status, 0);
-		if (WIFEXITED(status))
-			shell->exit_status = WEXITSTATUS(status);
-		signals_interactive();
-	}
-}
-
-// These built-in commands modify the shell state, hence are run in the
-// parent process, unlike echo, pwd, env which are read-only operations.
-// n commands need n - 1 pipes as each pipe connects adjacent commands.
 void	exec_pipeline(t_shell *shell)
 {
 	t_cmd	*cmd;
@@ -184,29 +136,45 @@ void	exec_pipeline(t_shell *shell)
 	n = count_cmds(cmd);
 	if (n == 1)
 	{
-		if (!cmd->args || !cmd->args[0] || cmd->args[0][0] == '\0')
+		if (!cmd->args || !cmd->args[0])
 			return ;
-		if (cmd->redirs)
+		if (!ft_strncmp(cmd->args[0], "echo", 5))
 		{
-			exec_builtin_with_redirs(cmd, shell);
+    		shell->exit_status = ft_echo(cmd->args);
+    		return ;
+		}
+		if (!ft_strncmp(cmd->args[0], "pwd", 4))
+		{
+    		shell->exit_status = ft_pwd();
+    		return ;
+		}
+		if (!ft_strncmp(cmd->args[0], "env", 4))
+		{
+    		shell->exit_status = ft_env(shell);
+    		return ;
+		}
+		if (!ft_strncmp(cmd->args[0], "cd", 3))
+		{
+			builtin_cd(shell, cmd);
 			return ;
 		}
-		if (!run_builtin(shell, cmd))
-			fork_and_exec(shell->cmds, shell);
+		if (!ft_strncmp(cmd->args[0], "exit", 6))
+		{
+			builtin_exit(shell, cmd);
+			return ;
+		}
+		if (!ft_strncmp(cmd->args[0], "export", 7))
+		{
+			builtin_export(shell, cmd);
+			return ;
+		}
+		if (!ft_strncmp(cmd->args[0], "unset", 6))
+		{
+			builtin_unset(shell, cmd);
+			return ;
+		}
+		fork_and_exec(shell->cmds, shell);
 		return ;
 	}
 	run_pipeline(shell, cmd, n);
 }
-/* FIX: Added exec_builtin_with_redirs() and run_builtin() to handle
-** builtins with redirections in single command pipelines.
-** Previously, builtins (echo, pwd, env, cd, export, unset, exit) in
-** exec_pipeline() were executed directly in the parent process without
-** applying redirections. This caused two problems:
-** 1. Redirections were ignored — output went to stdout instead of the file.
-** 2. When a redirection failed (missing file, no permissions), apply_redirs()
-**    called exit(1) in the parent process, closing the entire shell.
-** Now, when a builtin has redirections, we fork a child process,
-** apply the redirections there, and execute the builtin in the child.
-** The parent waits and collects the exit code via waitpid().
-** run_builtin() was extracted to keep exec_pipeline() within norminette
-** limits and avoid code duplication. */
