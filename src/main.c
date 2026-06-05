@@ -27,14 +27,12 @@ int	main(int argc, char **argv, char **envp)
 	while (shell.running)
 	{
 		line = readline("minishell> ");
-		printf("line=%p g_signal=%d\n", line, g_signal);
+		if (g_signal == SIGINT)
+			shell.exit_status = 130;
+		g_signal = 0;
 		if (line == NULL)
 		{
-			if (g_signal == SIGINT)
-			{
-				g_signal = 0;
-				continue ;
-			}
+			ft_putendl_fd("exit", 2);
 			break ;
 		}
 		if (ft_strlen(line) > 0)
@@ -49,5 +47,5 @@ int	main(int argc, char **argv, char **envp)
 		free(line);
 	}
 	free_array(shell.env);
-	return (0);
+	return (shell.exit_status);
 }
