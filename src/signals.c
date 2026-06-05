@@ -1,22 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
-<<<<<<< HEAD
 /*                                                        ::::::::            */
 /*   signals.c                                          :+:    :+:            */
 /*                                                     +:+                    */
 /*   By: luimarti <luimarti@student.42.fr>            +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2026/05/22 14:32:00 by dachin        #+#    #+#                 */
-/*   Updated: 2026/06/05 18:23:18 by dachin        ########   odam.nl         */
-=======
-/*                                                        :::      ::::::::   */
-/*   signals.c                                          :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: luimarti <luimarti@student.42.fr>          +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2026/05/22 14:32:00 by dachin            #+#    #+#             */
-/*   Updated: 2026/06/05 17:34:42 by luimarti         ###   ########.fr       */
->>>>>>> 4a28b5322b238281baf12bfaebdb01ff101f890a
+/*   Updated: 2026/06/05 18:27:25 by dachin        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,16 +19,10 @@
 static void	handle_signal(int sig)
 {
 	g_signal = sig;
-<<<<<<< HEAD
 	write(1, "^C\n", 3);
 	rl_replace_line("", 0);
 	rl_on_new_line();
 	rl_redisplay();
-=======
-	write(STDOUT_FILENO, "\n", 1);
-	rl_replace_line("", 0);
-	rl_on_new_line();
->>>>>>> 4a28b5322b238281baf12bfaebdb01ff101f890a
 }
 
 static void	handle_signal_waiting(int sig)
