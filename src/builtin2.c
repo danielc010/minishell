@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   builtin2.c                                         :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: lucho <lucho@student.42.fr>                +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2026/05/20 23:58:04 by dachin            #+#    #+#             */
-/*   Updated: 2026/06/05 00:15:56 by lucho            ###   ########.fr       */
+/*                                                        ::::::::            */
+/*   builtin2.c                                         :+:    :+:            */
+/*                                                     +:+                    */
+/*   By: lucho <lucho@student.42.fr>                  +#+                     */
+/*                                                   +#+                      */
+/*   Created: 2026/05/20 23:58:04 by dachin        #+#    #+#                 */
+/*   Updated: 2026/06/05 08:08:18 by dachin        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -108,6 +108,7 @@ void	builtin_exit(t_shell *shell, t_cmd *cmd)
 **    matching bash behaviour (e.g. exit 298 returns 42).
 ** ft_putendl_fd("exit") is always printed first, as bash does. */
 
+// The additional == '=' check ensures key "FOX" doesn't trigger "FOXERA=..."
 int	key_index(t_shell *shell, char *key)
 {
 	int	i;
@@ -124,15 +125,15 @@ int	key_index(t_shell *shell, char *key)
 	return (-1);
 }
 
+// For each NAME, remove the corresponding variable or function. Shift everything
+// left by one position then sets last entry to NULL. No reallocation of array.
 void	builtin_unset(t_shell *shell, t_cmd *cmd)
 {
 	char	*key;
 	int		index;
 
-	if (!shell || !cmd)
+	if (!shell || !cmd || !cmd->args[1])
 		return ;
-	if (!cmd->args[1])
-    	return ;
 	key = cmd->args[1];
 	index = key_index(shell, key);
 	if (index != -1)

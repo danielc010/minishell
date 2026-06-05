@@ -1,17 +1,18 @@
 /* ************************************************************************** */
 /*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   builtin3.c                                         :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: lucho <lucho@student.42.fr>                +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2026/05/27 16:48:07 by dachin            #+#    #+#             */
-/*   Updated: 2026/06/04 19:31:20 by lucho            ###   ########.fr       */
+/*                                                        ::::::::            */
+/*   builtin3.c                                         :+:    :+:            */
+/*                                                     +:+                    */
+/*   By: lucho <lucho@student.42.fr>                  +#+                     */
+/*                                                   +#+                      */
+/*   Created: 2026/05/27 16:48:07 by dachin        #+#    #+#                 */
+/*   Updated: 2026/06/05 08:09:09 by dachin        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/minishell.h"
 
+// In the format as displayed when we type export with no arguments
 void	print_export(char *key, char *value)
 {
 	ft_putstr_fd("declare -x ", 1);
@@ -21,6 +22,8 @@ void	print_export(char *key, char *value)
 	ft_putendl_fd("\"", 1);
 }
 
+// If no NAMEs are given,a list of all names that are exported in this shell is
+// printed.
 void	no_arg_export(t_shell *shell)
 {
 	char	*eq;
@@ -61,6 +64,8 @@ int is_valid_identifier(char *str)
 	return (1);
 }
 
+// Exporting shell variables and functions to child processes
+// Create and export a variable to env: export VAR=value
 void	builtin_export(t_shell *shell, t_cmd *cmd)
 {
 	char	*eq;

@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   builtin.c                                          :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: lucho <lucho@student.42.fr>                +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2026/05/20 23:39:07 by dachin            #+#    #+#             */
-/*   Updated: 2026/06/03 23:03:45 by lucho            ###   ########.fr       */
+/*                                                        ::::::::            */
+/*   builtin.c                                          :+:    :+:            */
+/*                                                     +:+                    */
+/*   By: lucho <lucho@student.42.fr>                  +#+                     */
+/*                                                   +#+                      */
+/*   Created: 2026/05/20 23:39:07 by dachin        #+#    #+#                 */
+/*   Updated: 2026/06/05 08:07:47 by dachin        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,6 +21,8 @@ void	replace_env_entry(char **entry, char *newval)
 	free(tmp);
 }
 
+// Copies shell->env entries into env_new. The old array shell->env is freed
+// but this does not affect the individual strings as they were copied out.
 void	add_env(t_shell *shell, int i, char *new_env)
 {
 	char	**env_new;
@@ -68,6 +70,8 @@ void	update_env(t_shell *shell, char *key, char *value)
 		add_env(shell, i, keyequalvalue);
 }
 
+// Skip past "KEY=" extract the pointer directly into the string at the value part.
+// "PATH=/usr/bin" returns "/user/bin"
 char	*get_env(t_shell *shell, char *key)
 {
 	int		i;
@@ -92,6 +96,10 @@ char	*get_env(t_shell *shell, char *key)
 	return (NULL);
 }
 
+// Sets the path for 3 cases:-
+// cd alone: goes to HOME folder i.e. cd ~
+// cd -: goes to previous directory i.e. OLDPWD
+// cd xx: goes to directory ./xx
 char	*get_cd_path(t_shell *shell, t_cmd *cmd)
 {
 	char	*path;
@@ -101,7 +109,11 @@ char	*get_cd_path(t_shell *shell, t_cmd *cmd)
 	if (!cmd->args[1])
 		path = get_env(shell, "HOME");
 	else if (!ft_strncmp(cmd->args[1], "-", 2))
+	{
 		path = get_env(shell, "OLDPWD");
+		if (path)
+			printf("%s\n", path);
+	}
 	else
 		path = cmd->args[1];
 	return (path);

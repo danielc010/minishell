@@ -1,18 +1,20 @@
 /* ************************************************************************** */
 /*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   cmd_execution.c                                    :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: lucho <lucho@student.42.fr>                +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2026/05/20 23:39:14 by dachin            #+#    #+#             */
-/*   Updated: 2026/06/05 00:54:24 by lucho            ###   ########.fr       */
+/*                                                        ::::::::            */
+/*   cmd_execution.c                                    :+:    :+:            */
+/*                                                     +:+                    */
+/*   By: lucho <lucho@student.42.fr>                  +#+                     */
+/*                                                   +#+                      */
+/*   Created: 2026/05/20 23:39:14 by dachin        #+#    #+#                 */
+/*   Updated: 2026/06/05 08:10:47 by dachin        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/minishell.h"
 
 // Finds all the PATH= in env, splitting on : and returns the array
+// PATH is environment variable telling OS where to search for exec programs
+// and commands. The folders are delimited by :
 char	**extract_path_to_array(t_shell *shell)
 {
 	int		i;
@@ -116,6 +118,9 @@ char	*resolve_path(char *cmd, t_shell *shell)
 ** it. If it is, we print the correct error message and exit with code 126,
 ** matching bash behaviour. */
 
+// Exit code 127 is standard POSIX convention for "cmd not found"
+// exit(127) occurs instead of returning from exec_child as
+// it is a generic exit(EXIT_FAILURE) in fork_and_exec.
 void	exec_child(t_cmd *cmd, t_shell *shell)
 {
 	char	*path;
@@ -133,6 +138,10 @@ void	exec_child(t_cmd *cmd, t_shell *shell)
 	free(path);
 }
 
+// When a child process finishes, it doesnt disapppear. It stays in the
+// process as a zombie proesss. waiting for its parent to collect
+// its exit status with waitpid for clean up, otherwise there will be
+// process table leak where no new processes can be created.
 void	fork_and_exec(t_cmd *cmd, t_shell *shell)
 {
 	pid_t	pid;
@@ -150,6 +159,7 @@ void	fork_and_exec(t_cmd *cmd, t_shell *shell)
 	}
 	else
 	{
+		signals_waiting();
 		waitpid(pid, &status, 0);
 		if (WIFEXITED(status))
 			shell->exit_status = WEXITSTATUS(status);
