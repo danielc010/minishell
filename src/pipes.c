@@ -6,7 +6,7 @@
 /*   By: luimarti <luimarti@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/20 23:39:28 by dachin            #+#    #+#             */
-/*   Updated: 2026/06/05 14:26:37 by luimarti         ###   ########.fr       */
+/*   Updated: 2026/06/05 16:24:19 by luimarti         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,6 +47,7 @@ void	wait_all(t_shell *shell, pid_t *pids, int n)
 		++i;
 	}
 	signals_interactive();
+	g_signal = 0;
 }
 
 void	fork_children(t_shell *shell, t_cmd *cmd, t_pipe_ctx *ctx)
@@ -126,6 +127,71 @@ void	run_pipeline(t_shell *shell, t_cmd *cmd, int n)
 	free_pipes(ctx.pipes, n - 1);
 }
 
+static int	run_builtin(t_shell *shell, t_cmd *cmd)
+{
+	if (!ft_strncmp(cmd->args[0], "echo", 5))
+		return (shell->exit_status = ft_echo(cmd->args), 1);
+	if (!ft_strncmp(cmd->args[0], "pwd", 4))
+		return (shell->exit_status = ft_pwd(), 1);
+	if (!ft_strncmp(cmd->args[0], "env", 4))
+		return (shell->exit_status = ft_env(shell), 1);
+	if (!ft_strncmp(cmd->args[0], "cd", 3))
+		return (builtin_cd(shell, cmd), 1);
+	if (!ft_strncmp(cmd->args[0], "exit", 6))
+		return (builtin_exit(shell, cmd), 1);
+	if (!ft_strncmp(cmd->args[0], "export", 7))
+		return (builtin_export(shell, cmd), 1);
+	if (!ft_strncmp(cmd->args[0], "unset", 6))
+		return (builtin_unset(shell, cmd), 1);
+	return (0);
+}
+
+static void	exec_builtin_with_redirs(t_cmd *cmd, t_shell *shell)
+{
+	pid_t	pid;
+	int		status;
+
+	pid = fork();
+	if (pid == -1)
+		return ;
+	if (pid == 0)
+	{
+		apply_redirs(cmd->redirs);
+		if (!ft_strncmp(cmd->args[0], "echo", 5))
+			exit(ft_echo(cmd->args));
+		if (!ft_strncmp(cmd->args[0], "pwd", 4))
+			exit(ft_pwd());
+		if (!ft_strncmp(cmd->args[0], "env", 4))
+			exit(ft_env(shell));
+		if (!ft_strncmp(cmd->args[0], "cd", 3))
+		{
+			builtin_cd(shell, cmd);
+			exit(shell->exit_status);
+		}
+		if (!ft_strncmp(cmd->args[0], "export", 7))
+		{
+			builtin_export(shell, cmd);
+			exit(shell->exit_status);
+		}
+		if (!ft_strncmp(cmd->args[0], "unset", 6))
+		{
+			builtin_unset(shell, cmd);
+			exit(shell->exit_status);
+		}
+		if (!ft_strncmp(cmd->args[0], "exit", 5))
+			exit(ft_atoi(cmd->args[1] ? cmd->args[1] : "0"));
+		exec_child(cmd, shell);
+		exit(EXIT_FAILURE);
+	}
+	else
+	{
+		waitpid(pid, &status, 0);
+		if (WIFEXITED(status))
+			shell->exit_status = WEXITSTATUS(status);
+		signals_interactive();
+	}
+}
+
 void	exec_pipeline(t_shell *shell)
 {
 	t_cmd	*cmd;
@@ -136,44 +202,15 @@ void	exec_pipeline(t_shell *shell)
 	n = count_cmds(cmd);
 	if (n == 1)
 	{
-		if (!cmd->args || !cmd->args[0])
+		if (!cmd->args || !cmd->args[0] || cmd->args[0][0] == '\0')
 			return ;
-		if (!ft_strncmp(cmd->args[0], "echo", 5))
+		if (cmd->redirs)
 		{
-    		shell->exit_status = ft_echo(cmd->args);
-    		return ;
-		}
-		if (!ft_strncmp(cmd->args[0], "pwd", 4))
-		{
-    		shell->exit_status = ft_pwd();
-    		return ;
-		}
-		if (!ft_strncmp(cmd->args[0], "env", 4))
-		{
-    		shell->exit_status = ft_env(shell);
-    		return ;
-		}
-		if (!ft_strncmp(cmd->args[0], "cd", 3))
-		{
-			builtin_cd(shell, cmd);
+			exec_builtin_with_redirs(cmd, shell);
 			return ;
 		}
-		if (!ft_strncmp(cmd->args[0], "exit", 6))
-		{
-			builtin_exit(shell, cmd);
-			return ;
-		}
-		if (!ft_strncmp(cmd->args[0], "export", 7))
-		{
-			builtin_export(shell, cmd);
-			return ;
-		}
-		if (!ft_strncmp(cmd->args[0], "unset", 6))
-		{
-			builtin_unset(shell, cmd);
-			return ;
-		}
-		fork_and_exec(shell->cmds, shell);
+		if (!run_builtin(shell, cmd))
+			fork_and_exec(shell->cmds, shell);
 		return ;
 	}
 	run_pipeline(shell, cmd, n);
