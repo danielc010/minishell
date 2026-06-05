@@ -6,7 +6,7 @@
 /*   By: dachin <dachin@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2026/06/05 11:01:33 by dachin        #+#    #+#                 */
-/*   Updated: 2026/06/05 11:03:22 by dachin        ########   odam.nl         */
+/*   Updated: 2026/06/05 13:27:48 by dachin        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,11 +53,11 @@ void	no_arg_export(t_shell *shell)
 // can only contain letters, digits (0-9) or underscores
 int	is_valid_identifier(char *str)
 {
-	int i;
+	int	i;
 
 	i = 0;
 	if (!ft_isalpha(str[0]) && str[0] != '_')
-			return (0);
+		return (0);
 	while (str[i])
 	{
 		if (!ft_isalpha(str[i]) && str[i] != '_' && !ft_isdigit(str[i]))

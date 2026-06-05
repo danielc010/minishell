@@ -6,7 +6,7 @@
 /*   By: lucho <lucho@student.42.fr>                  +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2026/05/20 23:39:28 by dachin        #+#    #+#                 */
-/*   Updated: 2026/06/05 08:31:59 by dachin        ########   odam.nl         */
+/*   Updated: 2026/06/05 13:25:42 by dachin        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,6 +56,11 @@ void	wait_all(t_shell *shell, pid_t *pids, int n)
 // before execve, so child inherits the correct stdin/stdout connections.
 // Similarly to parent closing all pipes post forking, the child needs to close
 // extra unused pipes which can prevent EOF from delivred in complex piplines.
+// Read-only built-ins are added here to cater for multiple command cases e.g.
+// echo hello | grep hello, where execution goes through fork_children instead.
+// Without these, echo would fall to exec_child which calls execve which looks
+// for external binary echo instead of our builtin. Setup_child_fds is already
+// called so stdout is wired to the pipe.
 void	fork_children(t_shell *shell, t_cmd *cmd, t_pipe_ctx *ctx)
 {
 	int	i;
@@ -89,14 +94,6 @@ void	fork_children(t_shell *shell, t_cmd *cmd, t_pipe_ctx *ctx)
 		}
 	}
 }
-/* FIX, lines 65 - 73: Added builtin execution inside fork_children() for pipeline support.
-** Previously, builtins (echo, pwd, env) were only executed in the parent
-** process in exec_pipeline(). When a builtin was part of a pipe, its stdout
-** was not connected to the pipe — it printed directly to the terminal instead
-** of passing output to the next command. Now builtins are also executed in
-** the child process with setup_child_fds() and close_all_pipes() called first
-** to correctly configure the pipe file descriptors. apply_redirs() was also
-** added to handle redirections within pipes. */
 
 // Close all pipes in the parent after forking, so child reading from the
 // pipe write ends get EOF delivered correctly when the writing child exits.
