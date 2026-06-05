@@ -6,7 +6,7 @@
 /*   By: luimarti <luimarti@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/22 14:32:00 by dachin            #+#    #+#             */
-/*   Updated: 2026/06/05 16:42:08 by luimarti         ###   ########.fr       */
+/*   Updated: 2026/06/05 17:34:42 by luimarti         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,12 +16,12 @@
 // - cannot be interrupted mid-way through and is hence async-signal-safe.
 // Printf is not used here as it uses internal buffers and locks that might
 // already be held when the signal interrupts the program, causing a deadlock.
-static void handle_signal(int sig)
+static void	handle_signal(int sig)
 {
-    g_signal = sig;
-    write(STDOUT_FILENO, "\n", 1);
-    rl_replace_line("", 0);
-    rl_on_new_line();
+	g_signal = sig;
+	write(STDOUT_FILENO, "\n", 1);
+	rl_replace_line("", 0);
+	rl_on_new_line();
 }
 
 static void	handle_signal_waiting(int sig)

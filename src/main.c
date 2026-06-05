@@ -6,7 +6,7 @@
 /*   By: luimarti <luimarti@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/20 23:39:19 by dachin            #+#    #+#             */
-/*   Updated: 2026/06/05 16:43:54 by luimarti         ###   ########.fr       */
+/*   Updated: 2026/06/05 17:45:47 by luimarti         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,6 @@ int	main(int argc, char **argv, char **envp)
 	while (shell.running)
 	{
 		line = readline("minishell> ");
-		printf("line=%p g_signal=%d\n", line, g_signal);
 		if (line == NULL)
 		{
 			if (g_signal == SIGINT)

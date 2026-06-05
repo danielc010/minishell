@@ -6,7 +6,7 @@
 /*   By: luimarti <luimarti@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/20 23:39:28 by dachin            #+#    #+#             */
-/*   Updated: 2026/06/05 16:24:19 by luimarti         ###   ########.fr       */
+/*   Updated: 2026/06/05 17:37:50 by luimarti         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,7 +73,11 @@ void	fork_children(t_shell *shell, t_cmd *cmd, t_pipe_ctx *ctx)
 			if (!ft_strncmp(cmd->args[0], "env", 4))
 				exit(ft_env(shell));
 			if (!ft_strncmp(cmd->args[0], "exit", 5))
-				exit(ft_atoi(cmd->args[1] ? cmd->args[1] : "0"));
+			{
+				if (cmd->args[1])
+					exit(ft_atoi(cmd->args[1]));
+				exit(ft_atoi("0"));
+			}
 			if (!ft_strncmp(cmd->args[0], "cd", 3))
 			{
 				builtin_cd(shell, cmd);
@@ -179,7 +183,11 @@ static void	exec_builtin_with_redirs(t_cmd *cmd, t_shell *shell)
 			exit(shell->exit_status);
 		}
 		if (!ft_strncmp(cmd->args[0], "exit", 5))
-			exit(ft_atoi(cmd->args[1] ? cmd->args[1] : "0"));
+		{
+			if (cmd->args[1])
+				exit(ft_atoi(cmd->args[1]));
+			exit(ft_atoi("0"));
+		}
 		exec_child(cmd, shell);
 		exit(EXIT_FAILURE);
 	}

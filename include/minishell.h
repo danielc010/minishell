@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
-/*                                                        ::::::::            */
-/*   minishell.h                                        :+:    :+:            */
-/*                                                     +:+                    */
-/*   By: lucho <lucho@student.42.fr>                  +#+                     */
-/*                                                   +#+                      */
-/*   Created: 2026/05/29 10:32:25 by dachin        #+#    #+#                 */
-/*   Updated: 2026/06/05 11:05:17 by dachin        ########   odam.nl         */
+/*                                                        :::      ::::::::   */
+/*   minishell.h                                        :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: luimarti <luimarti@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2026/05/29 10:32:25 by dachin            #+#    #+#             */
+/*   Updated: 2026/06/05 17:33:48 by luimarti         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -183,7 +183,6 @@ char			*get_cd_path(t_shell *shell, t_cmd *cmd);
 // builtin2.c
 void			builtin_cd(t_shell *shell, t_cmd *cmd);
 void			builtin_exit(t_shell *shell, t_cmd *cmd);
-
 
 //builtin3.c
 int				key_index(t_shell *shell, char *key);
