@@ -22,16 +22,16 @@ SRCS = src/main.c \
 	   src/cmd_execution2.c \
 	   src/pipes.c \
 	   src/pipes2.c \
-	   src/builtin.c \
-	   src/builtin2.c \
-	   src/builtin3.c \
-	   src/builtin4.c \
-	   src/echo.c \
-	   src/env.c \
+	   src/builtin_env_utils.c \
+	   src/builtin_cd_exit.c \
+	   src/builtin_unset.c \
+	   src/builtin_export.c \
+	   src/builtin_echo.c \
+	   src/builtin_env.c \
 	   src/expander.c \
 	   src/lexer.c \
 	   src/parser.c \
-	   src/pwd.c \
+	   src/builtin_pwd.c \
 	   src/utils_lexer.c \
 	   src/handlers_lexer.c \
 	   src/utils_parser.c \

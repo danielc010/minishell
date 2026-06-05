@@ -153,7 +153,7 @@ char			*find_in_paths(char **paths, char *with_slash);
 char			*resolve_path(char *cmd, t_shell *shell);
 void			exec_child(t_cmd *cmd, t_shell *shell);
 
-// cmd_execution2.d
+// cmd_execution2.c
 void			fork_and_exec(t_cmd *cmd, t_shell *shell);
 int				open_redir_fd(t_redir *redir);
 void			apply_redirs(t_redir *redir);
@@ -173,29 +173,28 @@ void			setup_child_fds(int **pipes, int i, int n);
 void			close_all_pipes(int **pipes, int n);
 void			free_pipes(int **pipes, int n);
 
-// builtin.c
+// builtin_env_utils.c
 void			replace_env_entry(char **entry, char *newval);
 void			add_env(t_shell *shell, int i, char *new_env);
 void			update_env(t_shell *shell, char *key, char *value);
 char			*get_env(t_shell *shell, char *key);
 char			*get_cd_path(t_shell *shell, t_cmd *cmd);
 
-// builtin2.c
+// builtin_cd_exit.c
 void			builtin_cd(t_shell *shell, t_cmd *cmd);
 void			builtin_exit(t_shell *shell, t_cmd *cmd);
 
-//builtin3.c
+// builtin_unset.c
 int				key_index(t_shell *shell, char *key);
 void			builtin_unset(t_shell *shell, t_cmd *cmd);
 
-//builtin4.c
+// builtin_export.c
 void			print_export(char *key, char *value);
 void			no_arg_export(t_shell *shell);
 int				is_valid_identifier(char *str);
 void			builtin_export(t_shell *shell, t_cmd *cmd);
 
-char			**copy_env(char **envp);
-void			free_array(char **str);
+// utils_parser.c
 void			free_cmd(t_cmd *commands);
 
 //LEXER
@@ -251,12 +250,16 @@ char			*get_str(char *str, t_shell *shell);
 char			*dollar_handler(char *str, char *result, t_shell *shell,
 					int *i);
 
-//built-ins
-
+// builtin_echo.c
 int				is_n_flag(char *str);
 int				ft_echo(char **args);
-int				ft_pwd(void);
+
+// builtin_env.c
+char			**copy_env(char **envp);
 int				ft_env(t_shell *shell);
+
+// builtin_pwd.c
+int				ft_pwd(void);
 
 //CORE
 
