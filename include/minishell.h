@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   minishell.h                                        :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: lucho <lucho@student.42.fr>                +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2026/05/29 10:32:25 by dachin            #+#    #+#             */
-/*   Updated: 2026/06/05 00:46:23 by lucho            ###   ########.fr       */
+/*                                                        ::::::::            */
+/*   minishell.h                                        :+:    :+:            */
+/*                                                     +:+                    */
+/*   By: lucho <lucho@student.42.fr>                  +#+                     */
+/*                                                   +#+                      */
+/*   Created: 2026/05/29 10:32:25 by dachin        #+#    #+#                 */
+/*   Updated: 2026/06/05 08:28:45 by dachin        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,8 @@
 # define MINISHELL_H
 
 # include "../libft/libft.h"
-// perror? currently not used
+
+// perror
 # include <stdio.h>
 
 // readline(), rl_catch_signals, rl_on_new_line, rl_replace_line, rl_redisplay.
@@ -137,6 +138,7 @@ typedef struct s_lexer
 
 // signals.c
 void			signals_interactive(void);
+void			signals_waiting(void);
 void			signals_child(void);
 
 // utils.c

@@ -6,7 +6,7 @@
 /*   By: lucho <lucho@student.42.fr>                  +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2026/05/20 23:39:28 by dachin        #+#    #+#                 */
-/*   Updated: 2026/06/05 08:14:46 by dachin        ########   odam.nl         */
+/*   Updated: 2026/06/05 08:31:59 by dachin        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -200,7 +200,6 @@ void	exec_pipeline(t_shell *shell)
 	}
 	run_pipeline(shell, cmd, n);
 }
-
 /* FIX: Added exec_builtin_with_redirs() and run_builtin() to handle
 ** builtins with redirections in single command pipelines.
 ** Previously, builtins (echo, pwd, env, cd, export, unset, exit) in
