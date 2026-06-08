@@ -1,12 +1,12 @@
 # **************************************************************************** #
 #                                                                              #
-#                                                         ::::::::             #
-#    Makefile                                           :+:    :+:             #
-#                                                      +:+                     #
-#    By: luimarti <luimarti@student.42.fr>            +#+                      #
-#                                                    +#+                       #
-#    Created: 2026/01/18 11:17:27 by luimarti      #+#    #+#                  #
-#    Updated: 2026/06/05 11:05:27 by dachin        ########   odam.nl          #
+#                                                         :::      ::::::::    #
+#    Makefile                                           :+:      :+:    :+:    #
+#                                                     +:+ +:+         +:+      #
+#    By: lucho <lucho@student.42.fr>                +#+  +:+       +#+         #
+#                                                 +#+#+#+#+#+   +#+            #
+#    Created: 2026/01/18 11:17:27 by luimarti          #+#    #+#              #
+#    Updated: 2026/06/08 22:05:00 by lucho            ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -37,6 +37,7 @@ SRCS = src/main.c \
 	   src/utils_parser.c \
 	   src/utils_parser_redir.c \
 	   src/utils_expander.c \
+	   src/utils_expander2.c \
 	   src/syntax_controller.c \
 	   src/core.c
 
