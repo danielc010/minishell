@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   minishell.h                                        :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: luimarti <luimarti@student.42.fr>          +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2026/05/29 10:32:25 by dachin            #+#    #+#             */
-/*   Updated: 2026/06/05 17:33:48 by luimarti         ###   ########.fr       */
+/*                                                        ::::::::            */
+/*   minishell.h                                        :+:    :+:            */
+/*                                                     +:+                    */
+/*   By: luimarti <luimarti@student.42.fr>            +#+                     */
+/*                                                   +#+                      */
+/*   Created: 2026/05/29 10:32:25 by dachin        #+#    #+#                 */
+/*   Updated: 2026/06/10 16:28:59 by dachin        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -189,16 +189,21 @@ int				key_index(t_shell *shell, char *key);
 void			builtin_unset(t_shell *shell, t_cmd *cmd);
 
 // builtin_export.c
-void			print_export(char *key, char *value);
 void			no_arg_export(t_shell *shell);
-int				is_valid_identifier(char *str);
+void			export_key_value(t_shell *shell, char *arg, char *eq);
+void			export_no_value(t_shell *shell, char *arg);
 void			builtin_export(t_shell *shell, t_cmd *cmd);
+
+// builtin_export_utils.c
+void			print_export(char *key, char *value);
+int				is_valid_identifier(char *str);
+void			exist_check(t_shell *shell, char *key);
+void			invalid_identifier(t_shell *shell, char *arg);
 
 // utils_parser.c
 void			free_cmd(t_cmd *commands);
 
 //LEXER
-
 int				add_operator_token(t_lexer *lx, t_token_type type, char *value);
 int				is_separator(char c);
 t_token			*new_token(t_token_type type, char *value);

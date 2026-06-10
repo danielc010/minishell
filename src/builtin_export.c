@@ -6,21 +6,11 @@
 /*   By: dachin <dachin@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2026/06/05 11:01:33 by dachin        #+#    #+#                 */
-/*   Updated: 2026/06/05 13:27:48 by dachin        ########   odam.nl         */
+/*   Updated: 2026/06/10 16:24:37 by dachin        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/minishell.h"
-
-// In the format as displayed when we type export with no arguments
-void	print_export(char *key, char *value)
-{
-	ft_putstr_fd("declare -x ", 1);
-	ft_putstr_fd(key, 1);
-	ft_putstr_fd("=\"", 1);
-	ft_putstr_fd(value, 1);
-	ft_putendl_fd("\"", 1);
-}
 
 // If no NAMEs are given,a list of all names that are exported in this shell is
 // printed.
@@ -37,6 +27,9 @@ void	no_arg_export(t_shell *shell)
 		eq = ft_strchr(shell->env[i], '=');
 		if (!eq)
 		{
+			ft_putstr_fd("declare -x ", 1);
+			ft_putstr_fd(shell->env[i], 1);
+			ft_putstr_fd("\n", 1);
 			++i;
 			continue ;
 		}
@@ -48,36 +41,14 @@ void	no_arg_export(t_shell *shell)
 	}
 }
 
-// POSIX rules for valid env variable identifier:
-// must start with a letter (A-Z or a-z) or underscore (_)
-// can only contain letters, digits (0-9) or underscores
-int	is_valid_identifier(char *str)
-{
-	int	i;
-
-	i = 0;
-	if (!ft_isalpha(str[0]) && str[0] != '_')
-		return (0);
-	while (str[i])
-	{
-		if (!ft_isalpha(str[i]) && str[i] != '_' && !ft_isdigit(str[i]))
-			return (0);
-		i++;
-	}
-	return (1);
-}
-
-static void	export_key_value(t_shell *shell, char *arg, char *eq)
+void	export_key_value(t_shell *shell, char *arg, char *eq)
 {
 	char	*key;
 
 	key = ft_substr(arg, 0, eq - arg);
 	if (!is_valid_identifier(key))
 	{
-		ft_putstr_fd("minishell: export: `", 2);
-		ft_putstr_fd(arg, 2);
-		ft_putstr_fd("': not a valid identifier\n", 2);
-		shell->exit_status = 1;
+		invalid_identifier(shell, arg);
 		free(key);
 		return ;
 	}
@@ -85,28 +56,36 @@ static void	export_key_value(t_shell *shell, char *arg, char *eq)
 	free(key);
 }
 
+void	export_no_value(t_shell *shell, char *arg)
+{
+	if (!is_valid_identifier(arg))
+	{
+		invalid_identifier(shell, arg);
+		return ;
+	}
+	exist_check(shell, arg);
+}
+
 // Exporting shell variables and functions to child processes
 // Create and export a variable to env: export VAR=value
 void	builtin_export(t_shell *shell, t_cmd *cmd)
 {
 	char	*eq;
+	int		i;
 
 	if (!cmd->args[1])
 	{
 		no_arg_export(shell);
 		return ;
 	}
-	eq = ft_strchr(cmd->args[1], '=');
-	if (!eq)
+	i = 1;
+	while (cmd->args[i])
 	{
-		if (!is_valid_identifier(cmd->args[1]))
-		{
-			ft_putstr_fd("minishell: export: `", 2);
-			ft_putstr_fd(cmd->args[1], 2);
-			ft_putstr_fd("': not a valid identifier\n", 2);
-			shell->exit_status = 1;
-		}
-		return ;
+		eq = ft_strchr(cmd->args[i], '=');
+		if (!eq)
+			export_no_value(shell, cmd->args[i]);
+		else
+			export_key_value(shell, cmd->args[i], eq);
+		++i;
 	}
-	export_key_value(shell, cmd->args[1], eq);
 }

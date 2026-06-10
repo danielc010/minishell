@@ -1,12 +1,12 @@
 # **************************************************************************** #
 #                                                                              #
-#                                                         :::      ::::::::    #
-#    Makefile                                           :+:      :+:    :+:    #
-#                                                     +:+ +:+         +:+      #
-#    By: lucho <lucho@student.42.fr>                +#+  +:+       +#+         #
-#                                                 +#+#+#+#+#+   +#+            #
-#    Created: 2026/01/18 11:17:27 by luimarti          #+#    #+#              #
-#    Updated: 2026/06/08 22:05:00 by lucho            ###   ########.fr        #
+#                                                         ::::::::             #
+#    Makefile                                           :+:    :+:             #
+#                                                      +:+                     #
+#    By: lucho <lucho@student.42.fr>                  +#+                      #
+#                                                    +#+                       #
+#    Created: 2026/01/18 11:17:27 by luimarti      #+#    #+#                  #
+#    Updated: 2026/06/10 16:20:27 by dachin        ########   odam.nl          #
 #                                                                              #
 # **************************************************************************** #
 
@@ -26,6 +26,7 @@ SRCS = src/main.c \
 	   src/builtin_cd_exit.c \
 	   src/builtin_unset.c \
 	   src/builtin_export.c \
+	   src/builtin_export_utils.c \
 	   src/builtin_echo.c \
 	   src/builtin_env.c \
 	   src/expander.c \
