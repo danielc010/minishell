@@ -6,7 +6,7 @@
 /*   By: dachin <dachin@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2026/06/05 11:01:33 by dachin        #+#    #+#                 */
-/*   Updated: 2026/06/10 16:24:37 by dachin        ########   odam.nl         */
+/*   Updated: 2026/06/10 16:45:54 by dachin        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,7 +48,7 @@ void	export_key_value(t_shell *shell, char *arg, char *eq)
 	key = ft_substr(arg, 0, eq - arg);
 	if (!is_valid_identifier(key))
 	{
-		invalid_identifier(shell, arg);
+		invalid_identifier(shell, arg, "export");
 		free(key);
 		return ;
 	}
@@ -60,7 +60,7 @@ void	export_no_value(t_shell *shell, char *arg)
 {
 	if (!is_valid_identifier(arg))
 	{
-		invalid_identifier(shell, arg);
+		invalid_identifier(shell, arg, "export");
 		return ;
 	}
 	exist_check(shell, arg);

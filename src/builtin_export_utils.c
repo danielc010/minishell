@@ -6,7 +6,7 @@
 /*   By: dachin <dachin@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2026/06/10 16:12:27 by dachin        #+#    #+#                 */
-/*   Updated: 2026/06/10 16:19:35 by dachin        ########   odam.nl         */
+/*   Updated: 2026/06/10 16:44:23 by dachin        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,9 +63,11 @@ void	exist_check(t_shell *shell, char *key)
 	add_env(shell, i, entry);
 }
 
-void	invalid_identifier(t_shell *shell, char *arg)
+void	invalid_identifier(t_shell *shell, char *arg, char *builtin)
 {
-	ft_putstr_fd("minishell: export: `", 2);
+	ft_putstr_fd("minishell: ", 2);
+	ft_putstr_fd(builtin, 2);
+	ft_putstr_fd(": `", 2);
 	ft_putstr_fd(arg, 2);
 	ft_putstr_fd("': not a valid identifier\n", 2);
 	shell->exit_status = 1;

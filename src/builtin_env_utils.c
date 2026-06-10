@@ -6,7 +6,7 @@
 /*   By: lucho <lucho@student.42.fr>                  +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2026/05/20 23:39:07 by dachin        #+#    #+#                 */
-/*   Updated: 2026/06/05 10:50:10 by dachin        ########   odam.nl         */
+/*   Updated: 2026/06/10 17:10:55 by dachin        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,27 +47,26 @@ void	update_env(t_shell *shell, char *key, char *value)
 	int		i;
 	char	*keyequal;
 	char	*keyequalvalue;
-	int		found;
 
 	if (!shell || !key || !value)
 		return ;
 	keyequal = ft_strjoin(key, "=");
 	keyequalvalue = ft_strjoin(keyequal, value);
-	found = 0;
 	i = 0;
 	while (shell->env[i])
 	{
-		if (!ft_strncmp(shell->env[i], keyequal, ft_strlen(keyequal)))
+		if (!ft_strncmp(shell->env[i], keyequal, ft_strlen(keyequal))
+			|| (!ft_strncmp(shell->env[i], key, ft_strlen(key))
+			&& shell->env[i][ft_strlen(key)] == '\0'))
 		{
-			found = 1;
 			replace_env_entry(&shell->env[i], keyequalvalue);
-			break ;
+			free(keyequal);
+			return ;
 		}
 		++i;
 	}
 	free(keyequal);
-	if (!found)
-		add_env(shell, i, keyequalvalue);
+	add_env(shell, i, keyequalvalue);
 }
 
 // Skip past "KEY=" extract the pointer directly into the string at

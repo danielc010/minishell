@@ -6,7 +6,7 @@
 /*   By: lucho <lucho@student.42.fr>                  +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2026/05/27 16:48:07 by dachin        #+#    #+#                 */
-/*   Updated: 2026/06/05 11:01:59 by dachin        ########   odam.nl         */
+/*   Updated: 2026/06/10 17:00:26 by dachin        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,8 @@ int	key_index(t_shell *shell, char *key)
 	j = ft_strlen(key);
 	while (shell->env[i])
 	{
-		if ((!ft_strncmp(shell->env[i], key, j)) && (shell->env[i][j] == '='))
+		if (!ft_strncmp(shell->env[i], key, j) && (shell->env[i][j] == '='
+			|| shell->env[i][j] == '\0'))
 			return (i);
 		++i;
 	}
@@ -36,19 +37,31 @@ void	builtin_unset(t_shell *shell, t_cmd *cmd)
 {
 	char	*key;
 	int		index;
+	int		i;
 
 	if (!shell || !cmd || !cmd->args[1])
 		return ;
-	key = cmd->args[1];
-	index = key_index(shell, key);
-	if (index != -1)
+	i = 1;
+	while (cmd->args[i])
 	{
-		free(shell->env[index]);
-		while (shell->env[index])
+		if (!is_valid_identifier(cmd->args[i]))
 		{
-			shell->env[index] = shell->env[index + 1];
-			++index;
+			invalid_identifier(shell, cmd->args[i], "unset");
+			++i;
+			continue ;
 		}
-		shell->env[index] = NULL;
+		key = cmd->args[i];
+		index = key_index(shell, key);
+		if (index != -1)
+		{
+			free(shell->env[index]);
+			while (shell->env[index])
+			{
+				shell->env[index] = shell->env[index + 1];
+				++index;
+			}
+			shell->env[index] = NULL;
+		}
+		++i;
 	}
 }

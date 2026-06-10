@@ -6,7 +6,7 @@
 /*   By: luimarti <luimarti@student.42.fr>            +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2026/05/29 10:32:25 by dachin        #+#    #+#                 */
-/*   Updated: 2026/06/10 16:28:59 by dachin        ########   odam.nl         */
+/*   Updated: 2026/06/10 16:45:44 by dachin        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -198,7 +198,7 @@ void			builtin_export(t_shell *shell, t_cmd *cmd);
 void			print_export(char *key, char *value);
 int				is_valid_identifier(char *str);
 void			exist_check(t_shell *shell, char *key);
-void			invalid_identifier(t_shell *shell, char *arg);
+void			invalid_identifier(t_shell *shell, char *arg, char *builtin);
 
 // utils_parser.c
 void			free_cmd(t_cmd *commands);
