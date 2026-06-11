@@ -6,7 +6,7 @@
 /*   By: luimarti <luimarti@student.42.fr>            +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2026/05/29 10:32:25 by dachin        #+#    #+#                 */
-/*   Updated: 2026/06/10 16:45:44 by dachin        ########   odam.nl         */
+/*   Updated: 2026/06/11 15:53:12 by dachin        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -163,12 +163,16 @@ int				setup_heredoc(char *delim);
 // pipes.c
 void			prepare_heredocs(t_cmd *cmd);
 void			wait_all(t_shell *shell, pid_t *pids, int n);
+void			child_state_builtins(t_shell *shell, t_cmd *cmd);
+void			run_builtin_in_child(t_shell *shell, t_cmd *cmd);
 void			fork_children(t_shell *shell, t_cmd *cmd, t_pipe_ctx *ctx);
-void			run_pipeline(t_shell *shell, t_cmd *cmd, int n);
-void			exec_pipeline(t_shell *shell);
 
 // pipes2.c
+void			run_pipeline(t_shell *shell, t_cmd *cmd, int n);
+void			exec_pipeline(t_shell *shell);
 int				init_pipes(int **pipes, int n);
+
+// pipes3.c
 void			setup_child_fds(int **pipes, int i, int n);
 void			close_all_pipes(int **pipes, int n);
 void			free_pipes(int **pipes, int n);
@@ -186,6 +190,7 @@ void			builtin_exit(t_shell *shell, t_cmd *cmd);
 
 // builtin_unset.c
 int				key_index(t_shell *shell, char *key);
+void			remove_env_entry(t_shell *shell, char *key);
 void			builtin_unset(t_shell *shell, t_cmd *cmd);
 
 // builtin_export.c

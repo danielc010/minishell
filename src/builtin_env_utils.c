@@ -6,7 +6,7 @@
 /*   By: lucho <lucho@student.42.fr>                  +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2026/05/20 23:39:07 by dachin        #+#    #+#                 */
-/*   Updated: 2026/06/10 17:10:55 by dachin        ########   odam.nl         */
+/*   Updated: 2026/06/11 15:48:39 by dachin        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,7 +57,7 @@ void	update_env(t_shell *shell, char *key, char *value)
 	{
 		if (!ft_strncmp(shell->env[i], keyequal, ft_strlen(keyequal))
 			|| (!ft_strncmp(shell->env[i], key, ft_strlen(key))
-			&& shell->env[i][ft_strlen(key)] == '\0'))
+				&& shell->env[i][ft_strlen(key)] == '\0'))
 		{
 			replace_env_entry(&shell->env[i], keyequalvalue);
 			free(keyequal);

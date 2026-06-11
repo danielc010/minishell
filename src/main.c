@@ -6,7 +6,7 @@
 /*   By: luimarti <luimarti@student.42.fr>            +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2026/05/20 23:39:19 by dachin        #+#    #+#                 */
-/*   Updated: 2026/06/05 18:26:20 by dachin        ########   odam.nl         */
+/*   Updated: 2026/06/11 15:58:35 by dachin        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,21 +14,15 @@
 
 volatile sig_atomic_t	g_signal = 0;
 
-int	main(int argc, char **argv, char **envp)
+static void	shell_loop(t_shell *shell)
 {
-	t_shell	shell;
 	char	*line;
 
-	(void)argc;
-	(void)argv;
-	init_shell(&shell, envp);
-	signals_interactive();
-	rl_catch_signals = 0;
-	while (shell.running)
+	while (shell->running)
 	{
 		line = readline("minishell> ");
 		if (g_signal == SIGINT)
-			shell.exit_status = 130;
+			shell->exit_status = 130;
 		g_signal = 0;
 		if (line == NULL)
 		{
@@ -37,15 +31,27 @@ int	main(int argc, char **argv, char **envp)
 		}
 		if (ft_strlen(line) > 0)
 			add_history(line);
-		shell.cmds = parse(line, &shell);
-		if (shell.cmds)
+		shell->cmds = parse(line, shell);
+		if (shell->cmds)
 		{
-			exec_pipeline(&shell);
-			free_cmd(shell.cmds);
-			shell.cmds = NULL;
+			exec_pipeline(shell);
+			free_cmd(shell->cmds);
+			shell->cmds = NULL;
 		}
 		free(line);
 	}
+}
+
+int	main(int argc, char **argv, char **envp)
+{
+	t_shell	shell;
+
+	(void)argc;
+	(void)argv;
+	init_shell(&shell, envp);
+	signals_interactive();
+	rl_catch_signals = 0;
+	shell_loop(&shell);
 	free_array(shell.env);
 	return (shell.exit_status);
 }

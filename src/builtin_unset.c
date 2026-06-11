@@ -6,7 +6,7 @@
 /*   By: lucho <lucho@student.42.fr>                  +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2026/05/27 16:48:07 by dachin        #+#    #+#                 */
-/*   Updated: 2026/06/10 17:00:26 by dachin        ########   odam.nl         */
+/*   Updated: 2026/06/11 15:52:30 by dachin        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,13 +30,28 @@ int	key_index(t_shell *shell, char *key)
 	return (-1);
 }
 
+void	remove_env_entry(t_shell *shell, char *key)
+{
+	int	index;
+
+	index = key_index(shell, key);
+	if (index != -1)
+	{
+		free(shell->env[index]);
+		while (shell->env[index])
+		{
+			shell->env[index] = shell->env[index + 1];
+			++index;
+		}
+		shell->env[index] = NULL;
+	}
+}
+
 // For each NAME, remove the corresponding variable or function. Shift
 // everythingleft by one position then sets last entry to NULL.
 // No reallocation of array.
 void	builtin_unset(t_shell *shell, t_cmd *cmd)
 {
-	char	*key;
-	int		index;
 	int		i;
 
 	if (!shell || !cmd || !cmd->args[1])
@@ -50,18 +65,7 @@ void	builtin_unset(t_shell *shell, t_cmd *cmd)
 			++i;
 			continue ;
 		}
-		key = cmd->args[i];
-		index = key_index(shell, key);
-		if (index != -1)
-		{
-			free(shell->env[index]);
-			while (shell->env[index])
-			{
-				shell->env[index] = shell->env[index + 1];
-				++index;
-			}
-			shell->env[index] = NULL;
-		}
+		remove_env_entry(shell, cmd->args[i]);
 		++i;
 	}
 }
