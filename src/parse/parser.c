@@ -6,7 +6,7 @@
 /*   By: luimarti <luimarti@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/24 13:56:39 by luimarti          #+#    #+#             */
-/*   Updated: 2026/05/21 13:58:49 by luimarti         ###   ########.fr       */
+/*   Updated: 2026/06/12 17:20:51 by luimarti         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,6 +70,11 @@ int	if_pipe(t_token *tokens, t_cmd **command, t_cmd *head, int words)
 	if (tokens->type == PIPE)
 	{
 		second = init_cmd();
+		if (!second)
+		{
+			free_cmd(head);
+			return (0);
+		}
 		words = word_counter(tokens->next);
 		if (words == -1)
 		{

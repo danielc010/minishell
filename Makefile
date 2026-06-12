@@ -16,32 +16,32 @@ CC = cc
 CFLAGS = -Wall -Wextra -Werror
 
 SRCS = src/main.c \
-	   src/signals.c \
 	   src/utils.c \
-	   src/cmd_execution.c \
-	   src/cmd_execution2.c \
-	   src/pipes.c \
-	   src/pipes2.c \
-	   src/pipes3.c \
-	   src/builtin_env_utils.c \
-	   src/builtin_cd_exit.c \
-	   src/builtin_unset.c \
-	   src/builtin_export.c \
-	   src/builtin_export_utils.c \
-	   src/builtin_echo.c \
-	   src/builtin_env.c \
-	   src/expander.c \
-	   src/lexer.c \
-	   src/parser.c \
-	   src/builtin_pwd.c \
-	   src/utils_lexer.c \
-	   src/handlers_lexer.c \
-	   src/utils_parser.c \
-	   src/utils_parser_redir.c \
-	   src/utils_expander.c \
-	   src/utils_expander2.c \
-	   src/syntax_controller.c \
-	   src/core.c
+	   src/builtins/builtin_cd_exit.c \
+	   src/builtins/builtin_echo.c \
+	   src/builtins/builtin_env.c \
+	   src/builtins/builtin_env_utils.c \
+	   src/builtins/builtin_export.c \
+	   src/builtins/builtin_export_utils.c \
+	   src/builtins/builtin_pwd.c \
+	   src/builtins/builtin_unset.c \
+	   src/execution/cmd_execution.c \
+	   src/execution/cmd_execution2.c \
+	   src/execution/pipes.c \
+	   src/execution/pipes2.c \
+	   src/execution/pipes3.c \
+	   src/execution/signals.c \
+	   src/parse/core.c \
+	   src/parse/expander.c \
+	   src/parse/handlers_lexer.c \
+	   src/parse/lexer.c \
+	   src/parse/parser.c \
+	   src/parse/syntax_controller.c \
+	   src/parse/utils_expander.c \
+	   src/parse/utils_expander2.c \
+	   src/parse/utils_lexer.c \
+	   src/parse/utils_parser.c \
+	   src/parse/utils_parser_redir.c
 
 OBJ_DIR = o_files
 OBJS = $(addprefix $(OBJ_DIR)/, $(notdir $(SRCS:.c=.o)))
@@ -66,6 +66,15 @@ $(NAME): $(OBJS) $(LIBFT_LIB)
 	$(CC) $(CFLAGS) $(OBJS) -L ./$(LIBFT_DIR) -lft $(LDLIBS) -o $(NAME)
 
 $(OBJ_DIR)/%.o: src/%.c | $(OBJ_DIR)
+	$(CC) $(CFLAGS) -I$(LIBFT_DIR) -Iinclude -c $< -o $@
+
+$(OBJ_DIR)/%.o: src/builtins/%.c | $(OBJ_DIR)
+	$(CC) $(CFLAGS) -I$(LIBFT_DIR) -Iinclude -c $< -o $@
+
+$(OBJ_DIR)/%.o: src/execution/%.c | $(OBJ_DIR)
+	$(CC) $(CFLAGS) -I$(LIBFT_DIR) -Iinclude -c $< -o $@
+
+$(OBJ_DIR)/%.o: src/parse/%.c | $(OBJ_DIR)
 	$(CC) $(CFLAGS) -I$(LIBFT_DIR) -Iinclude -c $< -o $@
 
 $(OBJ_DIR):
