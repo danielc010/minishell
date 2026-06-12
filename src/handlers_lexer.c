@@ -6,43 +6,31 @@
 /*   By: luimarti <luimarti@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/21 14:18:01 by luimarti          #+#    #+#             */
-/*   Updated: 2026/04/21 16:37:26 by luimarti         ###   ########.fr       */
+/*   Updated: 2026/06/12 15:00:22 by luimarti         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/minishell.h"
 
-int	handle_end_line(t_lexer *lx)
+static int	handle_word_quotes(t_lexer *lx)
 {
-	if (lx->state == IN_WORD)
+	if (lx->line[lx->i] == '"')
 	{
-		lx->value = ft_substr(lx->line, lx->word_start, lx->i - lx->word_start);
-		if (!lx->value)
-		{
-			free_tokens(lx->head);
-			return (0);
-		}
-		lx->tok = new_token(WORD, lx->value);
-		if (!lx->tok)
-		{
-			free_tokens(lx->head);
-			free(lx->value);
-			return (0);
-		}
-		add_token_back(&lx->head, lx->tok);
-		free(lx->value);
+		lx->state = IN_DOUBLE_QUOTE;
+		return (1);
 	}
-	else if (lx->state == IN_SINGLE_QUOTE || lx->state == IN_DOUBLE_QUOTE)
+	if (lx->line[lx->i] == '\'')
 	{
-		ft_putstr_fd("Syntax error: unclosed quote\n", 2);
-		free_tokens(lx->head);
-		return (0);
+		lx->state = IN_SINGLE_QUOTE;
+		return (1);
 	}
-	return (1);
+	return (0);
 }
 
 int	handle_word(t_lexer *lx)
 {
+	if (handle_word_quotes(lx))
+		return (1);
 	if (is_separator(lx->line[lx->i]))
 	{
 		lx->value = ft_substr(lx->line, lx->word_start, lx->i - lx->word_start);

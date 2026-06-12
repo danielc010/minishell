@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   builtin_env.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lucho <lucho@student.42.fr>                +#+  +:+       +#+        */
+/*   By: luimarti <luimarti@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/03 10:58:25 by luimarti          #+#    #+#             */
-/*   Updated: 2026/05/18 17:33:41 by lucho            ###   ########.fr       */
+/*   Updated: 2026/06/12 14:35:57 by luimarti         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,7 @@ char	**copy_env(char **envp)
 		env[n] = ft_strdup(envp[n]);
 		if (!env[n])
 		{
-			free_array(env);
+			free_partial_env(env, n);
 			return (NULL);
 		}
 		n++;
