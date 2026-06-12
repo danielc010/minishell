@@ -6,7 +6,7 @@
 /*   By: luimarti <luimarti@student.42.fr>            +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2026/05/20 23:39:28 by dachin        #+#    #+#                 */
-/*   Updated: 2026/06/11 15:52:54 by dachin        ########   odam.nl         */
+/*   Updated: 2026/06/12 08:05:27 by dachin        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,19 +31,16 @@ void	prepare_heredocs(t_cmd *cmd)
 
 void	wait_all(t_shell *shell, pid_t *pids, int n)
 {
-	int	i;
-	int	pid;
-	int	status;
+	int		i;
+	pid_t	pid;
+	int		status;
 
 	i = 0;
 	while (i < n)
 	{
 		pid = pids[i];
 		waitpid(pid, &status, 0);
-		if (WIFEXITED(status))
-			shell->exit_status = WEXITSTATUS(status);
-		if (WIFSIGNALED(status) && WTERMSIG(status) == SIGQUIT)
-			ft_putendl_fd("Quit: 3", 2);
+		handle_wait_status(shell, status);
 		++i;
 	}
 	signals_interactive();
@@ -71,6 +68,8 @@ void	child_state_builtins(t_shell *shell, t_cmd *cmd)
 
 void	run_builtin_in_child(t_shell *shell, t_cmd *cmd)
 {
+	if (!cmd->args || !cmd->args[0] || cmd->args[0][0] == '\0')
+		exit(0);
 	if (!ft_strncmp(cmd->args[0], "echo", 5))
 		exit(ft_echo(cmd->args));
 	if (!ft_strncmp(cmd->args[0], "pwd", 4))

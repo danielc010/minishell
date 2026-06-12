@@ -6,7 +6,7 @@
 /*   By: luimarti <luimarti@student.42.fr>            +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2026/05/29 10:32:25 by dachin        #+#    #+#                 */
-/*   Updated: 2026/06/11 15:53:12 by dachin        ########   odam.nl         */
+/*   Updated: 2026/06/12 07:50:21 by dachin        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -176,6 +176,7 @@ int				init_pipes(int **pipes, int n);
 void			setup_child_fds(int **pipes, int i, int n);
 void			close_all_pipes(int **pipes, int n);
 void			free_pipes(int **pipes, int n);
+void			handle_wait_status(t_shell *shell, int status);
 
 // builtin_env_utils.c
 void			replace_env_entry(char **entry, char *newval);

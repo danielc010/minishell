@@ -6,7 +6,7 @@
 /*   By: luimarti <luimarti@student.42.fr>            +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2026/05/22 12:19:00 by dachin        #+#    #+#                 */
-/*   Updated: 2026/06/05 10:03:10 by dachin        ########   odam.nl         */
+/*   Updated: 2026/06/12 07:59:45 by dachin        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,17 @@
 // process as a zombie proesss. waiting for its parent to collect
 // its exit status with waitpid for clean up, otherwise there will be
 // process table leak where no new processes can be created.
+// signals_waiting:
+// While parent sits in waitpid, it's still a live process. Ctrl+C sends SIGINT
+// to the entire foreground process group - both child and parent receive it
+// simultaneously. If parent still has interactive signal handler active, the
+// handler calls readline internals to redraw the prompt. When waitpid returns
+// and shell_loop calls readline again, it draws a prompt a second time.
+// signals_waiting() swaps to a simpler handler that only sets g_signal and
+// writes \n, with no readline calls. After waitpid returns, signals_interactive
+// restores the full handler.
+// waitpid: fills status with a packed integeter encoding what happened to child
+// man waitpid
 void	fork_and_exec(t_cmd *cmd, t_shell *shell)
 {
 	pid_t	pid;
@@ -35,10 +46,7 @@ void	fork_and_exec(t_cmd *cmd, t_shell *shell)
 	{
 		signals_waiting();
 		waitpid(pid, &status, 0);
-		if (WIFEXITED(status))
-			shell->exit_status = WEXITSTATUS(status);
-		if (WIFSIGNALED(status) && WTERMSIG(status) == SIGQUIT)
-			ft_putendl_fd("Quit: 3", 2);
+		handle_wait_status(shell, status);
 		signals_interactive();
 	}
 }
