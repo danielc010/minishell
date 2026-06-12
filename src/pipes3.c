@@ -6,7 +6,7 @@
 /*   By: dachin <dachin@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2026/06/11 15:31:00 by dachin        #+#    #+#                 */
-/*   Updated: 2026/06/12 07:51:15 by dachin        ########   odam.nl         */
+/*   Updated: 2026/06/12 10:05:45 by dachin        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@ void	setup_child_fds(int **pipes, int i, int n)
 		dup2(pipes[i][1], STDOUT_FILENO);
 }
 
-// Close all pipe fds in child after dup2 so parent is not hanging
+// Close all pipe fds
 void	close_all_pipes(int **pipes, int n)
 {
 	int	i;

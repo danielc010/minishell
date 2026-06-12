@@ -6,12 +6,14 @@
 /*   By: dachin <dachin@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2026/05/22 14:57:15 by dachin        #+#    #+#                 */
-/*   Updated: 2026/06/12 08:04:27 by dachin        ########   odam.nl         */
+/*   Updated: 2026/06/12 10:10:48 by dachin        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/minishell.h"
 
+// After all children are forked, parent never uses pipe fds so we close them
+// so the children sees EOF correctly at the read end.
 void	run_pipeline(t_shell *shell, t_cmd *cmd, int n)
 {
 	t_pipe_ctx	ctx;

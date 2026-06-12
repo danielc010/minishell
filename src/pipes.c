@@ -6,7 +6,7 @@
 /*   By: luimarti <luimarti@student.42.fr>            +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2026/05/20 23:39:28 by dachin        #+#    #+#                 */
-/*   Updated: 2026/06/12 08:05:27 by dachin        ########   odam.nl         */
+/*   Updated: 2026/06/12 09:20:29 by dachin        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -86,6 +86,7 @@ void	run_builtin_in_child(t_shell *shell, t_cmd *cmd)
 	exit(EXIT_FAILURE);
 }
 
+// Each child calls close_all_pipes after dup2 as they are no longer needed
 void	fork_children(t_shell *shell, t_cmd *cmd, t_pipe_ctx *ctx)
 {
 	int	i;
