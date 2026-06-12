@@ -6,13 +6,14 @@
 /*   By: luimarti <luimarti@student.42.fr>            +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2026/05/20 23:39:19 by dachin        #+#    #+#                 */
-/*   Updated: 2026/06/11 15:58:35 by dachin        ########   odam.nl         */
+/*   Updated: 2026/06/12 06:00:12 by dachin        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/minishell.h"
 
-volatile sig_atomic_t	g_signal = 0;
+// Global variables in C are zero-initialised by default
+volatile sig_atomic_t	g_signal;
 
 static void	shell_loop(t_shell *shell)
 {
