@@ -157,6 +157,9 @@ void			exec_child(t_cmd *cmd, t_shell *shell);
 void			fork_and_exec(t_cmd *cmd, t_shell *shell);
 int				open_redir_fd(t_redir *redir);
 void			apply_redirs(t_redir *redir);
+
+// heredoc.c
+int				process_heredoc_line(char *delim, int *pipe_fd);
 int				setup_heredoc(char *delim);
 
 // pipes.c

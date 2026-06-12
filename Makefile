@@ -27,6 +27,7 @@ SRCS = src/main.c \
 	   src/builtins/builtin_unset.c \
 	   src/execution/cmd_execution.c \
 	   src/execution/cmd_execution2.c \
+	   src/execution/heredoc.c \
 	   src/execution/pipes.c \
 	   src/execution/pipes2.c \
 	   src/execution/pipes3.c \
