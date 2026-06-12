@@ -157,11 +157,10 @@ void			exec_child(t_cmd *cmd, t_shell *shell);
 void			fork_and_exec(t_cmd *cmd, t_shell *shell);
 int				open_redir_fd(t_redir *redir);
 void			apply_redirs(t_redir *redir);
-int				handle_heredoc_signal(void);
 int				setup_heredoc(char *delim);
 
 // pipes.c
-void			prepare_heredocs(t_cmd *cmd);
+int				prepare_heredocs(t_cmd *cmd);
 void			wait_all(t_shell *shell, pid_t *pids, int n);
 void			child_state_builtins(t_shell *shell, t_cmd *cmd);
 void			run_builtin_in_child(t_shell *shell, t_cmd *cmd);

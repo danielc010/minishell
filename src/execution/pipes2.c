@@ -95,7 +95,11 @@ void	exec_pipeline(t_shell *shell)
 	int		n;
 
 	cmd = shell->cmds;
-	prepare_heredocs(cmd);
+	if (prepare_heredocs(cmd) == -1)
+	{
+		shell->exit_status = 130;
+		return ;
+	}
 	n = count_cmds(cmd);
 	if (n == 1)
 	{

@@ -12,7 +12,7 @@
 
 #include "../include/minishell.h"
 
-void	prepare_heredocs(t_cmd *cmd)
+int	prepare_heredocs(t_cmd *cmd)
 {
 	t_redir	*redir;
 
@@ -23,10 +23,13 @@ void	prepare_heredocs(t_cmd *cmd)
 		{
 			if (redir->type == R_HEREDOC)
 				redir->fd = setup_heredoc(redir->file);
+			if (redir->fd == -1)
+				return (-1);
 			redir = redir->next;
 		}
 		cmd = cmd->next;
 	}
+	return (0);
 }
 
 void	wait_all(t_shell *shell, pid_t *pids, int n)
