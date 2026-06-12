@@ -6,7 +6,7 @@
 /*   By: luimarti <luimarti@student.42.fr>            +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2026/05/22 12:19:00 by dachin        #+#    #+#                 */
-/*   Updated: 2026/06/12 07:59:45 by dachin        ########   odam.nl         */
+/*   Updated: 2026/06/12 09:14:35 by dachin        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -97,12 +97,6 @@ void	apply_redirs(t_redir *redir)
 		redir = redir->next;
 	}
 }
-/* FIX (lines 39-43): Added fd == -1 check after open_redir_fd().
-** When open() fails (e.g. permission denied, file not found),
-** it returns -1. Without this check, -1 was passed to dup2() and
-** close(), causing the program to continue silently instead of
-** reporting the error. Now we print the system error with perror()
-** and exit with code 1, matching bash behaviour. */
 
 // Reset signal flag so the next iteraction doesn't think another
 // Ctrl + C happened
