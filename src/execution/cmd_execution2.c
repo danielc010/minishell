@@ -6,7 +6,7 @@
 /*   By: luimarti <luimarti@student.42.fr>            +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2026/05/22 12:19:00 by dachin        #+#    #+#                 */
-/*   Updated: 2026/06/12 19:36:57 by dachin        ########   odam.nl         */
+/*   Updated: 2026/06/15 10:43:03 by dachin        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,7 +80,6 @@ void	apply_redirs(t_redir *redir)
 {
 	int	fd;
 
-	fd = 0;
 	while (redir)
 	{
 		fd = open_redir_fd(redir);
