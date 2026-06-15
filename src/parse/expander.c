@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   expander.c                                         :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: lucho <lucho@student.42.fr>                +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2026/05/03 10:56:58 by luimarti          #+#    #+#             */
-/*   Updated: 2026/06/08 22:02:09 by lucho            ###   ########.fr       */
+/*                                                        ::::::::            */
+/*   expander.c                                         :+:    :+:            */
+/*                                                     +:+                    */
+/*   By: lucho <lucho@student.42.fr>                  +#+                     */
+/*                                                   +#+                      */
+/*   Created: 2026/05/03 10:56:58 by luimarti      #+#    #+#                 */
+/*   Updated: 2026/06/15 15:36:39 by dachin        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,12 +42,15 @@ static void	remove_empty_arg(t_cmd *cmds, char *tmp, int i)
 	free(tmp);
 }
 
+// FIX: Add null guard to avoid deference null
 static void	expand_args(t_cmd *cmds, t_shell *shell)
 {
 	char	*tmp;
 	int		i;
 
 	i = 0;
+	if (!cmds->args)
+		return ;
 	while (cmds->args[i])
 	{
 		tmp = cmds->args[i];

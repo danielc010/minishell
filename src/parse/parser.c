@@ -6,7 +6,7 @@
 /*   By: luimarti <luimarti@student.42.fr>            +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2026/04/24 13:56:39 by luimarti      #+#    #+#                 */
-/*   Updated: 2026/06/15 10:38:39 by dachin        ########   odam.nl         */
+/*   Updated: 2026/06/15 15:32:21 by dachin        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,7 +42,7 @@ char	**build_args(t_token *tokens, int words)
 	int		i;
 	int		x;
 
-	args = malloc (sizeof(char *) * (words + 1));
+	args = malloc(sizeof(char *) * (words + 1));
 	if (!args)
 		return (NULL);
 	current = tokens;
@@ -89,17 +89,19 @@ int	if_pipe(t_token *tokens, t_cmd **command, t_cmd *head, int words)
 	return (1);
 }
 
+// FIX: Combined first two NULL checks, added NULL guard similar to
+// if_pipe for command, similar to in if_pipe
 t_cmd	*parsing_core(t_token *tokens)
 {
 	t_cmd	*command;
 	t_cmd	*head;
 	int		words;
 
-	if (!tokens)
-		return (NULL);
-	if (!syntax_controller(tokens))
+	if (!tokens || !syntax_controller(tokens))
 		return (NULL);
 	command = init_cmd();
+	if (!command)
+		return (NULL);
 	words = word_counter(tokens);
 	if (words == -1)
 	{

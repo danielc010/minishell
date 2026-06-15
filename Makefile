@@ -6,14 +6,14 @@
 #    By: lucho <lucho@student.42.fr>                  +#+                      #
 #                                                    +#+                       #
 #    Created: 2026/01/18 11:17:27 by luimarti      #+#    #+#                  #
-#    Updated: 2026/06/11 15:46:23 by dachin        ########   odam.nl          #
+#    Updated: 2026/06/15 14:39:43 by dachin        ########   odam.nl          #
 #                                                                              #
 # **************************************************************************** #
 
 
 NAME = minishell
 CC = cc
-CFLAGS = -Wall -Wextra -Werror
+CFLAGS = -Wall -Wextra -Werror -g
 
 SRCS = src/main.c \
 	   src/utils.c \
