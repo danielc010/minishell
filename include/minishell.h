@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   minishell.h                                        :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: luimarti <luimarti@student.42.fr>          +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2026/05/29 10:32:25 by dachin            #+#    #+#             */
-/*   Updated: 2026/06/12 14:31:23 by luimarti         ###   ########.fr       */
+/*                                                        ::::::::            */
+/*   minishell.h                                        :+:    :+:            */
+/*                                                     +:+                    */
+/*   By: luimarti <luimarti@student.42.fr>            +#+                     */
+/*                                                   +#+                      */
+/*   Created: 2026/05/29 10:32:25 by dachin        #+#    #+#                 */
+/*   Updated: 2026/06/15 16:46:52 by dachin        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -186,6 +186,9 @@ void			add_env(t_shell *shell, int i, char *new_env);
 void			update_env(t_shell *shell, char *key, char *value);
 char			*get_env(t_shell *shell, char *key);
 char			*get_cd_path(t_shell *shell, t_cmd *cmd);
+
+// builtin_env_utils2.c
+int				replace_env_key(t_shell *shell, char *key, char *keq, char *keqval);
 
 // builtin_cd_exit.c
 void			builtin_cd(t_shell *shell, t_cmd *cmd);

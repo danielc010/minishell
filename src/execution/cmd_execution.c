@@ -6,7 +6,7 @@
 /*   By: lucho <lucho@student.42.fr>                  +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2026/05/20 23:39:14 by dachin        #+#    #+#                 */
-/*   Updated: 2026/06/15 15:34:46 by dachin        ########   odam.nl         */
+/*   Updated: 2026/06/15 16:13:10 by dachin        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,6 +39,7 @@ char	**extract_path_to_array(t_shell *shell)
 // if ((access(full_path, X_OK)) == 0): we found the executable, skip to
 // last return statement
 // if (paths_array[i] == NULL): command is not found
+// FIX: Added skipping access in case full_path = NULL
 char	*find_in_paths(char **paths, char *with_slash)
 {
 	char	*full_path;
@@ -49,12 +50,15 @@ char	*find_in_paths(char **paths, char *with_slash)
 	while (paths[i])
 	{
 		full_path = ft_strjoin(paths[i], with_slash);
-		if ((access(full_path, X_OK)) == 0)
-			break ;
-		else
+		if (full_path)
 		{
-			free(full_path);
-			full_path = NULL;
+			if ((access(full_path, X_OK)) == 0)
+				break ;
+			else
+			{
+				free(full_path);
+				full_path = NULL;
+			}
 		}
 		++i;
 	}

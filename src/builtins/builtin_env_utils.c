@@ -6,7 +6,7 @@
 /*   By: lucho <lucho@student.42.fr>                  +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2026/05/20 23:39:07 by dachin        #+#    #+#                 */
-/*   Updated: 2026/06/15 15:19:31 by dachin        ########   odam.nl         */
+/*   Updated: 2026/06/15 16:45:00 by dachin        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,6 +42,7 @@ void	add_env(t_shell *shell, int i, char *new_env)
 	shell->env = env_new;
 }
 
+// FIX: Add guard to avoid null pointer dereference.
 void	update_env(t_shell *shell, char *key, char *value)
 {
 	int		i;
@@ -51,20 +52,17 @@ void	update_env(t_shell *shell, char *key, char *value)
 	if (!shell || !key || !value)
 		return ;
 	keyequal = ft_strjoin(key, "=");
+	if (!keyequal)
+		return ;
 	keyequalvalue = ft_strjoin(keyequal, value);
-	i = 0;
-	while (shell->env[i])
+	if (!keyequalvalue)
 	{
-		if (!ft_strncmp(shell->env[i], keyequal, ft_strlen(keyequal))
-			|| (!ft_strncmp(shell->env[i], key, ft_strlen(key))
-				&& shell->env[i][ft_strlen(key)] == '\0'))
-		{
-			replace_env_entry(&shell->env[i], keyequalvalue);
-			free(keyequal);
-			return ;
-		}
-		++i;
+		free(keyequal);
+		return ;
 	}
+	i = replace_env_key(shell, key, keyequal, keyequalvalue);
+	if (i == -1)
+		return ;
 	free(keyequal);
 	add_env(shell, i, keyequalvalue);
 }
@@ -72,6 +70,7 @@ void	update_env(t_shell *shell, char *key, char *value)
 // Skip past "KEY=" extract the pointer directly into the string at
 // the value part.
 // "PATH=/usr/bin" returns "/user/bin"
+// FIX: Add guard for null pointer dereference
 char	*get_env(t_shell *shell, char *key)
 {
 	int		i;
@@ -81,6 +80,8 @@ char	*get_env(t_shell *shell, char *key)
 	if (!shell || !key)
 		return (NULL);
 	keyequal = ft_strjoin(key, "=");
+	if (!keyequal)
+		return (NULL);
 	len = ft_strlen(keyequal);
 	i = 0;
 	while (shell->env[i])

@@ -6,7 +6,7 @@
 #    By: lucho <lucho@student.42.fr>                  +#+                      #
 #                                                    +#+                       #
 #    Created: 2026/01/18 11:17:27 by luimarti      #+#    #+#                  #
-#    Updated: 2026/06/15 14:39:43 by dachin        ########   odam.nl          #
+#    Updated: 2026/06/15 16:43:28 by dachin        ########   odam.nl          #
 #                                                                              #
 # **************************************************************************** #
 
@@ -21,6 +21,7 @@ SRCS = src/main.c \
 	   src/builtins/builtin_echo.c \
 	   src/builtins/builtin_env.c \
 	   src/builtins/builtin_env_utils.c \
+	   src/builtins/builtin_env_utils2.c \
 	   src/builtins/builtin_export.c \
 	   src/builtins/builtin_export_utils.c \
 	   src/builtins/builtin_pwd.c \
