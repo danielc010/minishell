@@ -27,7 +27,7 @@ void	add_env(t_shell *shell, int i, char *new_env)
 {
 	char	**env_new;
 
-	env_new = malloc((i + 2) * sizeof(char *));
+	env_new = ft_calloc(i + 2, sizeof(char *));
 	if (!env_new)
 		return ;
 	env_new[i + 1] = NULL;

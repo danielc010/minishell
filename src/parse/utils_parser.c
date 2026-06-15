@@ -43,7 +43,7 @@ t_cmd	*init_cmd(void)
 {
 	t_cmd	*body;
 
-	body = malloc(sizeof(t_cmd));
+	body = ft_calloc(1, sizeof(t_cmd));
 	if (!body)
 		return (NULL);
 	body->args = NULL;
@@ -56,7 +56,7 @@ t_redir	*init_redir(void)
 {
 	t_redir	*current;
 
-	current = malloc(sizeof(t_redir));
+	current = ft_calloc(1, sizeof(t_redir));
 	if (!current)
 		return (NULL);
 	current->type = 0;

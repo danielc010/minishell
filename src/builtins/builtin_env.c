@@ -20,7 +20,7 @@ char	**copy_env(char **envp)
 	n = 0;
 	while (envp[n] != NULL)
 		n++;
-	env = malloc(sizeof(char *) * (n + 1));
+	env = ft_calloc(n + 1, sizeof(char *));
 	if (!env)
 		return (NULL);
 	n = 0;

@@ -42,7 +42,7 @@ char	**build_args(t_token *tokens, int words)
 	int		i;
 	int		x;
 
-	args = malloc(sizeof(char *) * (words + 1));
+	args = ft_calloc(words + 1, sizeof(char *));
 	if (!args)
 		return (NULL);
 	current = tokens;

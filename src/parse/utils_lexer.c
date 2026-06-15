@@ -33,7 +33,7 @@ t_token	*new_token(t_token_type type, char *value)
 {
 	t_token	*token;
 
-	token = malloc(sizeof(t_token));
+	token = ft_calloc(1, sizeof(t_token));
 	if (!token)
 		return (NULL);
 	token->type = type;

@@ -19,7 +19,7 @@ void	run_pipeline(t_shell *shell, t_cmd *cmd, int n)
 	t_pipe_ctx	ctx;
 
 	ctx.n = n;
-	ctx.pipes = malloc(sizeof(int *) * (n - 1));
+	ctx.pipes = ft_calloc(n - 1, sizeof(int *));
 	if (!ctx.pipes)
 		return ;
 	if (init_pipes(ctx.pipes, n - 1) == -1)
@@ -27,7 +27,7 @@ void	run_pipeline(t_shell *shell, t_cmd *cmd, int n)
 		free_pipes(ctx.pipes, n - 1);
 		return ;
 	}
-	ctx.pids = malloc(sizeof(pid_t) * n);
+	ctx.pids = ft_calloc(n, sizeof(pid_t));
 	if (!ctx.pids)
 	{
 		free_pipes(ctx.pipes, n - 1);
@@ -125,7 +125,7 @@ int	init_pipes(int **pipes, int n)
 	i = 0;
 	while (i < n)
 	{
-		pipes[i] = malloc(sizeof(int) * 2);
+		pipes[i] = ft_calloc(2, sizeof(int));
 		if (!pipes[i])
 		{
 			return (-1);
