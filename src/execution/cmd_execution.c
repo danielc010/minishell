@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
-/*                                                        ::::::::            */
-/*   cmd_execution.c                                    :+:    :+:            */
-/*                                                     +:+                    */
-/*   By: lucho <lucho@student.42.fr>                  +#+                     */
-/*                                                   +#+                      */
-/*   Created: 2026/05/20 23:39:14 by dachin        #+#    #+#                 */
-/*   Updated: 2026/06/15 16:13:10 by dachin        ########   odam.nl         */
+/*                                                        :::      ::::::::   */
+/*   cmd_execution.c                                    :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: lucho <lucho@student.42.fr>                +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2026/05/20 23:39:14 by dachin            #+#    #+#             */
+/*   Updated: 2026/06/17 00:03:44 by lucho            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -112,6 +112,11 @@ char	*resolve_path(char *cmd, t_shell *shell)
 	if (!paths_array)
 		return (NULL);
 	with_slash = ft_strjoin("/", cmd);
+	if (!with_slash)
+	{
+		free_array(paths_array);
+		return (NULL);
+	}
 	full_path = find_in_paths(paths_array, with_slash);
 	return (free(with_slash), free_array(paths_array), full_path);
 }

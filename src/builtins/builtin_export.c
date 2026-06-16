@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
-/*                                                        ::::::::            */
-/*   builtin_export.c                                   :+:    :+:            */
-/*                                                     +:+                    */
-/*   By: dachin <dachin@student.codam.nl>             +#+                     */
-/*                                                   +#+                      */
-/*   Created: 2026/06/05 11:01:33 by dachin        #+#    #+#                 */
-/*   Updated: 2026/06/15 15:14:48 by dachin        ########   odam.nl         */
+/*                                                        :::      ::::::::   */
+/*   builtin_export.c                                   :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: lucho <lucho@student.42.fr>                +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2026/06/05 11:01:33 by dachin            #+#    #+#             */
+/*   Updated: 2026/06/17 00:01:22 by lucho            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,6 +34,8 @@ void	no_arg_export(t_shell *shell)
 			continue ;
 		}
 		key = ft_substr(shell->env[i], 0, eq - shell->env[i]);
+		if (!key)
+			return ;
 		value = eq + 1;
 		print_export(key, value);
 		free(key);
@@ -46,6 +48,11 @@ void	export_key_value(t_shell *shell, char *arg, char *eq)
 	char	*key;
 
 	key = ft_substr(arg, 0, eq - arg);
+	if (!key)
+	{
+		shell->exit_status = 1;
+		return ;
+	}
 	if (!is_valid_identifier(key))
 	{
 		invalid_identifier(shell, arg, "export");

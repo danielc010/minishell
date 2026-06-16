@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_strdup.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: luimarti <luimarti@student.42.fr>          +#+  +:+       +#+        */
+/*   By: lucho <lucho@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/03 15:17:01 by luimarti          #+#    #+#             */
-/*   Updated: 2025/05/03 17:06:38 by luimarti         ###   ########.fr       */
+/*   Updated: 2026/06/16 23:27:42 by lucho            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,8 @@ char	*ft_strdup(const char *s)
 	size_t		i;
 	char		*copy;
 
+	if (!s)
+		return (NULL);
 	length = 0;
 	i = 0;
 	while (s[length] != '\0')

@@ -6,7 +6,7 @@
 /*   By: lucho <lucho@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/14 12:02:08 by lucho             #+#    #+#             */
-/*   Updated: 2026/05/14 14:29:37 by lucho            ###   ########.fr       */
+/*   Updated: 2026/06/17 00:42:24 by lucho            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,11 +57,14 @@ char	*append_char(char *str, char *result, int *i)
 	char	*tmp;
 
 	piece = ft_substr(str, *i, 1);
+	if (!piece)
+		return (NULL);
 	tmp = ft_strjoin(result, piece);
-	free (result);
-	result = tmp;
-	free (piece);
-	return (result);
+	free(result);
+	free(piece);
+	if (!tmp)
+		return (NULL);
+	return (tmp);
 }
 
 char	*expand_var(char *str, t_shell *shell, char *result, int *i)
@@ -71,19 +74,25 @@ char	*expand_var(char *str, t_shell *shell, char *result, int *i)
 	char	*tmp;
 
 	var_name = get_var_name(&str[*i]);
+	if (!var_name)
+		return (result);
 	var_value = find_value(var_name, shell);
 	if (!var_value)
 		var_value = ft_strdup("");
+	if (!var_value)
+	{
+		free(var_name);
+		return (result);
+	}
 	tmp = ft_strjoin(result, var_value);
 	*i = *i + ft_strlen(var_name);
 	free(result);
-	result = tmp;
 	free(var_name);
 	free(var_value);
-	return (result);
-}
+	return (tmp);
+}	
 
-char	*dollar_handler(char *str, char *result, t_shell *shell, int *i)
+	char	*dollar_handler(char *str, char *result, t_shell *shell, int *i)
 {
 	if (str[(*i) + 1] == '\0' || str[(*i) + 1] == ' ')
 	{

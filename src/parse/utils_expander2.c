@@ -6,7 +6,7 @@
 /*   By: lucho <lucho@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/08 22:00:59 by lucho             #+#    #+#             */
-/*   Updated: 2026/06/08 22:02:13 by lucho            ###   ########.fr       */
+/*   Updated: 2026/06/17 00:48:05 by lucho            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,12 +47,13 @@ char	*special_handler(char *result, t_shell *shell, int *i)
 	char	*var_value;
 
 	var_value = ft_itoa(shell->exit_status);
+	if (!var_value)
+		return (result);
 	tmp = ft_strjoin(result, var_value);
 	free(result);
-	result = tmp;
 	free(var_value);
 	(*i)++;
-	return (result);
+	return (tmp);
 }
 
 char	*dispatcher(char *str, t_shell *shell, char *result, int *i)

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   core.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: luimarti <luimarti@student.42.fr>          +#+  +:+       +#+        */
+/*   By: lucho <lucho@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/21 13:58:59 by luimarti          #+#    #+#             */
-/*   Updated: 2026/05/21 14:17:14 by luimarti         ###   ########.fr       */
+/*   Updated: 2026/06/16 23:34:20 by lucho            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,6 +32,11 @@ void	init_shell(t_shell *shell, char **envp)
 {
 	shell->cmds = NULL;
 	shell->env = copy_env(envp);
+	if (!shell->env)
+	{
+		ft_putstr_fd("minishell: fatal: failed to copy environment\n", 2);
+		exit(EXIT_FAILURE);
+	}
 	shell->exit_status = 0;
 	shell->running = 1;
 	return ;
