@@ -6,7 +6,7 @@
 /*   By: lucho <lucho@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/14 12:02:08 by lucho             #+#    #+#             */
-/*   Updated: 2026/06/17 00:42:24 by lucho            ###   ########.fr       */
+/*   Updated: 2026/06/17 01:21:36 by lucho            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -90,9 +90,9 @@ char	*expand_var(char *str, t_shell *shell, char *result, int *i)
 	free(var_name);
 	free(var_value);
 	return (tmp);
-}	
+}
 
-	char	*dollar_handler(char *str, char *result, t_shell *shell, int *i)
+char	*dollar_handler(char *str, char *result, t_shell *shell, int *i)
 {
 	if (str[(*i) + 1] == '\0' || str[(*i) + 1] == ' ')
 	{
