@@ -6,7 +6,7 @@
 /*   By: lucho <lucho@student.42.fr>                  +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2026/05/20 23:58:04 by dachin        #+#    #+#                 */
-/*   Updated: 2026/06/17 09:24:54 by dachin        ########   odam.nl         */
+/*   Updated: 2026/06/17 09:35:31 by dachin        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,7 +73,7 @@ void	validate_and_exit(char *arg)
 			ft_putstr_fd("minishell: exit: ", 2);
 			ft_putstr_fd(arg, 2);
 			ft_putstr_fd(": numeric argument required\n", 2);
-			exit(255);
+			exit(2);
 		}
 		i++;
 	}
