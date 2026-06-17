@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   minishell.h                                        :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: lucho <lucho@student.42.fr>                +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2026/05/29 10:32:25 by dachin            #+#    #+#             */
-/*   Updated: 2026/06/17 01:09:45 by lucho            ###   ########.fr       */
+/*                                                        ::::::::            */
+/*   minishell.h                                        :+:    :+:            */
+/*                                                     +:+                    */
+/*   By: lucho <lucho@student.42.fr>                  +#+                     */
+/*                                                   +#+                      */
+/*   Created: 2026/05/29 10:32:25 by dachin        #+#    #+#                 */
+/*   Updated: 2026/06/17 09:16:07 by dachin        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -193,6 +193,7 @@ int				replace_env_key(t_shell *shell, char *key, char *keq,
 
 // builtin_cd_exit.c
 void			builtin_cd(t_shell *shell, t_cmd *cmd);
+void			validate_and_exit(char *arg);
 void			builtin_exit(t_shell *shell, t_cmd *cmd);
 
 // builtin_unset.c

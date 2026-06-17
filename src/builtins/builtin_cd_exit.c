@@ -6,7 +6,7 @@
 /*   By: lucho <lucho@student.42.fr>                  +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2026/05/20 23:58:04 by dachin        #+#    #+#                 */
-/*   Updated: 2026/06/15 15:50:32 by dachin        ########   odam.nl         */
+/*   Updated: 2026/06/17 09:24:54 by dachin        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,7 +59,7 @@ void	builtin_cd(t_shell *shell, t_cmd *cmd)
 
 // Exit code is masked (with & 0XFF) to the lowest 8 bits,
 // keeping in 0-255 range as exit codes are a single byte.
-static void	validate_and_exit(char *arg)
+void	validate_and_exit(char *arg)
 {
 	int	i;
 
@@ -73,7 +73,7 @@ static void	validate_and_exit(char *arg)
 			ft_putstr_fd("minishell: exit: ", 2);
 			ft_putstr_fd(arg, 2);
 			ft_putstr_fd(": numeric argument required\n", 2);
-			exit(2);
+			exit(255);
 		}
 		i++;
 	}
@@ -91,6 +91,7 @@ void	builtin_exit(t_shell *shell, t_cmd *cmd)
 		shell->exit_status = 1;
 		return ;
 	}
+
 	if (cmd->args[1])
 		validate_and_exit(cmd->args[1]);
 	exit(shell->exit_status);

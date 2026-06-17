@@ -6,7 +6,7 @@
 /*   By: luimarti <luimarti@student.42.fr>            +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2026/05/20 23:39:28 by dachin        #+#    #+#                 */
-/*   Updated: 2026/06/12 09:20:29 by dachin        ########   odam.nl         */
+/*   Updated: 2026/06/17 09:15:25 by dachin        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,7 +81,8 @@ void	run_builtin_in_child(t_shell *shell, t_cmd *cmd)
 		exit(ft_env(shell));
 	if (!ft_strncmp(cmd->args[0], "exit", 5))
 	{
-		builtin_exit(shell, cmd);
+		if (cmd->args[1])
+			validate_and_exit(cmd->args[1]);
 		exit(shell->exit_status);
 	}
 	child_state_builtins(shell, cmd);
