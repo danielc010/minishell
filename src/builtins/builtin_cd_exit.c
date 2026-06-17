@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
-/*                                                        ::::::::            */
-/*   builtin_cd_exit.c                                  :+:    :+:            */
-/*                                                     +:+                    */
-/*   By: lucho <lucho@student.42.fr>                  +#+                     */
-/*                                                   +#+                      */
-/*   Created: 2026/05/20 23:58:04 by dachin        #+#    #+#                 */
-/*   Updated: 2026/06/17 09:35:31 by dachin        ########   odam.nl         */
+/*                                                        :::      ::::::::   */
+/*   builtin_cd_exit.c                                  :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: lucho <lucho@student.42.fr>                +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2026/05/20 23:58:04 by dachin            #+#    #+#             */
+/*   Updated: 2026/06/17 21:17:48 by lucho            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -91,7 +91,6 @@ void	builtin_exit(t_shell *shell, t_cmd *cmd)
 		shell->exit_status = 1;
 		return ;
 	}
-
 	if (cmd->args[1])
 		validate_and_exit(cmd->args[1]);
 	exit(shell->exit_status);

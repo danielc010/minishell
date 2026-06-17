@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
-/*                                                        ::::::::            */
-/*   builtin_env_utils.c                                :+:    :+:            */
-/*                                                     +:+                    */
-/*   By: lucho <lucho@student.42.fr>                  +#+                     */
-/*                                                   +#+                      */
-/*   Created: 2026/05/20 23:39:07 by dachin        #+#    #+#                 */
-/*   Updated: 2026/06/15 16:45:00 by dachin        ########   odam.nl         */
+/*                                                        :::      ::::::::   */
+/*   builtin_env_utils.c                                :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: lucho <lucho@student.42.fr>                +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2026/05/20 23:39:07 by dachin            #+#    #+#             */
+/*   Updated: 2026/06/17 21:23:15 by lucho            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -115,6 +115,8 @@ char	*get_cd_path(t_shell *shell, t_cmd *cmd)
 		if (path)
 			printf("%s\n", path);
 	}
+	else if (!ft_strncmp(cmd->args[1], "~", 2))
+		path = get_env(shell, "HOME");
 	else
 		path = cmd->args[1];
 	return (path);

@@ -6,7 +6,7 @@
 /*   By: lucho <lucho@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/21 13:58:59 by luimarti          #+#    #+#             */
-/*   Updated: 2026/06/16 23:34:20 by lucho            ###   ########.fr       */
+/*   Updated: 2026/06/17 10:14:31 by lucho            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,10 @@ t_cmd	*parse(char *line, t_shell *shell)
 	head = parsing_core(tokens);
 	free_tokens(tokens);
 	if (!head)
+	{
+		shell->exit_status = 2;
 		return (NULL);
+	}
 	expander(head, shell);
 	return (head);
 }
