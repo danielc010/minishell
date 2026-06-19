@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   builtin_cd_exit.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lucho <lucho@student.42.fr>                +#+  +:+       +#+        */
+/*   By: luimarti <luimarti@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/20 23:58:04 by dachin            #+#    #+#             */
-/*   Updated: 2026/06/17 21:17:48 by lucho            ###   ########.fr       */
+/*   Updated: 2026/06/19 17:07:02 by luimarti         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,7 +57,7 @@ void	builtin_cd(t_shell *shell, t_cmd *cmd)
 	shell->exit_status = do_cd(shell, path);
 }
 
-static int	digits_too_large(char *digits)
+int	digits_too_large(char *digits)
 {
 	char	*max;
 
@@ -104,13 +104,13 @@ void	builtin_exit(t_shell *shell, t_cmd *cmd)
 	if (!shell || !cmd)
 		return ;
 	ft_putendl_fd("exit", 2);
-	if (cmd->args[1] && cmd->args[2])
+	if (!cmd->args[1])
+		exit(shell->exit_status);
+	if (is_valid_number(cmd->args[1]) && cmd->args[2])
 	{
 		ft_putstr_fd("minishell: exit: too many arguments\n", 2);
 		shell->exit_status = 1;
 		return ;
 	}
-	if (cmd->args[1])
-		validate_and_exit(cmd->args[1]);
-	exit(shell->exit_status);
+	validate_and_exit(cmd->args[1]);
 }

@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
-/*                                                        ::::::::            */
-/*   utils.c                                            :+:    :+:            */
-/*                                                     +:+                    */
-/*   By: luimarti <luimarti@student.42.fr>            +#+                     */
-/*                                                   +#+                      */
-/*   Created: 2026/05/21 00:38:41 by dachin        #+#    #+#                 */
-/*   Updated: 2026/06/05 08:20:56 by dachin        ########   odam.nl         */
+/*                                                        :::      ::::::::   */
+/*   utils.c                                            :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: luimarti <luimarti@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2026/05/21 00:38:41 by dachin            #+#    #+#             */
+/*   Updated: 2026/06/19 17:03:12 by luimarti         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,4 +41,24 @@ int	count_cmds(t_cmd *cmd)
 		++i;
 	}
 	return (i);
+}
+
+int	is_valid_number(char *arg)
+{
+	int	i;
+
+	i = 0;
+	if (arg[0] == '+' || arg[0] == '-')
+		i++;
+	if (!arg[i])
+		return (0);
+	if (digits_too_large(arg + i))
+		return (0);
+	while (arg[i])
+	{
+		if (!ft_isdigit(arg[i]))
+			return (0);
+		i++;
+	}
+	return (1);
 }

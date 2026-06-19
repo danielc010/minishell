@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
-/*                                                        ::::::::            */
-/*   minishell.h                                        :+:    :+:            */
-/*                                                     +:+                    */
-/*   By: lucho <lucho@student.42.fr>                  +#+                     */
-/*                                                   +#+                      */
-/*   Created: 2026/05/29 10:32:25 by dachin        #+#    #+#                 */
-/*   Updated: 2026/06/17 09:16:07 by dachin        ########   odam.nl         */
+/*                                                        :::      ::::::::   */
+/*   minishell.h                                        :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: luimarti <luimarti@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2026/05/29 10:32:25 by dachin            #+#    #+#             */
+/*   Updated: 2026/06/19 17:08:09 by luimarti         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -136,124 +136,82 @@ typedef struct s_lexer
 	char	*value;
 }	t_lexer;
 
-// signals.c
 void			signals_interactive(void);
 void			signals_waiting(void);
 void			signals_child(void);
-
-// utils.c
 void			free_partial_env(char **env, int count);
-void			dup_envp(t_shell *shell, char **envp);
-void			free_array(char **arr);
 int				count_cmds(t_cmd *cmd);
-
-// cmd_execution.c
+int				is_valid_number(char *arg);
 char			**extract_path_to_array(t_shell *shell);
 char			*find_in_paths(char **paths, char *with_slash);
 char			*resolve_path(char *cmd, t_shell *shell);
 void			exec_child(t_cmd *cmd, t_shell *shell);
-
-// cmd_execution2.c
 void			fork_and_exec(t_cmd *cmd, t_shell *shell);
 int				open_redir_fd(t_redir *redir);
 void			apply_redirs(t_redir *redir);
-
-// heredoc.c
 int				process_heredoc_line(char *delim, int *pipe_fd);
 int				setup_heredoc(char *delim);
-
-// pipes.c
 int				prepare_heredocs(t_cmd *cmd);
 void			wait_all(t_shell *shell, pid_t *pids, int n);
 void			child_state_builtins(t_shell *shell, t_cmd *cmd);
 void			run_builtin_in_child(t_shell *shell, t_cmd *cmd);
 void			fork_children(t_shell *shell, t_cmd *cmd, t_pipe_ctx *ctx);
-
-// pipes2.c
 void			run_pipeline(t_shell *shell, t_cmd *cmd, int n);
 void			exec_pipeline(t_shell *shell);
 int				init_pipes(int **pipes, int n);
-
-// pipes3.c
 void			setup_child_fds(int **pipes, int i, int n);
 void			close_all_pipes(int **pipes, int n);
 void			free_pipes(int **pipes, int n);
 void			handle_wait_status(t_shell *shell, int status);
-
-// builtin_env_utils.c
 void			replace_env_entry(char **entry, char *newval);
 void			add_env(t_shell *shell, int i, char *new_env);
 void			update_env(t_shell *shell, char *key, char *value);
 char			*get_env(t_shell *shell, char *key);
 char			*get_cd_path(t_shell *shell, t_cmd *cmd);
-
-// builtin_env_utils2.c
 int				replace_env_key(t_shell *shell, char *key, char *keq,
 					char *keqval);
-
-// builtin_cd_exit.c
 void			builtin_cd(t_shell *shell, t_cmd *cmd);
 void			validate_and_exit(char *arg);
 void			builtin_exit(t_shell *shell, t_cmd *cmd);
-
-// builtin_unset.c
 int				key_index(t_shell *shell, char *key);
 void			remove_env_entry(t_shell *shell, char *key);
 void			builtin_unset(t_shell *shell, t_cmd *cmd);
-
-// builtin_export.c
 void			no_arg_export(t_shell *shell);
 void			export_key_value(t_shell *shell, char *arg, char *eq);
 void			export_no_value(t_shell *shell, char *arg);
 void			builtin_export(t_shell *shell, t_cmd *cmd);
-
-// builtin_export_utils.c
 void			print_export(char *key, char *value);
 int				is_valid_identifier(char *str);
 void			exist_check(t_shell *shell, char *key);
 void			invalid_identifier(t_shell *shell, char *arg, char *builtin);
-
-// utils_parser.c
 void			free_cmd(t_cmd *commands);
-
-//LEXER
 int				add_operator_token(t_lexer *lx, t_token_type type, char *value);
 int				is_separator(char c);
 t_token			*new_token(t_token_type type, char *value);
 void			add_token_back(t_token **head, t_token *new);
 void			free_tokens(t_token *head);
-
 int				handle_end_line(t_lexer *lx);
 int				handle_word(t_lexer *lx);
 void			handle_quotes(t_lexer *lx);
 int				handle_double_operator(t_lexer *lx);
 int				handle_operator(t_lexer *lx);
-
 void			init_lexer(char *line, t_lexer *lx);
 int				handle_normal(t_lexer *lx);
 t_token			*lexer(char *line);
-
-//PARSER
-
 t_cmd			*init_cmd(void);
 t_redir			*init_redir(void);
 int				word_counter(t_token *tokens);
 char			**build_args(t_token *tokens, int words);
 t_cmd			*parsing_core(t_token *tokens);
-
 t_redir			*build_redir(t_token *tokens);
 int				fill_redir(t_token *tokens, t_redir **head, t_redir **current);
 t_redir_type	redir_type(t_token *tokens);
 int				add_redir(t_redir *new, t_token *tokens, t_redir **head,
 					t_redir **current);
 void			free_redir(t_redir *redirs);
-
 int				syntax_controller(t_token *tokens);
 int				check_redirs(t_token *tokens);
 int				check_pipes(t_token *tokens);
-
-//EXPANDER
-
 void			expander(t_cmd *cmds, t_shell *shell);
 char			*find_value(char *name, t_shell *shell);
 char			*get_var_name(char *str);
@@ -267,21 +225,14 @@ char			*dispatcher(char *str, t_shell *shell, char *result, int *i);
 char			*get_str(char *str, t_shell *shell);
 char			*dollar_handler(char *str, char *result, t_shell *shell,
 					int *i);
-
-// builtin_echo.c
 int				is_n_flag(char *str);
 int				ft_echo(char **args);
-
-// builtin_env.c
 char			**copy_env(char **envp);
 int				ft_env(t_shell *shell);
-
-// builtin_pwd.c
 int				ft_pwd(void);
-
-//CORE
-
 t_cmd			*parse(char *line, t_shell *shell);
 void			init_shell(t_shell *shell, char **envp);
+void			free_array(char **arr);
+int				digits_too_large(char *digits);
 
 #endif
