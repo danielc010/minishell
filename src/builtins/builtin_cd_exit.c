@@ -57,6 +57,18 @@ void	builtin_cd(t_shell *shell, t_cmd *cmd)
 	shell->exit_status = do_cd(shell, path);
 }
 
+static int	digits_too_large(char *digits)
+{
+	char	*max;
+
+	max = "9223372036854775807";
+	if (ft_strlen(digits) > 19)
+		return (1);
+	if (ft_strlen(digits) == 19 && ft_strncmp(digits, max, 19) > 0)
+		return (1);
+	return (0);
+}
+
 // Exit code is masked (with & 0XFF) to the lowest 8 bits,
 // keeping in 0-255 range as exit codes are a single byte.
 void	validate_and_exit(char *arg)
@@ -66,6 +78,13 @@ void	validate_and_exit(char *arg)
 	i = 0;
 	if (arg[0] == '+' || arg[0] == '-')
 		i++;
+	if (digits_too_large(arg + i))
+	{
+		ft_putstr_fd("minishell: exit: ", 2);
+		ft_putstr_fd(arg, 2);
+		ft_putstr_fd(": numeric argument required\n", 2);
+		exit(2);
+	}
 	while (arg[i])
 	{
 		if (!ft_isdigit(arg[i]))

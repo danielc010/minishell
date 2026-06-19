@@ -49,7 +49,8 @@ int	ft_env(t_shell *shell)
 	i = 0;
 	while (var[i])
 	{
-		printf("%s\n", var[i]);
+		if (ft_strchr(var[i], '='))
+			printf("%s\n", var[i]);
 		i++;
 	}
 	return (0);

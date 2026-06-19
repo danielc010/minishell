@@ -6,7 +6,7 @@
 /*   By: luimarti <luimarti@student.42.fr>            +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2026/04/24 13:56:39 by luimarti      #+#    #+#                 */
-/*   Updated: 2026/06/15 15:32:21 by dachin        ########   odam.nl         */
+/*   Updated: 2026/06/19 10:37:07 by dachin        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -89,8 +89,6 @@ int	if_pipe(t_token *tokens, t_cmd **command, t_cmd *head, int words)
 	return (1);
 }
 
-// FIX: Combined first two NULL checks, added NULL guard similar to
-// if_pipe for command, similar to in if_pipe
 t_cmd	*parsing_core(t_token *tokens)
 {
 	t_cmd	*command;

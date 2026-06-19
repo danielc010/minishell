@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   cmd_execution.c                                    :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: lucho <lucho@student.42.fr>                +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2026/05/20 23:39:14 by dachin            #+#    #+#             */
-/*   Updated: 2026/06/17 00:03:44 by lucho            ###   ########.fr       */
+/*                                                        ::::::::            */
+/*   cmd_execution.c                                    :+:    :+:            */
+/*                                                     +:+                    */
+/*   By: lucho <lucho@student.42.fr>                  +#+                     */
+/*                                                   +#+                      */
+/*   Created: 2026/05/20 23:39:14 by dachin        #+#    #+#                 */
+/*   Updated: 2026/06/19 10:36:58 by dachin        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,7 +39,6 @@ char	**extract_path_to_array(t_shell *shell)
 // if ((access(full_path, X_OK)) == 0): we found the executable, skip to
 // last return statement
 // if (paths_array[i] == NULL): command is not found
-// FIX: Added skipping access in case full_path = NULL
 char	*find_in_paths(char **paths, char *with_slash)
 {
 	char	*full_path;
@@ -124,7 +123,6 @@ char	*resolve_path(char *cmd, t_shell *shell)
 // Exit code 127 is standard POSIX convention for "cmd not found"
 // exit(127) occurs instead of returning from exec_child as
 // it is a generic exit(EXIT_FAILURE) in fork_and_exec.
-// FIX: added NULL guard to avoid NULL dereference
 void	exec_child(t_cmd *cmd, t_shell *shell)
 {
 	char	*path;

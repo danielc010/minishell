@@ -6,7 +6,7 @@
 /*   By: lucho <lucho@student.42.fr>                  +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2026/05/03 10:56:58 by luimarti      #+#    #+#                 */
-/*   Updated: 2026/06/15 16:21:11 by dachin        ########   odam.nl         */
+/*   Updated: 2026/06/19 10:37:01 by dachin        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,7 +42,6 @@ static void	remove_empty_arg(t_cmd *cmds, char *tmp, int i)
 	free(tmp);
 }
 
-// FIX: Add 2 null guards to avoid deference null
 static void	expand_args(t_cmd *cmds, t_shell *shell)
 {
 	char	*tmp;

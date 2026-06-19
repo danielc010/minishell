@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   builtin_env_utils.c                                :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: lucho <lucho@student.42.fr>                +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2026/05/20 23:39:07 by dachin            #+#    #+#             */
-/*   Updated: 2026/06/17 21:23:15 by lucho            ###   ########.fr       */
+/*                                                        ::::::::            */
+/*   builtin_env_utils.c                                :+:    :+:            */
+/*                                                     +:+                    */
+/*   By: lucho <lucho@student.42.fr>                  +#+                     */
+/*                                                   +#+                      */
+/*   Created: 2026/05/20 23:39:07 by dachin        #+#    #+#                 */
+/*   Updated: 2026/06/19 10:36:52 by dachin        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,7 +42,6 @@ void	add_env(t_shell *shell, int i, char *new_env)
 	shell->env = env_new;
 }
 
-// FIX: Add guard to avoid null pointer dereference.
 void	update_env(t_shell *shell, char *key, char *value)
 {
 	int		i;
@@ -70,7 +69,6 @@ void	update_env(t_shell *shell, char *key, char *value)
 // Skip past "KEY=" extract the pointer directly into the string at
 // the value part.
 // "PATH=/usr/bin" returns "/user/bin"
-// FIX: Add guard for null pointer dereference
 char	*get_env(t_shell *shell, char *key)
 {
 	int		i;
